@@ -16,6 +16,7 @@ The android application is developed using an object oriented approach by applyi
 
 ### Hardware used:
 - Arduino
+- ESP32 microcontroller
 - SmartCar shield
 - Wi-Fi adapter/transceiver 
 - GPS sensor
