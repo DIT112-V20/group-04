@@ -16,7 +16,7 @@ The android application is developed using an object oriented approach by applyi
 
 ### Hardware used:
 - Arduino
-- [Smartcar platform] (https://www.hackster.io/platisd/getting-started-with-the-smartcar-platform-1648ad) based on the ESP32 microcontroller
+- [Smartcar platform](https://www.hackster.io/platisd/getting-started-with-the-smartcar-platform-1648ad) based on the ESP32 microcontroller
 - Wi-Fi connectivity (integrated in the ESP32 SoC microcontroller)
 - 3D-printer
 
