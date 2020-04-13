@@ -67,11 +67,19 @@ void loop() {
     clientRequest.remove(clientRequest.length()-9,9);
 
     if (clientRequest == "stop") {
+      client.println("HTTP/1.1 200 OK");
+      client.println("Content-type:text/html");
+      client.println("Connection: close");
+      client.println();
       handle_stop();
       delay(1);
     }
 
     if (clientRequest == "forward") {
+      client.println("HTTP/1.1 200 OK");
+      client.println("Content-type:text/html");
+      client.println("Connection: close");
+      client.println();
       handle_forward();
       delay(1);
     }

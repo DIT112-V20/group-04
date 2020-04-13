@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">HealthRover</string>
+    <string name="Forward">forward</string>
+    <string name="Stop">stop</string>
 </resources>
