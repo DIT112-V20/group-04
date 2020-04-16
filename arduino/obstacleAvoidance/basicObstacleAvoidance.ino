@@ -24,9 +24,7 @@ void setup()
   sensor.setTimeout(500);
   if (!sensor.init())
   {
-    Serial.println("Failed to detect and initialize sensor!");
-    while (1) {}
-  }
+    Serial.println("Failed to detect ,
 
   // Start continuous back-to-back mode 
   // (take readings as fast as possible).

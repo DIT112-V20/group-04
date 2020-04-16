@@ -10,6 +10,8 @@ It will minimize the amount of human contact amidst a pandemic and reduce the ri
 ## How
 Healthcare professionals will have the opportunity to provide patients with the needed medication or medical equipment by the use of a Smartcar along with a smartphone application. A simple graphical user interface will guide the end-user through the process of the delivery, which is going to be primarily led by voice controlling the car through the app. It will provide features such as voice recognition, access through Wi-Fi as well as capabilities that support the manual navigation of the car, such as obstacle avoidance.
 
+For simplicity and security, the solution is developed to have the SmartCar and the application connect to the same wi-fi network. Optionally, the customer can change the networking configurations in order to adapt the connectivity between the SmartCar and the application to their needs.
+
 The android application is developed using an object oriented approach by applying proven design and architecture patterns as well as early and continuous testing to ensure the robustness and high quality of the application. 
 
 ## Technical Overview
