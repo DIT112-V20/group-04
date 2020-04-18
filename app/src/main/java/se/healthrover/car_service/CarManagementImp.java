@@ -15,7 +15,7 @@ public class CarManagementImp implements CarManagement {
     }
 
     public boolean moveCar(HealthRoverCar healthRoverCar, int speed, int angle) {
-        String request = healthRoverCar.getUrl() + CarCommands.MOVE.getCarCommands() + CarCommands.SPEED.getCarCommands() + speed + CarCommands.ANGLE.getCarCommands() + angle;
+        String request = healthRoverCar.getUrl() + CarCommands.REQUEST.getCarCommands() + CarCommands.SPEED.getCarCommands() + speed + CarCommands.ANGLE.getCarCommands() + angle;
         return service.sendGetRequest(request);
     }
 

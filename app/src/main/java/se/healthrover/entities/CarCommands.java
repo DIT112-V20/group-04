@@ -3,7 +3,7 @@ package se.healthrover.entities;
 public enum CarCommands {
 
     //A list of predefined commands used to manage the car
-    MOVE("move"), ANGLE("&angle="), STATUS("status"), SPEED("&speed=");
+    ANGLE("&angle="), STATUS("status"), SPEED("&speed="), REQUEST("request?type=move");
 
     private final String carCommands;
 
