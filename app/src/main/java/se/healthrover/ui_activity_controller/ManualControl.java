@@ -51,10 +51,10 @@ public class ManualControl extends AppCompatActivity {
             @SuppressLint({"SetTextI18n", "DefaultLocale"})
             @Override
             public void onMove(int angle, int strength) {
-                speed = strength;
-                turningAngle = angle;
+                speed = convertSpeed(strength, angle);
+                turningAngle = convertAngle(angle);
                 angleText.setText(turningAngle + "° angle");
-                strengthText.setText(speed + "% strength");
+                strengthText.setText(speed + "% speed");
                 //carManagement.moveCar(HealthRoverCar.valueOf(HealthRoverCar.getCarObjectName(carName)),speed, turningAngle);
                 coordinatesText.setText(
                         String.format("x%03d:y%03d",
@@ -82,7 +82,25 @@ public class ManualControl extends AppCompatActivity {
 
     }
 
+    //Convert strength from joystick to the corresponding car speed
+    private int convertSpeed(int strength, int angle) {
+        if (angle > 180) {
+            return - strength;
+        } else {
+            return strength;
+        }
+    }
 
-
-
+    //Converts angle from joystick to the corresponding car angles
+    private int convertAngle(int angle) {
+        if (angle <= 90 && angle >= 0) {
+            return (90 - angle);
+        } else if (angle > 90 && angle <= 180) {
+            return (angle - 90) * (-1);
+        } else if (angle > 180 && angle <= 270) {
+            return (angle - 270);
+        } else {
+            return (angle - 270);
+        }
+    }
 }
