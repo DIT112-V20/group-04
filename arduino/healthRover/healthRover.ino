@@ -4,22 +4,32 @@
 #include <WiFi.h>
 #include <WebServer.h>
 
-const int START_SPEED = 50;
+const auto pulsesPerMeter = 600;
+const int START_SPEED = 40;
 const int MIN_OBSTACLE_DISTANCE = 300;
 const int BAUD_RATE = 115200;
 const int STOP = 0;
-const char* ssid = "SSID";
-const char* password = "PASSWORD";
+const char* ssid = "ssid";
+const char* password = "password";
 
 int frontSensorReading;
+int carSpeed;
 
 WebServer server(80);
 
 BrushedMotor leftMotor(smartcarlib::pins::v2::leftMotorPins);
 BrushedMotor rightMotor(smartcarlib::pins::v2::rightMotorPins);
 DifferentialControl control(leftMotor, rightMotor);
-SimpleCar car(control);
+
+GY50 gyroscope(14);
 VL53L0X sensor;
+
+DirectionlessOdometer leftOdometer(
+    smartcarlib::pins::v2::leftOdometerPin, []() { leftOdometer.update(); }, pulsesPerMeter);
+DirectionlessOdometer rightOdometer(
+    smartcarlib::pins::v2::rightOdometerPin, []() { rightOdometer.update(); }, pulsesPerMeter);
+
+SmartCar car(control, gyroscope, leftOdometer, rightOdometer);
 
 // Static Local IP configuration for identifying car.
 IPAddress local_IP(192, 168, 1, 200);
@@ -30,7 +40,9 @@ void setup(){
   Serial.begin(BAUD_RATE);
   delay(10);
   Wire.begin();
+  //car.enableCruiseControl();
   connectToWiFi();
+  carSpeed = START_SPEED;
 
   // Allow half a second to connect the sensor
   sensor.setTimeout(500);
@@ -45,6 +57,8 @@ void setup(){
 
   // Car URL to handle the request
   server.on("/request", HTTP_GET, handleRequest);
+  server.on("/status", HTTP_GET, handleStatus);
+  server.onNotFound(handleNotFound);
 
   server.begin();
 }
@@ -76,31 +90,56 @@ void connectToWiFi(){
   Serial.println(WiFi.localIP());
 }
 
-void moveForward() {
-  car.setSpeed(START_SPEED);
+void setCarMovement(int newSpeed, int newAngle) {
+  setCarAngle(newAngle);
+  setCarSpeed(newSpeed);
 }
-
+void setCarAngle(int newAngle){
+  car.setAngle(newAngle);
+}
 void stopCar() {
-  car.setSpeed(STOP);
+  carSpeed = STOP;
+  car.setSpeed(carSpeed);
+}
+void setCarSpeed(int newSpeed){
+  if(newSpeed == 0){
+    stopCar();
+  }else if(newSpeed < carSpeed){
+    while(newSpeed < carSpeed){
+      carSpeed--;
+      car.setSpeed(carSpeed);
+    }
+  }else if(newSpeed > carSpeed){
+    while(newSpeed > carSpeed){
+      carSpeed++;
+      car.setSpeed(carSpeed);
+    }
+  }else{
+    car.setSpeed(carSpeed);
+  }
 }
 void handleRequest() {
-  if (!server.hasArg("type")) {
+  if (!server.hasArg("type") && !server.hasArg("speed") && !server.hasArg("angle")) {
     server.send(404);
     return;
   }
   String appRequest = server.arg("type");
-  if (appRequest.equals("forward")) {
-    moveForward();
+  int speedRequest = (server.arg("speed")).toInt();
+  int angleRequest = (server.arg("angle")).toInt();
+  if (appRequest.equals("move")) {
+    setCarMovement(speedRequest, angleRequest);
     server.send(200);
   }
   else if (appRequest.equals("stop")) {
     stopCar();
     server.send(200);
-  }
-  else  if (appRequest.equals("status")) {
-    server.send(200);
-  }
-  else {
+  }else {
     server.send(404);
   }
+}
+void handleStatus(){
+  server.send(200);
+}
+void handleNotFound(){
+  server.send(404);
 }
