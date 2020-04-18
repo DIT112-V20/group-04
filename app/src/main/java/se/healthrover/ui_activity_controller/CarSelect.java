@@ -1,4 +1,4 @@
-package se.healthrover.ui_activity_controler;
+package se.healthrover.ui_activity_controller;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -39,7 +39,7 @@ public class CarSelect extends Activity{
 
     //Used to initialize the elements on the activity once it¨s loaded
     private void initialize(){
-        //setting up by default everything to false and loading the car names into the listview and adapter
+        //setting up by default everything to false and loading the car names into the listView and adapter
         carOnlineConnection = false;
         healthRoverCar = null;
         setContentView(R.layout.car_select);
@@ -72,7 +72,7 @@ public class CarSelect extends Activity{
                     Toast.makeText(getApplicationContext(), "Select a car...", Toast.LENGTH_SHORT).show();
                 }else {
 
-                    carOnlineConnection = carManagement.checkCarOnlineStatus(healthRoverCar);
+                    carOnlineConnection = carManagement.checkStatus(healthRoverCar);
                     if (!carOnlineConnection) {
                         Toast.makeText(getApplicationContext(), "Car is offline...", Toast.LENGTH_SHORT).show();
                     } else {
