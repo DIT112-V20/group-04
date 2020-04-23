@@ -19,6 +19,7 @@ public class HttpService {
 
     private boolean checkStatus = false;
     private OkHttpClient client = new OkHttpClient();
+    private final int HTTP_SUCCESS = 200;
 
     public boolean sendGetRequest (String url){
 
@@ -43,7 +44,7 @@ public class HttpService {
             public void onResponse(@NotNull Call call, @NotNull Response response)  {
 
                 Log.i("Success","Success: "+response.code());
-                if (response.code() == 200) {
+                if (response.code() == HTTP_SUCCESS) {
                     checkStatus = true;
                 }
                 else {
