@@ -45,10 +45,10 @@ public class CarSelect extends Activity{
         setContentView(R.layout.car_select);
         connectToCarSelected = findViewById(R.id.connectToCar);
 
-        ArrayAdapter adapter = new ArrayAdapter<String>(this,
+        ArrayAdapter adapter = new ArrayAdapter<>(this,
                 android.R.layout.simple_list_item_1, HealthRoverCar.getListOfCarNames());
 
-        carList = (ListView) findViewById(R.id.smartCarList);
+        carList = findViewById(R.id.smartCarList);
         carList.setAdapter(adapter);
 
         //Once a car is selected the name is retrieved and used to initialize the car object that is to be controlled
@@ -84,7 +84,12 @@ public class CarSelect extends Activity{
             }
         });
     }
-
-
+    //Using back button to exit application
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        finishAffinity();
+        finish();
+    }
 
 }

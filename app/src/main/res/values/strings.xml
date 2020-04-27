@@ -5,4 +5,5 @@
     <string name="choose_a_car_from_the_list">Choose a car from the list:</string>
     <string name="connect">Connect</string>
     <string name="voice_control">Switch to\nVoice Control</string>
+    <string name="manual_control">Switch to\nManual Control</string>
 </resources>
