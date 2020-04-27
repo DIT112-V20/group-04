@@ -25,13 +25,14 @@ The android application is developed using an object oriented approach by applyi
  
 ### Software:
 - Android Studio
-- TeamHub-plugin
+- [TeamHub plugin](https://teamhub.dev/)
 - Java
 - Gradle
 - Travis CI
-- SmartCar API
+- [SmartCar API](https://platisd.github.io/smartcar_shield/)
 - Arduino IDE
 - GitHub
+- [Virtual Joystick Android library](https://github.com/controlwear/virtual-joystick-android)
 
  
 ### Team Overview
