@@ -1,0 +1,93 @@
+language: android
+jdk: oraclejdk8
+
+# Set environment variables
+env:
+  global:
+    # Set timeout for the Android emulator to come online
+    - ADB_INSTALL_TIMEOUT=10
+    # Set the minimum Android API to support
+    # Note: Not all of them work well with Travis
+    - ANDROID_TARGET=android-21
+    # Use a modern C++ compiler
+    - CXX=g++-6
+
+before_cache:
+  - rm -f $HOME/.gradle/caches/modules-2/modules-2.lock
+
+cache:
+  directories:
+    # Cache all dirs under .gradle folder
+    - $HOME/.gradle/daemon       # Cache daemon logs
+    - $HOME/.gradle/native       # Cache library downloaded from the gradle dependency
+    - $HOME/.gradle/wrapper      # Cache the gradle
+
+
+
+android:
+  components:
+    - tools # to get the new `repository-11.xml`
+    - tools # see https://github.com/travis-ci/travis-ci/issues/6040#issuecomment-219367943)
+    - platform-tools
+    - build-tools-30.0.0
+    - $ANDROID_TARGET # Our minimum Android version
+    - sys-img-armeabi-v7a-$ANDROID_TARGET
+    - extra-android-m2repository
+    - extra-google-m2repository
+
+compiler:
+  - g++
+
+before_script:
+  # Launch Android emulator to run the instrumented tests
+  - android list targets
+  - echo no | android create avd --force -n test -t $ANDROID_TARGET --abi armeabi-v7a # Create AVD for given api
+  - emulator -avd test -no-audio -no-window & # Start emulator
+  - android-wait-for-emulator
+  - adb devices # Display list of devices
+  - adb shell input keyevent 82 &
+  # Set `gradlew` as executable
+  - chmod +x $TRAVIS_BUILD_DIR/gradlew
+
+before_install:
+  # Install Android 9 SDK and accept its user agreement
+  - echo yes | sdkmanager "platforms;android-30"
+  # Install Travis CI configuration for Arduino sketches
+  - source <(curl -SLs https://raw.githubusercontent.com/adafruit/travis-ci-arduino/master/install.sh)
+
+install:
+  # Install Smartcar shield library (used by our sketch)
+  - arduino --install-library "Smartcar shield"
+  # Install VL53L0X distance sensor library
+  - arduino --install-library "VL53L0X"
+  # TODO: Install the Web Server Library for ESP32
+  # TODO: Install the Wi-Fi Library for ESP32
+
+
+script:
+  # Build the Android app
+  - cd $TRAVIS_BUILD_DIR/app
+  - ./gradlew build --stacktrace
+  # Run the Android app's unit tests
+  - ./gradlew test --info
+  # Run the Android app's instrumented tests
+  - ./gradlew connectedAndroidTest
+  # Run the Arduino sketch's unit tests
+  #  - cd $TRAVIS_BUILD_DIR/arduino/healthRoverTest
+  #  - mkdir -p build
+  #  - cd build
+  #  - cmake ..
+  #  - make
+  #  - ctest
+  # Build all .ino files for Arduino Mega
+  - cd $TRAVIS_BUILD_DIR/arduino/healthRover
+  - build_platform esp32
+
+  # Send notification
+  notifications:
+    email:
+      recipients:
+        - gustsach@student.gu.se
+        - gusparkr@student.gu.se
+      on_success: always
+      on_failure: always
