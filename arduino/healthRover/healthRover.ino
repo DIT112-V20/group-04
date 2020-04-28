@@ -70,10 +70,10 @@ void loop() {
   frontSensorReading = getMedianSensorReading(NR_OF_READINGS);
   // Stop when distance is less than MIN_OBSTACLE_DISTANCE and
   // disregard 0 reading because its a null reading from the sensor
-  if (frontSensorReading <= MIN_OBSTACLE_DISTANCE && frontSensorReading > 0){
-    car.setSpeed(STOP);
+  if (obstacleDetectedFront()){
+    stopCar();
   } else if (WiFi.status() != WL_CONNECTED){
-    car.setSpeed(STOP);
+    stopCar();
     connectToWiFi();
   }
 }
@@ -103,10 +103,15 @@ void stopCar() {
   carSpeed = STOP;
   car.setSpeed(carSpeed);
 }
+
+// Sets the cars speed while also doing basic obstacle avoidance
 void setCarSpeed(int newSpeed){
   if(newSpeed == 0){
     stopCar();
-  }else if(newSpeed < carSpeed){
+  }else if(obstacleDetectedFront()){
+   stopCar();
+  }
+  else if(newSpeed < carSpeed){
     while(newSpeed < carSpeed){
       carSpeed--;
       car.setSpeed(carSpeed);
@@ -181,4 +186,14 @@ int getMedianSensorReading(int iterations) {
 // Returns the current sensor reading, in mm
 int getSensorReading() {
     return sensor.readRangeContinuousMillimeters();
+}
+
+// Returns true when an obstacle is within MIN_OBSTACLE_DISTANCE of the front sensor
+bool obstacleDetectedFront() {
+    if (frontSensorReading <= MIN_OBSTACLE_DISTANCE && frontSensorReading > 0) {
+        // Serial.println("Obstacle detected!"); // For debugging
+        return true;
+    } else {
+        return false;
+    }
 }
