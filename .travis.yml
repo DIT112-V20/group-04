@@ -38,6 +38,12 @@ android:
 compiler:
   - g++
 
+branches:
+  only:
+    - master
+    - voice_control
+    - travis_ci
+
 before_script:
   # Launch Android emulator to run the instrumented tests
   - android list targets
