@@ -30,4 +30,32 @@
         custom:layout_constraintTop_toTopOf="parent"
         custom:layout_constraintVertical_bias="0.957" />
 
+    <ImageView
+        android:id="@+id/speechButton"
+        android:layout_width="140dp"
+        android:layout_height="137dp"
+        android:layout_marginStart="135dp"
+        android:layout_marginEnd="136dp"
+        android:layout_marginBottom="213dp"
+        custom:layout_constraintBottom_toTopOf="@+id/manualControl"
+        custom:layout_constraintEnd_toEndOf="parent"
+        custom:layout_constraintStart_toStartOf="parent"
+        custom:srcCompat="@android:drawable/ic_btn_speak_now" />
+
+    <TextView
+        android:id="@+id/speechToText"
+        android:layout_width="171dp"
+        android:layout_height="24dp"
+        android:layout_marginStart="120dp"
+        android:layout_marginTop="201dp"
+        android:layout_marginEnd="120dp"
+        android:layout_marginBottom="77dp"
+        android:gravity="center"
+        android:text=""
+        android:textSize="18sp"
+        custom:layout_constraintBottom_toTopOf="@+id/speechButton"
+        custom:layout_constraintEnd_toEndOf="parent"
+        custom:layout_constraintStart_toStartOf="parent"
+        custom:layout_constraintTop_toTopOf="parent" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

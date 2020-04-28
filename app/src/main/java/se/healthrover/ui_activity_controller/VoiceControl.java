@@ -2,13 +2,22 @@ package se.healthrover.ui_activity_controller;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.speech.RecognizerIntent;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+import java.util.ArrayList;
+
 import se.healthrover.R;
+import se.healthrover.car_service.CarManagement;
+import se.healthrover.car_service.CarManagementImp;
 import se.healthrover.entities.HealthRoverCar;
 
 public class VoiceControl extends AppCompatActivity {
@@ -17,6 +26,15 @@ public class VoiceControl extends AppCompatActivity {
     private HealthRoverCar healthRoverCar;
     private String carName;
     private TextView headerVoiceControl;
+    private ImageView speechButton;
+    private TextView speechToText;
+    private int speed;
+    private static final int NO_ANGLE = 0;
+    private static final int STOP = 0;
+    private static final int TURN_LEFT = -90;
+    private static final int TURN_RIGHT = 90;
+    private static final int SPEECH_RESULT = 1;
+    private CarManagement carManagement = new CarManagementImp();
 
 
     //Create the activity
@@ -41,6 +59,8 @@ public class VoiceControl extends AppCompatActivity {
         headerVoiceControl.setText(carName);
         healthRoverCar = HealthRoverCar.valueOf(HealthRoverCar.getCarObjectName(carName));
         manualControlButton = findViewById(R.id.manualControl);
+        speechButton = findViewById(R.id.speechButton);
+        speechToText = findViewById(R.id.speechToText);
 
         manualControlButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -48,6 +68,17 @@ public class VoiceControl extends AppCompatActivity {
                 Intent intent = new Intent(VoiceControl.this, ManualControl.class);
                 intent.putExtra("carName", healthRoverCar.getCarName());
                 startActivity(intent);
+            }
+        });
+        // Method for speech-to-text functionality
+        speechButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent speechIntent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
+                speechIntent.putExtra(RecognizerIntent.EXTRA_SPEECH_INPUT_COMPLETE_SILENCE_LENGTH_MILLIS, 10);
+                speechIntent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
+                speechIntent.putExtra(RecognizerIntent.EXTRA_PROMPT, "Listening...");
+                startActivityForResult(speechIntent, SPEECH_RESULT);
             }
         });
     }
@@ -58,5 +89,59 @@ public class VoiceControl extends AppCompatActivity {
         super.onBackPressed();
         Intent intent = new Intent(VoiceControl.this, CarSelect.class);
         startActivity(intent);
+    }
+    // Convert speech to String
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+
+        if(requestCode == SPEECH_RESULT && resultCode == RESULT_OK){
+            ArrayList<String> spokenWords = data.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
+            speechToText.setText(spokenWords.get(0));
+            sendVoiceCommand(spokenWords.get(0));
+        }
+        super.onActivityResult(requestCode, resultCode, data);
+    }
+    // Method to send voice commands to the SmartCar
+    private void sendVoiceCommand(String command) {
+        switch (command) {
+            case "forward":
+                if (speed < 0) {
+                    speed = speed * (-1);
+                }
+                carManagement.moveCar(healthRoverCar, speed, NO_ANGLE);
+                break;
+            case "stop":
+                carManagement.moveCar(healthRoverCar, STOP, NO_ANGLE);
+                break;
+            case "increase":
+                if (speed < 50 && speed > 10) {
+                    speed += 10;
+                    carManagement.moveCar(healthRoverCar, speed, NO_ANGLE);
+                } else {
+                    Toast.makeText(VoiceControl.this, "Maximum velocity reached", Toast.LENGTH_SHORT).show();
+                }
+                break;
+            case "decrease":
+                if (speed > 10) {
+                    speed -= 10;
+                    carManagement.moveCar(healthRoverCar, speed, NO_ANGLE);
+                } else {
+                    Toast.makeText(VoiceControl.this, "Minimum velocity reached", Toast.LENGTH_SHORT).show();
+                }
+                break;
+            case "left":
+                carManagement.moveCar(healthRoverCar, speed, TURN_LEFT);
+                break;
+            case "right":
+                carManagement.moveCar(healthRoverCar, speed, TURN_RIGHT);
+                break;
+            case "reverse":
+                speed = -speed;
+                carManagement.moveCar(healthRoverCar, speed, NO_ANGLE);
+                break;
+            default:
+                Toast.makeText(VoiceControl.this, "Invalid command", Toast.LENGTH_SHORT).show();
+                break;
+        }
     }
 }
