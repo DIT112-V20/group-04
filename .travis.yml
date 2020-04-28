@@ -1,7 +1,6 @@
 language: android
 jdk: oraclejdk8
 
-# Set environment variables
 env:
   global:
     # Set timeout for the Android emulator to come online
@@ -9,8 +8,6 @@ env:
     # Set the minimum Android API to support
     # Note: Not all of them work well with Travis
     - ANDROID_TARGET=android-21
-    # Use a modern C++ compiler
-    - CXX=g++-6
 
 before_cache:
   - rm -f $HOME/.gradle/caches/modules-2/modules-2.lock
@@ -22,27 +19,16 @@ cache:
     - $HOME/.gradle/native       # Cache library downloaded from the gradle dependency
     - $HOME/.gradle/wrapper      # Cache the gradle
 
-
-
 android:
   components:
     - tools # to get the new `repository-11.xml`
     - tools # see https://github.com/travis-ci/travis-ci/issues/6040#issuecomment-219367943)
     - platform-tools
-    - build-tools-30.0.0
+    - build-tools-28.0.3
     - $ANDROID_TARGET # Our minimum Android version
     - sys-img-armeabi-v7a-$ANDROID_TARGET
     - extra-android-m2repository
     - extra-google-m2repository
-
-compiler:
-  - g++
-
-branches:
-  only:
-    - master
-    - voice_control
-    - travis_ci
 
 before_script:
   # Launch Android emulator to run the instrumented tests
@@ -52,17 +38,17 @@ before_script:
   - android-wait-for-emulator
   - adb devices # Display list of devices
   - adb shell input keyevent 82 &
-  # Set `gradlew` as executable
+  # Change gradlew file's permissions in order to be executable
   - chmod +x $TRAVIS_BUILD_DIR/gradlew
 
 before_install:
   # Install Android 9 SDK and accept its user agreement
-  - echo yes | sdkmanager "platforms;android-30"
+  - echo yes | sdkmanager "platforms;android-28"
   # Install Travis CI configuration for Arduino sketches
   - source <(curl -SLs https://raw.githubusercontent.com/adafruit/travis-ci-arduino/master/install.sh)
 
 install:
-  # Install Smartcar shield library (used by our sketch)
+  # Install SmartCar shield library (used in our sketch)
   - arduino --install-library "Smartcar shield"
   # Install VL53L0X distance sensor library
   - arduino --install-library "VL53L0X"
@@ -71,29 +57,27 @@ install:
 
 
 script:
-  # Build the Android app
-  - cd $TRAVIS_BUILD_DIR/app
+  # Build the Android application
+  - cd $TRAVIS_BUILD_DIR/
   - ./gradlew build --stacktrace
-  # Run the Android app's unit tests
+  # Run the Android application's unit tests
   - ./gradlew test --info
-  # Run the Android app's instrumented tests
+  # Execution of Android application's instrumented tests
+  - ./gradlew connectedCheck
   - ./gradlew connectedAndroidTest
-  # Run the Arduino sketch's unit tests
-  #  - cd $TRAVIS_BUILD_DIR/arduino/healthRoverTest
-  #  - mkdir -p build
-  #  - cd build
-  #  - cmake ..
-  #  - make
-  #  - ctest
-  # Build all .ino files for Arduino Mega
-  - cd $TRAVIS_BUILD_DIR/arduino/healthRover
-  - build_platform esp32
+  # Build the .ino file(s) for ESP32
+  # - cd $TRAVIS_BUILD_DIR/arduino/healthRover
+  # - build-platform esp32
 
-  # Send notification
-  notifications:
+
+notifications:
     email:
       recipients:
         - gustsach@student.gu.se
         - gusparkr@student.gu.se
+        - gusjesee@student.gu.se
+        - gusgunsah@student.gu.se
+        - gussmosa@student.gu.se
+        - guslarcaan@student.gu.se
       on_success: always
       on_failure: always
