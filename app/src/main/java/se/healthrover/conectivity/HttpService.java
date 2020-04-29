@@ -44,7 +44,6 @@ public class HttpService {
 
             @Override
             public void onResponse(@NotNull Call call, @NotNull Response response)  {
-
                 Log.i("Success","Success: "+response.code());
                 if (response.code() == HTTP_SUCCESS) {
                     checkStatus = true;

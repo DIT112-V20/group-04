@@ -65,17 +65,22 @@ public class ManualControl extends AppCompatActivity {
             @SuppressLint({"SetTextI18n", "DefaultLocale"})
             @Override
             public void onMove(int angle, int strength) {
+                //Update ui text
                 speed = convertSpeed(strength, angle);
                 turningAngle = convertAngle(angle);
                 angleText.setText(turningAngle + "° angle");
                 strengthText.setText(speed + "% speed");
-                carManagement.moveCar(healthRoverCar, speed, turningAngle);
-                //checkRequest(healthRoverCar, speed, turningAngle); TODO implement methods bellow
                 coordinatesText.setText(
                         String.format("x%03d:y%03d",
                                 joystickController.getNormalizedX(),
                                 joystickController.getNormalizedY())
                 );
+
+                //Send request to move the car
+                carManagement.moveCar(healthRoverCar, speed, turningAngle);
+
+                //checkRequest(healthRoverCar, speed, turningAngle); TODO implement methods bellow
+
             }
         });
 
