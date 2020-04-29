@@ -52,9 +52,10 @@ install:
   - arduino --install-library "Smartcar shield"
   # Install VL53L0X distance sensor library
   - arduino --install-library "VL53L0X"
-  # TODO: Install the Web Server Library for ESP32
-  # TODO: Install the Wi-Fi Library for ESP32
-
+  # Install the ServoESP32 library, in order to generate RC servo signals on selected pins with ESP32
+  - arduino --install-library "ServoESP32"
+  # Install the ESP32 AnalogWrite library, in order to provide analogWrite function polyfill for ESP32 Arduino framework
+  - arduino --install-library "ESP32 AnalogWrite"
 
 script:
   # Build the Android application
@@ -66,10 +67,10 @@ script:
   - ./gradlew connectedCheck
   - ./gradlew connectedAndroidTest
   # Build the .ino file(s) for ESP32
-  # - cd $TRAVIS_BUILD_DIR/arduino/healthRover
-  # - build-platform esp32
+  - cd $TRAVIS_BUILD_DIR/arduino
+  - build_platform esp32
 
-
+  # Send email notification to team memebers after build is dane
 notifications:
     email:
       recipients:
