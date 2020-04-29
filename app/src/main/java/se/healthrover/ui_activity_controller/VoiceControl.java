@@ -17,6 +17,7 @@ import java.util.ArrayList;
 import se.healthrover.R;
 import se.healthrover.car_service.CarManagement;
 import se.healthrover.car_service.CarManagementImp;
+import se.healthrover.entities.CarCommands;
 import se.healthrover.entities.HealthRoverCar;
 
 public class VoiceControl extends AppCompatActivity {
@@ -28,17 +29,10 @@ public class VoiceControl extends AppCompatActivity {
     private ImageView speechButton;
     private TextView speechToText;
     private int speed = 30;
-    private static final int NO_ANGLE = 0;
-    private static final int STOP = 0;
-    private static final int LEFT_ANGLE = -90;
-    private static final int RIGHT_ANGLE = 90;
     private static final int SPEECH_RESULT = 1;
-    private static final int MAX_VELOCITY = 50;
-    private static final int MIN_VELOCITY = 10;
     private static final int VELOCITY_MODIFIER = 10;
     private static final int NEGATION = -1;
     private CarManagement carManagement = new CarManagementImp();
-
 
     //Create the activity
     @Override
@@ -110,36 +104,36 @@ public class VoiceControl extends AppCompatActivity {
                 if (speed < 0) {
                     speed = speed * NEGATION;
                 }
-                carManagement.moveCar(healthRoverCar, speed, NO_ANGLE);
+                carManagement.moveCar(healthRoverCar, speed, Integer.parseInt(CarCommands.NO_ANGLE.getCarCommands()));
                 break;
             case "stop":
-                carManagement.moveCar(healthRoverCar, STOP, NO_ANGLE);
+                carManagement.moveCar(healthRoverCar, Integer.parseInt(CarCommands.NO_MOVEMENT.getCarCommands()), Integer.parseInt(CarCommands.NO_ANGLE.getCarCommands()));
                 break;
             case "increase":
-                if (speed < MAX_VELOCITY && speed > MIN_VELOCITY) {
+                if (speed < Integer.parseInt(CarCommands.VC_MAX_VELOCITY.getCarCommands()) && speed > Integer.parseInt(CarCommands.VC_MIN_VELOCITY.getCarCommands())) {
                     speed += VELOCITY_MODIFIER;
-                    carManagement.moveCar(healthRoverCar, speed, NO_ANGLE);
+                    carManagement.moveCar(healthRoverCar, speed, Integer.parseInt(CarCommands.NO_ANGLE.getCarCommands()));
                 } else {
                     Toast.makeText(VoiceControl.this, "Maximum velocity reached", Toast.LENGTH_SHORT).show();
                 }
                 break;
             case "decrease":
-                if (speed > MIN_VELOCITY) {
+                if (speed > Integer.parseInt(CarCommands.VC_MIN_VELOCITY.getCarCommands())) {
                     speed -= VELOCITY_MODIFIER;
-                    carManagement.moveCar(healthRoverCar, speed, NO_ANGLE);
+                    carManagement.moveCar(healthRoverCar, speed, Integer.parseInt(CarCommands.NO_ANGLE.getCarCommands()));
                 } else {
                     Toast.makeText(VoiceControl.this, "Minimum velocity reached", Toast.LENGTH_SHORT).show();
                 }
                 break;
             case "left":
-                carManagement.moveCar(healthRoverCar, speed, LEFT_ANGLE);
+                carManagement.moveCar(healthRoverCar, speed, Integer.parseInt(CarCommands.LEFT_ANGLE.getCarCommands()));
                 break;
             case "right":
-                carManagement.moveCar(healthRoverCar, speed, RIGHT_ANGLE);
+                carManagement.moveCar(healthRoverCar, speed, Integer.parseInt(CarCommands.RIGHT_ANGLE.getCarCommands()));
                 break;
             case "reverse":
                 speed = speed * NEGATION;
-                carManagement.moveCar(healthRoverCar, speed, NO_ANGLE);
+                carManagement.moveCar(healthRoverCar, speed, Integer.parseInt(CarCommands.NO_ANGLE.getCarCommands()));
                 break;
             default:
                 Toast.makeText(VoiceControl.this, "Invalid command", Toast.LENGTH_SHORT).show();
