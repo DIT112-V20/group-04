@@ -5,7 +5,6 @@ import android.os.Bundle;
 import android.speech.RecognizerIntent;
 import android.view.View;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -28,12 +27,16 @@ public class VoiceControl extends AppCompatActivity {
     private TextView headerVoiceControl;
     private ImageView speechButton;
     private TextView speechToText;
-    private int speed;
+    private int speed = 30;
     private static final int NO_ANGLE = 0;
     private static final int STOP = 0;
-    private static final int TURN_LEFT = -90;
-    private static final int TURN_RIGHT = 90;
+    private static final int LEFT_ANGLE = -90;
+    private static final int RIGHT_ANGLE = 90;
     private static final int SPEECH_RESULT = 1;
+    private static final int MAX_VELOCITY = 50;
+    private static final int MIN_VELOCITY = 10;
+    private static final int VELOCITY_MODIFIER = 10;
+    private static final int NEGATION = -1;
     private CarManagement carManagement = new CarManagementImp();
 
 
@@ -75,7 +78,6 @@ public class VoiceControl extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent speechIntent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
-                speechIntent.putExtra(RecognizerIntent.EXTRA_SPEECH_INPUT_COMPLETE_SILENCE_LENGTH_MILLIS, 10);
                 speechIntent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
                 speechIntent.putExtra(RecognizerIntent.EXTRA_PROMPT, "Listening...");
                 startActivityForResult(speechIntent, SPEECH_RESULT);
@@ -106,7 +108,7 @@ public class VoiceControl extends AppCompatActivity {
         switch (command) {
             case "forward":
                 if (speed < 0) {
-                    speed = speed * (-1);
+                    speed = speed * NEGATION;
                 }
                 carManagement.moveCar(healthRoverCar, speed, NO_ANGLE);
                 break;
@@ -114,29 +116,29 @@ public class VoiceControl extends AppCompatActivity {
                 carManagement.moveCar(healthRoverCar, STOP, NO_ANGLE);
                 break;
             case "increase":
-                if (speed < 50 && speed > 10) {
-                    speed += 10;
+                if (speed < MAX_VELOCITY && speed > MIN_VELOCITY) {
+                    speed += VELOCITY_MODIFIER;
                     carManagement.moveCar(healthRoverCar, speed, NO_ANGLE);
                 } else {
                     Toast.makeText(VoiceControl.this, "Maximum velocity reached", Toast.LENGTH_SHORT).show();
                 }
                 break;
             case "decrease":
-                if (speed > 10) {
-                    speed -= 10;
+                if (speed > MIN_VELOCITY) {
+                    speed -= VELOCITY_MODIFIER;
                     carManagement.moveCar(healthRoverCar, speed, NO_ANGLE);
                 } else {
                     Toast.makeText(VoiceControl.this, "Minimum velocity reached", Toast.LENGTH_SHORT).show();
                 }
                 break;
             case "left":
-                carManagement.moveCar(healthRoverCar, speed, TURN_LEFT);
+                carManagement.moveCar(healthRoverCar, speed, LEFT_ANGLE);
                 break;
             case "right":
-                carManagement.moveCar(healthRoverCar, speed, TURN_RIGHT);
+                carManagement.moveCar(healthRoverCar, speed, RIGHT_ANGLE);
                 break;
             case "reverse":
-                speed = -speed;
+                speed = speed * NEGATION;
                 carManagement.moveCar(healthRoverCar, speed, NO_ANGLE);
                 break;
             default:
