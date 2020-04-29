@@ -21,13 +21,13 @@ public class HttpService {
     private OkHttpClient client = new OkHttpClient();
     private final int HTTP_SUCCESS = 200;
 
-    public boolean sendGetRequest (String url){
+    public boolean sendGetRequest (String url, final boolean waitForCheckRequest){
 
         //Builds a GET request to a given url
         Request request = new Request.Builder()
                 .url(url)
                 .build();
-        //Used to control async threading in java, we need to wait for the requset to execute in order to continue
+        //Used to control async threading in java, we need to wait for the request to execute in order to continue
         final CountDownLatch countDownLatch = new CountDownLatch(1);
 
         //enqueue the request and run it on a thread, Logging the failures into the log and on success setting the status to true, using countdown to manage threading
@@ -37,7 +37,9 @@ public class HttpService {
             public void onFailure(@NotNull Call call, @NotNull IOException e) {
                 checkStatus = false;
                 Log.i("Error","Failed to connect: "+e.getMessage());
-                countDownLatch.countDown();
+                if (waitForCheckRequest) {
+                    countDownLatch.countDown();
+                }
             }
 
             @Override
@@ -50,18 +52,22 @@ public class HttpService {
                 else {
                     checkStatus = false;
                 }
-                countDownLatch.countDown();
+                if (waitForCheckRequest) {
+                    countDownLatch.countDown();
+                }
             }
         });
 
-        //Wait for the request thread to finish before returning the result
-        try {
-            countDownLatch.await();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
+        if (waitForCheckRequest) {
+            //Wait for the request thread to finish before returning the result
+            try {
+                countDownLatch.await();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
         }
-        return checkStatus;
 
+        return checkStatus;
     }
 
 }
