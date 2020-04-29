@@ -77,7 +77,7 @@ public class ManualControl extends AppCompatActivity {
                 );
 
                 //Send request to move the car, but only if REQUEST_DELAY ms have passed since last request sent
-                if (lastRequest - SystemClock.currentThreadTimeMillis() > REQUEST_DELAY) {
+                if (SystemClock.currentThreadTimeMillis() - lastRequest > REQUEST_DELAY) {
                     carManagement.moveCar(healthRoverCar, speed, turningAngle);
                     lastRequest = SystemClock.currentThreadTimeMillis();
                 }
