@@ -14,6 +14,7 @@ import io.github.controlwear.virtual.joystick.android.JoystickView;
 import se.healthrover.R;
 import se.healthrover.car_service.CarManagement;
 import se.healthrover.car_service.CarManagementImp;
+import se.healthrover.conectivity.MyWebSocket;
 import se.healthrover.entities.HealthRoverCar;
 
 
@@ -32,6 +33,7 @@ public class ManualControl extends AppCompatActivity {
     private Boolean statusCheck;
     private HealthRoverCar healthRoverCar;
     private long lastRequest;
+    private static int joystickMove = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -76,10 +78,11 @@ public class ManualControl extends AppCompatActivity {
                                 joystickController.getNormalizedX(),
                                 joystickController.getNormalizedY())
                 );
+                carManagement.moveCar(healthRoverCar, speed, turningAngle, ManualControl.this);
+                joystickMove++;
 
                 //Send request to move the car, but only if REQUEST_DELAY ms have passed since last request sent
                 if (SystemClock.currentThreadTimeMillis() - lastRequest > REQUEST_DELAY) {
-                    carManagement.moveCar(healthRoverCar, speed, turningAngle);
                     lastRequest = SystemClock.currentThreadTimeMillis();
                 }
 
@@ -137,6 +140,11 @@ public class ManualControl extends AppCompatActivity {
     public void onBackPressed() {
         super.onBackPressed();
         Intent intent = new Intent(ManualControl.this, CarSelect.class);
+        System.out.println("Joystick " + joystickMove);
+        System.out.println("Move method calledd " + CarManagementImp.countMoveRequest);
+        System.out.println("Send request " + MyWebSocket.socketInt);
+        System.out.println("REsponse " + MyWebSocket.socketRestp);
+
         startActivity(intent);
     }
 

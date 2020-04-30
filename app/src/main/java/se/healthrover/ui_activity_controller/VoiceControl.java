@@ -130,53 +130,53 @@ public class VoiceControl extends AppCompatActivity {
         if(requestCode == SPEECH_RESULT && resultCode == RESULT_OK){
             ArrayList<String> spokenWords = data.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
             speechToText.setText(spokenWords.get(0));
-            sendVoiceCommand(spokenWords.get(0));
+          //  sendVoiceCommand(spokenWords.get(0));
         }
         super.onActivityResult(requestCode, resultCode, data);
     }
     // Method to send voice commands to the SmartCar
-    private void sendVoiceCommand(String command) {
-        switch (command) {
-            case "forward":
-                if (speed < SPEED_CHECK) {
-                    speed = speed * NEGATION;
-                }
-                carManagement.moveCar(healthRoverCar, speed, Integer.parseInt(CarCommands.NO_ANGLE.getCarCommands()));
-                break;
-            case "stop":
-                carManagement.moveCar(healthRoverCar, Integer.parseInt(CarCommands.NO_MOVEMENT.getCarCommands()), Integer.parseInt(CarCommands.NO_ANGLE.getCarCommands()));
-                break;
-            case "increase":
-                if (speed < Integer.parseInt(CarCommands.VC_MAX_VELOCITY.getCarCommands()) && speed > Integer.parseInt(CarCommands.VC_MIN_VELOCITY.getCarCommands())) {
-                    speed += VELOCITY_MODIFIER;
-                    carManagement.moveCar(healthRoverCar, speed, Integer.parseInt(CarCommands.NO_ANGLE.getCarCommands()));
-                } else {
-                    Toast.makeText(VoiceControl.this, "Maximum velocity reached", Toast.LENGTH_SHORT).show();
-                }
-                break;
-            case "decrease":
-                if (speed > Integer.parseInt(CarCommands.VC_MIN_VELOCITY.getCarCommands())) {
-                    speed -= VELOCITY_MODIFIER;
-                    carManagement.moveCar(healthRoverCar, speed, Integer.parseInt(CarCommands.NO_ANGLE.getCarCommands()));
-                } else {
-                    Toast.makeText(VoiceControl.this, "Minimum velocity reached", Toast.LENGTH_SHORT).show();
-                }
-                break;
-            case "left":
-                carManagement.moveCar(healthRoverCar, speed, Integer.parseInt(CarCommands.LEFT_ANGLE.getCarCommands()));
-                break;
-            case "right":
-                carManagement.moveCar(healthRoverCar, speed, Integer.parseInt(CarCommands.RIGHT_ANGLE.getCarCommands()));
-                break;
-            case "reverse":
-                if(speed>SPEED_CHECK) {
-                    speed = speed * NEGATION;
-                }
-                carManagement.moveCar(healthRoverCar, speed, Integer.parseInt(CarCommands.NO_ANGLE.getCarCommands()));
-                break;
-            default:
-                Toast.makeText(VoiceControl.this, "Invalid command", Toast.LENGTH_SHORT).show();
-                break;
-        }
-    }
+//    private void sendVoiceCommand(String command) {
+//        switch (command) {
+//            case "forward":
+//                if (speed < SPEED_CHECK) {
+//                    speed = speed * NEGATION;
+//                }
+//                carManagement.moveCar(healthRoverCar, speed, Integer.parseInt(CarCommands.NO_ANGLE.getCarCommands()));
+//                break;
+//            case "stop":
+//                carManagement.moveCar(healthRoverCar, Integer.parseInt(CarCommands.NO_MOVEMENT.getCarCommands()), Integer.parseInt(CarCommands.NO_ANGLE.getCarCommands()));
+//                break;
+//            case "increase":
+//                if (speed < Integer.parseInt(CarCommands.VC_MAX_VELOCITY.getCarCommands()) && speed > Integer.parseInt(CarCommands.VC_MIN_VELOCITY.getCarCommands())) {
+//                    speed += VELOCITY_MODIFIER;
+//                    carManagement.moveCar(healthRoverCar, speed, Integer.parseInt(CarCommands.NO_ANGLE.getCarCommands()));
+//                } else {
+//                    Toast.makeText(VoiceControl.this, "Maximum velocity reached", Toast.LENGTH_SHORT).show();
+//                }
+//                break;
+//            case "decrease":
+//                if (speed > Integer.parseInt(CarCommands.VC_MIN_VELOCITY.getCarCommands())) {
+//                    speed -= VELOCITY_MODIFIER;
+//                    carManagement.moveCar(healthRoverCar, speed, Integer.parseInt(CarCommands.NO_ANGLE.getCarCommands()));
+//                } else {
+//                    Toast.makeText(VoiceControl.this, "Minimum velocity reached", Toast.LENGTH_SHORT).show();
+//                }
+//                break;
+//            case "left":
+//                carManagement.moveCar(healthRoverCar, speed, Integer.parseInt(CarCommands.LEFT_ANGLE.getCarCommands()));
+//                break;
+//            case "right":
+//                carManagement.moveCar(healthRoverCar, speed, Integer.parseInt(CarCommands.RIGHT_ANGLE.getCarCommands()));
+//                break;
+//            case "reverse":
+//                if(speed>SPEED_CHECK) {
+//                    speed = speed * NEGATION;
+//                }
+//                carManagement.moveCar(healthRoverCar, speed, Integer.parseInt(CarCommands.NO_ANGLE.getCarCommands()));
+//                break;
+//            default:
+//                Toast.makeText(VoiceControl.this, "Invalid command", Toast.LENGTH_SHORT).show();
+//                break;
+//        }
+//    }
 }

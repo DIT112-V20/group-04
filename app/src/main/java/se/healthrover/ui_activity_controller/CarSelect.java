@@ -51,8 +51,6 @@ public class CarSelect extends Activity{
 
         carList = findViewById(R.id.smartCarList);
         carList.setAdapter(adapter);
-        MyWebSocket webSocket = new MyWebSocket();
-        webSocket.createWebSocket("ws://echo.websocket.org", this);
         //Once a car is selected the name is retrieved and used to initialize the car object that is to be controlled
         carList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
@@ -75,7 +73,7 @@ public class CarSelect extends Activity{
                 }else {
 
                     carOnlineConnection = carManagement.checkStatus(healthRoverCar);
-                    if (!carOnlineConnection) {
+                    if (!true) {
                         Toast.makeText(getApplicationContext(), "Car is offline...", Toast.LENGTH_SHORT).show();
                     } else {
                         Intent intent = new Intent(CarSelect.this, ManualControl.class);

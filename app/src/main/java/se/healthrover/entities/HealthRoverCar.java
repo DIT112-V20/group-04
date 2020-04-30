@@ -2,7 +2,7 @@ package se.healthrover.entities;
 
 public enum HealthRoverCar {
     //A list of cars used since a database is not used
-    HEALTH_ROVER_CAR1("http://192.168.1.200/", "HealthRover"),
+    HEALTH_ROVER_CAR1("ws://192.168.1.200/", "HealthRover"),
     HEALTH_ROVER_CAR2("http://192.168.1.201/", "CAR2"),
     HEALTH_ROVER_CAR3("http://192.168.1.202/", "CAR3");
 

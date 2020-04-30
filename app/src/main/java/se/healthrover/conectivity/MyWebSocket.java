@@ -3,6 +3,8 @@ package se.healthrover.conectivity;
 import android.app.Activity;
 import android.widget.Toast;
 
+import androidx.loader.content.CursorLoader;
+
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -15,14 +17,20 @@ import okio.ByteString;
 
 public class MyWebSocket {
 
+        private OkHttpClient okHttpClient = new OkHttpClient();
+        private SocketListener socketListener;
+        public static int socketInt = 0;
+        public static int socketRestp =  0;
 
+
+    public MyWebSocket(Activity activity){
+         socketListener = new SocketListener(activity);
+       }
         public void createWebSocket(String url, Activity activity){
 
-            OkHttpClient okHttpClient = new OkHttpClient();
             Request request = new Request.Builder()
                     .url(url)
                     .build();
-            SocketListener socketListener = new SocketListener(activity);
             WebSocket webSocket =  okHttpClient.newWebSocket(request, socketListener);
 
         }
@@ -52,13 +60,13 @@ public class MyWebSocket {
         }
 
         @Override
-        public void onMessage(@NotNull okhttp3.WebSocket webSocket, @NotNull String text) {
+        public void onMessage(@NotNull okhttp3.WebSocket webSocket, @NotNull final String text) {
             super.onMessage(webSocket, text);
             activity.runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
-                    Toast.makeText(activity, "Connected", Toast.LENGTH_LONG).show();
-                    System.out.println("Connected...............");
+                    System.out.println(text);
+                    socketRestp++;
                 }
             });
         }
@@ -69,13 +77,15 @@ public class MyWebSocket {
         }
 
         @Override
-        public void onOpen(@NotNull okhttp3.WebSocket webSocket, @NotNull Response response) {
+        public void onOpen(@NotNull final okhttp3.WebSocket webSocket, @NotNull Response response) {
             super.onOpen(webSocket, response);
             activity.runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
-                    Toast.makeText(activity, "Connected", Toast.LENGTH_LONG).show();
-                    System.out.println("Connected...............");
+                    System.out.println("Sending");
+                    webSocket.send("");
+                    socketInt++;
+                    System.out.println("\n" + "Send");
                 }
             });
         }

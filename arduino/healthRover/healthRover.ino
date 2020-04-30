@@ -2,7 +2,7 @@
 #include <Wire.h>
 #include <VL53L0X.h>
 #include <WiFi.h>
-#include <WebServer.h>
+#include <WebSocketServer.h>
 
 const auto pulsesPerMeter = 600;
 const int START_SPEED = 40;
@@ -15,7 +15,7 @@ const char* password = "password";
 int frontSensorReading;
 int carSpeed;
 
-WebServer server(80);
+WebSocketServer server(80);
 
 BrushedMotor leftMotor(smartcarlib::pins::v2::leftMotorPins);
 BrushedMotor rightMotor(smartcarlib::pins::v2::rightMotorPins);
