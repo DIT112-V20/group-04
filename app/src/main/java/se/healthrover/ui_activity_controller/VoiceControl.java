@@ -3,9 +3,14 @@ package se.healthrover.ui_activity_controller;
 import android.content.Intent;
 import android.os.Bundle;
 import android.speech.RecognizerIntent;
+import android.view.Gravity;
+import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.PopupWindow;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -23,6 +28,7 @@ import se.healthrover.entities.HealthRoverCar;
 public class VoiceControl extends AppCompatActivity {
 
     private Button manualControlButton;
+    private Button guideButton;
     private HealthRoverCar healthRoverCar;
     private String carName;
     private TextView headerVoiceControl;
@@ -56,6 +62,7 @@ public class VoiceControl extends AppCompatActivity {
         headerVoiceControl.setText(carName);
         healthRoverCar = HealthRoverCar.valueOf(HealthRoverCar.getCarObjectName(carName));
         manualControlButton = findViewById(R.id.manualControl);
+        guideButton = findViewById(R.id.guideButton);
         speechButton = findViewById(R.id.speechButton);
         speechToText = findViewById(R.id.speechToText);
 
@@ -67,6 +74,35 @@ public class VoiceControl extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+
+        guideButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Inflate the layout of the popup window
+                LayoutInflater inflater = (LayoutInflater)
+                        getSystemService(LAYOUT_INFLATER_SERVICE);
+                View popupView = inflater.inflate(R.layout.guide_popup, null);
+
+                // Create the popup window
+                int width = LinearLayout.LayoutParams.WRAP_CONTENT;
+                int height = LinearLayout.LayoutParams.WRAP_CONTENT;
+                boolean focusable = true; // lets taps outside the popup also dismiss it
+                final PopupWindow popupWindow = new PopupWindow(popupView, width, height, focusable);
+
+                // Show the popup window
+                popupWindow.showAtLocation(v, Gravity.CENTER, 0, 0);
+
+                // Dismiss the popup window when touched
+                popupView.setOnTouchListener(new View.OnTouchListener() {
+                    @Override
+                    public boolean onTouch(View v, MotionEvent event) {
+                        popupWindow.dismiss();
+                        return true;
+                    }
+                });
+            }
+        });
+
         // Method for speech-to-text functionality
         speechButton.setOnClickListener(new View.OnClickListener() {
             @Override
