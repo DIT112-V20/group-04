@@ -38,6 +38,7 @@ public class VoiceControl extends AppCompatActivity {
     private static final int SPEECH_RESULT = 1;
     private static final int VELOCITY_MODIFIER = 10;
     private static final int NEGATION = -1;
+    private static final int SPEED_CHECK = 0;
     private CarManagement carManagement = new CarManagementImp();
 
     //Create the activity
@@ -168,7 +169,9 @@ public class VoiceControl extends AppCompatActivity {
                 carManagement.moveCar(healthRoverCar, speed, Integer.parseInt(CarCommands.RIGHT_ANGLE.getCarCommands()));
                 break;
             case "reverse":
-                speed = speed * NEGATION;
+                if(speed>SPEED_CHECK) {
+                    speed = speed * NEGATION;
+                }
                 carManagement.moveCar(healthRoverCar, speed, Integer.parseInt(CarCommands.NO_ANGLE.getCarCommands()));
                 break;
             default:
