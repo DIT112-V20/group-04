@@ -6,4 +6,5 @@
     <string name="connect">Connect</string>
     <string name="voice_control">Switch to\nVoice Control</string>
     <string name="manual_control">Switch to\nManual Control</string>
+    <string name="guide_button">Guide</string>
 </resources>
