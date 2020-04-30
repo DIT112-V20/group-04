@@ -3,6 +3,7 @@ package se.healthrover.ui_activity_controller;
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.SystemClock;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -17,7 +18,7 @@ import se.healthrover.entities.HealthRoverCar;
 
 
 public class ManualControl extends AppCompatActivity {
-
+   private static final int REQUEST_DELAY = 100;
 
     private TextView header;
     private String carName;
@@ -30,6 +31,7 @@ public class ManualControl extends AppCompatActivity {
     private Button voiceControl;
     private Boolean statusCheck;
     private HealthRoverCar healthRoverCar;
+    private long lastRequest;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,8 +58,7 @@ public class ManualControl extends AppCompatActivity {
         strengthText = findViewById(R.id.textView_strength);
         coordinatesText = findViewById(R.id.textView_coordinate);
         healthRoverCar = HealthRoverCar.valueOf(HealthRoverCar.getCarObjectName(carName));
-
-
+        lastRequest = 0;
 
         final JoystickView joystickController = findViewById(R.id.joystick);
 
@@ -65,17 +66,24 @@ public class ManualControl extends AppCompatActivity {
             @SuppressLint({"SetTextI18n", "DefaultLocale"})
             @Override
             public void onMove(int angle, int strength) {
+                //Update ui text
                 speed = convertSpeed(strength, angle);
                 turningAngle = convertAngle(angle);
                 angleText.setText(turningAngle + "° angle");
                 strengthText.setText(speed + "% speed");
-                carManagement.moveCar(healthRoverCar, speed, turningAngle);
-                //checkRequest(healthRoverCar, speed, turningAngle); TODO implement methods bellow
                 coordinatesText.setText(
                         String.format("x%03d:y%03d",
                                 joystickController.getNormalizedX(),
                                 joystickController.getNormalizedY())
                 );
+
+                //Send request to move the car, but only if REQUEST_DELAY ms have passed since last request sent
+                if (SystemClock.currentThreadTimeMillis() - lastRequest > REQUEST_DELAY) {
+                    carManagement.moveCar(healthRoverCar, speed, turningAngle);
+                    lastRequest = SystemClock.currentThreadTimeMillis();
+                }
+
+                //checkRequest(healthRoverCar, speed, turningAngle); TODO implement methods bellow
             }
         });
 
