@@ -138,7 +138,7 @@ public class VoiceControl extends AppCompatActivity {
     private void sendVoiceCommand(String command) {
         switch (command) {
             case "forward":
-                if (speed < 0) {
+                if (speed < SPEED_CHECK) {
                     speed = speed * NEGATION;
                 }
                 carManagement.moveCar(healthRoverCar, speed, Integer.parseInt(CarCommands.NO_ANGLE.getCarCommands()));
