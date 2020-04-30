@@ -58,6 +58,7 @@ public class ManualControl extends AppCompatActivity {
         strengthText = findViewById(R.id.textView_strength);
         coordinatesText = findViewById(R.id.textView_coordinate);
         healthRoverCar = HealthRoverCar.valueOf(HealthRoverCar.getCarObjectName(carName));
+        lastRequest = 0;
 
         final JoystickView joystickController = findViewById(R.id.joystick);
 
