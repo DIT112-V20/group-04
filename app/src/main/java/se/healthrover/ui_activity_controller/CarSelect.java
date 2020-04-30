@@ -13,6 +13,7 @@ import android.widget.Toast;
 import se.healthrover.R;
 import se.healthrover.car_service.CarManagement;
 import se.healthrover.car_service.CarManagementImp;
+import se.healthrover.conectivity.MyWebSocket;
 import se.healthrover.entities.HealthRoverCar;
 
 public class CarSelect extends Activity{
@@ -50,7 +51,8 @@ public class CarSelect extends Activity{
 
         carList = findViewById(R.id.smartCarList);
         carList.setAdapter(adapter);
-
+        MyWebSocket webSocket = new MyWebSocket();
+        webSocket.createWebSocket("ws://echo.websocket.org", this);
         //Once a car is selected the name is retrieved and used to initialize the car object that is to be controlled
         carList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
