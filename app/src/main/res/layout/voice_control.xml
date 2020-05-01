@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:custom="http://schemas.android.com/apk/res-auto"
+    tools:context=".ui_activity_controller.ManualControl">
+
+    <TextView
+        android:id="@+id/headerVoiceControl"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text=""
+        custom:layout_constraintBottom_toBottomOf="parent"
+        custom:layout_constraintHorizontal_bias="0.498"
+        custom:layout_constraintLeft_toLeftOf="parent"
+        custom:layout_constraintRight_toRightOf="parent"
+        custom:layout_constraintTop_toTopOf="parent"
+        custom:layout_constraintVertical_bias="0.08" />
+
+    <Button
+        android:id="@+id/manualControl"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/manual_control"
+        custom:layout_constraintBottom_toBottomOf="parent"
+        custom:layout_constraintEnd_toEndOf="parent"
+        custom:layout_constraintHorizontal_bias="0.492"
+        custom:layout_constraintStart_toStartOf="parent"
+        custom:layout_constraintTop_toTopOf="parent"
+        custom:layout_constraintVertical_bias="0.957" />
+
+    <ImageView
+        android:id="@+id/speechButton"
+        android:layout_width="140dp"
+        android:layout_height="137dp"
+        android:layout_marginStart="135dp"
+        android:layout_marginEnd="136dp"
+        android:layout_marginBottom="213dp"
+        custom:layout_constraintBottom_toTopOf="@+id/manualControl"
+        custom:layout_constraintEnd_toEndOf="parent"
+        custom:layout_constraintStart_toStartOf="parent"
+        custom:srcCompat="@android:drawable/ic_btn_speak_now" />
+
+    <TextView
+        android:id="@+id/speechToText"
+        android:layout_width="171dp"
+        android:layout_height="24dp"
+        android:layout_marginStart="120dp"
+        android:layout_marginTop="201dp"
+        android:layout_marginEnd="120dp"
+        android:layout_marginBottom="77dp"
+        android:gravity="center"
+        android:text=""
+        android:textSize="18sp"
+        custom:layout_constraintBottom_toTopOf="@+id/speechButton"
+        custom:layout_constraintEnd_toEndOf="parent"
+        custom:layout_constraintStart_toStartOf="parent"
+        custom:layout_constraintTop_toTopOf="parent" />
+
+    <Button
+        android:id="@+id/guideButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:text="@string/guide_button"
+        custom:layout_constraintEnd_toEndOf="parent"
+        custom:layout_constraintTop_toTopOf="parent" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,0 +1,84 @@
+language: android
+jdk: oraclejdk8
+
+env:
+  global:
+    # Set timeout for the Android emulator to come online
+    - ADB_INSTALL_TIMEOUT=10
+    # Set the minimum Android API to support
+    # Note: Not all of them work well with Travis
+    - ANDROID_TARGET=android-21
+
+before_cache:
+  - rm -f $HOME/.gradle/caches/modules-2/modules-2.lock
+
+cache:
+  directories:
+    # Cache all dirs under .gradle folder
+    - $HOME/.gradle/daemon       # Cache daemon logs
+    - $HOME/.gradle/native       # Cache library downloaded from the gradle dependency
+    - $HOME/.gradle/wrapper      # Cache the gradle
+
+android:
+  components:
+    - tools # to get the new `repository-11.xml`
+    - tools # see https://github.com/travis-ci/travis-ci/issues/6040#issuecomment-219367943)
+    - platform-tools
+    - build-tools-28.0.3
+    - $ANDROID_TARGET # Our minimum Android version
+    - sys-img-armeabi-v7a-$ANDROID_TARGET
+    - extra-android-m2repository
+    - extra-google-m2repository
+
+before_script:
+  # Launch Android emulator to run the instrumented tests
+  - android list targets
+  - echo no | android create avd --force -n test -t $ANDROID_TARGET --abi armeabi-v7a # Create AVD for given api
+  - emulator -avd test -no-audio -no-window & # Start emulator
+  - android-wait-for-emulator
+  - adb devices # Display list of devices
+  - adb shell input keyevent 82 &
+  # Change gradlew file's permissions in order to be executable
+  - chmod +x $TRAVIS_BUILD_DIR/gradlew
+
+before_install:
+  # Install Android 9 SDK and accept its user agreement
+  - echo yes | sdkmanager "platforms;android-28"
+  # Install Travis CI configuration for Arduino sketches
+  - source <(curl -SLs https://raw.githubusercontent.com/adafruit/travis-ci-arduino/master/install.sh)
+
+install:
+  # Install SmartCar shield library (used in our sketch)
+  - arduino --install-library "Smartcar shield"
+  # Install VL53L0X distance sensor library
+  - arduino --install-library "VL53L0X"
+  # Install the ServoESP32 library, in order to generate RC servo signals on selected pins with ESP32
+  - arduino --install-library "ServoESP32"
+  # Install the ESP32 AnalogWrite library, in order to provide analogWrite function polyfill for ESP32 Arduino framework
+  - arduino --install-library "ESP32 AnalogWrite"
+
+script:
+  # Build the Android application
+  - cd $TRAVIS_BUILD_DIR/
+  - ./gradlew build --stacktrace
+  # Run the Android application's unit tests
+  - ./gradlew test --info
+  # Execution of Android application's instrumented tests
+  - ./gradlew connectedCheck
+  - ./gradlew connectedAndroidTest
+  # Build the .ino file(s) for ESP32
+  - cd $TRAVIS_BUILD_DIR/arduino
+  - build_platform esp32
+
+  # Send email notification to team memebers after build is dane
+notifications:
+    email:
+      recipients:
+        - gustsach@student.gu.se
+        - gusparkr@student.gu.se
+        - gusjesee@student.gu.se
+        - gusgunsah@student.gu.se
+        - gussmosa@student.gu.se
+        - guslarcaan@student.gu.se
+      on_success: always
+      on_failure: always

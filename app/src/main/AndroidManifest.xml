@@ -2,6 +2,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="se.healthrover">
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.RECORD_AUDIO" />
+
 
     <application
         android:allowBackup="true"
@@ -19,6 +21,8 @@
             </intent-filter>
         </activity>
         <activity android:name=".ui_activity_controller.ManualControl" />
+        <activity android:name=".ui_activity_controller.VoiceControl" />
+
 
     </application>
 

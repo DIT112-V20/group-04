@@ -3,16 +3,12 @@ package se.healthrover.ui_activity_controller;
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
-import android.speech.tts.TextToSpeech;
-import android.util.Log;
+import android.os.SystemClock;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
-
-import java.util.Locale;
 
 import io.github.controlwear.virtual.joystick.android.JoystickView;
 import se.healthrover.R;
@@ -22,7 +18,7 @@ import se.healthrover.entities.HealthRoverCar;
 
 
 public class ManualControl extends AppCompatActivity {
-
+   private static final int REQUEST_DELAY = 100;
 
     private TextView header;
     private String carName;
@@ -33,66 +29,84 @@ public class ManualControl extends AppCompatActivity {
     private int speed;
     private int turningAngle;
     private Button voiceControl;
-    private TextToSpeech textToSpeech;
     private Boolean statusCheck;
+    private HealthRoverCar healthRoverCar;
+    private long lastRequest;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        initialize();
+
+    }
+    //On restart refresh the content
+    @Override
+    protected void onRestart() {
+        super.onRestart();
+        initialize();
+    }
+
+    // Using the method to load and initialize the content
+    private void initialize(){
+
         setContentView(R.layout.manual_control);
         header = findViewById(R.id.header);
         voiceControl = findViewById(R.id.voiceControl);
         carName = getIntent().getStringExtra("carName");
         header.setText(carName);
-        angleText = (TextView) findViewById(R.id.textView_angle);
-        strengthText = (TextView) findViewById(R.id.textView_strength);
+        angleText = findViewById(R.id.textView_angle);
+        strengthText = findViewById(R.id.textView_strength);
         coordinatesText = findViewById(R.id.textView_coordinate);
+        healthRoverCar = HealthRoverCar.valueOf(HealthRoverCar.getCarObjectName(carName));
+        lastRequest = 0;
 
-
-
-        final JoystickView joystickController = (JoystickView) findViewById(R.id.joystick);
+        final JoystickView joystickController = findViewById(R.id.joystick);
 
         joystickController.setOnMoveListener(new JoystickView.OnMoveListener() {
             @SuppressLint({"SetTextI18n", "DefaultLocale"})
             @Override
             public void onMove(int angle, int strength) {
-                HealthRoverCar tempCar = HealthRoverCar.valueOf(HealthRoverCar.getCarObjectName(carName));
+                //Update ui text
                 speed = convertSpeed(strength, angle);
                 turningAngle = convertAngle(angle);
                 angleText.setText(turningAngle + "° angle");
                 strengthText.setText(speed + "% speed");
-                carManagement.moveCar(tempCar, speed, turningAngle);
-                checkRequest(tempCar, speed, turningAngle);
                 coordinatesText.setText(
                         String.format("x%03d:y%03d",
                                 joystickController.getNormalizedX(),
                                 joystickController.getNormalizedY())
                 );
+
+                //Send request to move the car, but only if REQUEST_DELAY ms have passed since last request sent
+                if (SystemClock.currentThreadTimeMillis() - lastRequest > REQUEST_DELAY) {
+                    carManagement.moveCar(healthRoverCar, speed, turningAngle);
+                    lastRequest = SystemClock.currentThreadTimeMillis();
+                }
+
+                //checkRequest(healthRoverCar, speed, turningAngle); TODO implement methods bellow
             }
         });
 
-        textToSpeech = new TextToSpeech(getApplicationContext(), new TextToSpeech.OnInitListener() {
-            @Override
-            public void onInit(int status) {
-                if (status != TextToSpeech.ERROR){
-                    textToSpeech.setLanguage(Locale.ENGLISH);
-                }
-            }
-        });
+
         voiceControl.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                textToSpeech.speak("This option is not available yet",TextToSpeech.QUEUE_FLUSH,null);
+                Intent intent = new Intent(ManualControl.this, VoiceControl.class);
+                intent.putExtra("carName", healthRoverCar.getCarName());
+                startActivity(intent);
             }
         });
 
 
     }
+    /* TODO implement error handling for HTTP
     private void switchCarSelect(String errorMessage){
         Intent intent = new Intent(ManualControl.this, CarSelect.class);
         startActivity(intent);
         Toast.makeText(ManualControl.this, errorMessage, Toast.LENGTH_LONG).show();
     }
+
+
     private void checkRequest(HealthRoverCar car, int speed, int turningAngle){
         statusCheck = carManagement.moveCar(car, speed, turningAngle);
         if(!statusCheck){
@@ -116,6 +130,14 @@ public class ManualControl extends AppCompatActivity {
                 }
             }
         }
+    }
+*/
+    // Using back button to return to Car select page
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        Intent intent = new Intent(ManualControl.this, CarSelect.class);
+        startActivity(intent);
     }
 
     //Convert strength from joystick to the corresponding car speed

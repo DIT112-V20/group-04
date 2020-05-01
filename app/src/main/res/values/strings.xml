@@ -5,4 +5,15 @@
     <string name="choose_a_car_from_the_list">Choose a car from the list:</string>
     <string name="connect">Connect</string>
     <string name="voice_control">Switch to\nVoice Control</string>
+    <string name="manual_control">Switch to\nManual Control</string>
+    <string name="guide_button">Guide</string>
+    <string name="guide_text">The following commands are available:\n
+        Forward\n
+        Stop\n
+        Increase\n
+        Decrease\n
+        Left\n
+        Right\n
+        Reverse\n
+    </string>
 </resources>
