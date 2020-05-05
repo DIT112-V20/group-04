@@ -3,7 +3,6 @@ package se.healthrover.ui_activity_controller;
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.SystemClock;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -14,7 +13,7 @@ import io.github.controlwear.virtual.joystick.android.JoystickView;
 import se.healthrover.R;
 import se.healthrover.car_service.CarManagement;
 import se.healthrover.car_service.CarManagementImp;
-import se.healthrover.conectivity.MyWebSocket;
+import se.healthrover.conectivity.HealthRoverWebSocket;
 import se.healthrover.entities.HealthRoverCar;
 
 
@@ -33,6 +32,7 @@ public class ManualControl extends AppCompatActivity {
     private Boolean statusCheck;
     private HealthRoverCar healthRoverCar;
     private long lastRequest;
+    //Testing TODO remove counter
     private static int joystickMove = 0;
 
     @Override
@@ -78,13 +78,15 @@ public class ManualControl extends AppCompatActivity {
                                 joystickController.getNormalizedX(),
                                 joystickController.getNormalizedY())
                 );
+
                 carManagement.moveCar(healthRoverCar, speed, turningAngle, ManualControl.this);
+                //Testing TODO remove counter
                 joystickMove++;
 
                 //Send request to move the car, but only if REQUEST_DELAY ms have passed since last request sent
-                if (SystemClock.currentThreadTimeMillis() - lastRequest > REQUEST_DELAY) {
-                    lastRequest = SystemClock.currentThreadTimeMillis();
-                }
+//                if (SystemClock.currentThreadTimeMillis() - lastRequest > REQUEST_DELAY) {
+//                    lastRequest = SystemClock.currentThreadTimeMillis();
+//                }
 
                 //checkRequest(healthRoverCar, speed, turningAngle); TODO implement methods bellow
             }
@@ -140,10 +142,11 @@ public class ManualControl extends AppCompatActivity {
     public void onBackPressed() {
         super.onBackPressed();
         Intent intent = new Intent(ManualControl.this, CarSelect.class);
+        //Testing TODO remove counter
         System.out.println("Joystick " + joystickMove);
         System.out.println("Move method calledd " + CarManagementImp.countMoveRequest);
-        System.out.println("Send request " + MyWebSocket.socketInt);
-        System.out.println("REsponse " + MyWebSocket.socketRestp);
+        System.out.println("Send request " + HealthRoverWebSocket.socketInt);
+        System.out.println("REsponse " + HealthRoverWebSocket.socketRestp);
 
         startActivity(intent);
     }

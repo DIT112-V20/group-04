@@ -15,15 +15,16 @@ import okhttp3.WebSocket;
 import okhttp3.WebSocketListener;
 import okio.ByteString;
 
-public class MyWebSocket {
+public class HealthRoverWebSocket {
 
         private OkHttpClient okHttpClient = new OkHttpClient();
         private SocketListener socketListener;
+        //Testing TODO remove counter
         public static int socketInt = 0;
         public static int socketRestp =  0;
 
 
-    public MyWebSocket(Activity activity){
+    public HealthRoverWebSocket(Activity activity){
          socketListener = new SocketListener(activity);
        }
         public void createWebSocket(String url, Activity activity){
@@ -66,6 +67,7 @@ public class MyWebSocket {
                 @Override
                 public void run() {
                     System.out.println(text);
+                    //Testing TODO remove counter
                     socketRestp++;
                 }
             });
@@ -84,6 +86,7 @@ public class MyWebSocket {
                 public void run() {
                     System.out.println("Sending");
                     webSocket.send("");
+                    //Testing TODO remove counter
                     socketInt++;
                     System.out.println("\n" + "Send");
                 }

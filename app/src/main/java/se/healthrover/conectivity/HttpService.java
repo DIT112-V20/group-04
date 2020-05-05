@@ -21,7 +21,7 @@ public class HttpService {
     private OkHttpClient client = new OkHttpClient();
     private final int HTTP_SUCCESS = 200;
 
-    public boolean sendGetRequest (String url, final boolean waitForCheckRequest){
+    public boolean sendGetRequest (String url){
 
         //Builds a GET request to a given url
         Request request = new Request.Builder()
@@ -37,9 +37,8 @@ public class HttpService {
             public void onFailure(@NotNull Call call, @NotNull IOException e) {
                 checkStatus = false;
                 Log.i("Error","Failed to connect: "+e.getMessage());
-                if (waitForCheckRequest) {
+
                     countDownLatch.countDown();
-                }
             }
 
             @Override
@@ -51,20 +50,16 @@ public class HttpService {
                 else {
                     checkStatus = false;
                 }
-                if (waitForCheckRequest) {
                     countDownLatch.countDown();
-                }
-            }
-        });
 
-        if (waitForCheckRequest) {
+        }});
+
             //Wait for the request thread to finish before returning the result
             try {
                 countDownLatch.await();
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
-        }
 
         return checkStatus;
     }

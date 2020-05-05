@@ -13,7 +13,6 @@ import android.widget.Toast;
 import se.healthrover.R;
 import se.healthrover.car_service.CarManagement;
 import se.healthrover.car_service.CarManagementImp;
-import se.healthrover.conectivity.MyWebSocket;
 import se.healthrover.entities.HealthRoverCar;
 
 public class CarSelect extends Activity{
@@ -73,7 +72,7 @@ public class CarSelect extends Activity{
                 }else {
 
                     carOnlineConnection = carManagement.checkStatus(healthRoverCar);
-                    if (!true) {
+                    if (!carOnlineConnection) {
                         Toast.makeText(getApplicationContext(), "Car is offline...", Toast.LENGTH_SHORT).show();
                     } else {
                         Intent intent = new Intent(CarSelect.this, ManualControl.class);
