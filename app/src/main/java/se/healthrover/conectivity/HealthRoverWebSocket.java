@@ -1,9 +1,11 @@
 package se.healthrover.conectivity;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.widget.Toast;
 
 import androidx.loader.content.CursorLoader;
+import java.util.concurrent.CountDownLatch;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -14,6 +16,7 @@ import okhttp3.Response;
 import okhttp3.WebSocket;
 import okhttp3.WebSocketListener;
 import okio.ByteString;
+import se.healthrover.ui_activity_controller.ManualControl;
 
 public class HealthRoverWebSocket {
 
@@ -29,14 +32,15 @@ public class HealthRoverWebSocket {
          socketListener = new SocketListener(activity);
        }
 
-
         public boolean createWebSocket(String url, Activity activity, String command){
 
             Request request = new Request.Builder()
-                    .url(url)
+                    .url(url + command)
                     .build();
             WebSocket webSocket =  okHttpClient.newWebSocket(request, socketListener);
-            webSocket.send(command);
+            //webSocket.send(command);
+            System.out.println("command " + command);
+            System.out.println("request " + request);
             return status;
         }
 
@@ -71,12 +75,16 @@ public class HealthRoverWebSocket {
                 @Override
                 public void run() {
                     if (text.contains("200")){
+                        Intent intent = new Intent(activity.getApplication(), ManualControl.class);
+                        intent.putExtra("carName", "HealthRover");
+                        activity.startActivity(intent);
                         status = true;
+                        System.out.println("response " + text);
                     }
                     else {
+                        System.out.println("response " + text);
                         status = false;
                     }
-                    System.out.println(text);
                     //Testing TODO remove counter
                     socketRestp++;
                 }
@@ -95,7 +103,7 @@ public class HealthRoverWebSocket {
                 @Override
                 public void run() {
                     System.out.println("Sending");
-                    webSocket.send("");
+                    //webSocket.send("");
                     //Testing TODO remove counter
                     socketInt++;
                     System.out.println("\n" + "Send");

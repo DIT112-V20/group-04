@@ -15,16 +15,17 @@ public class CarManagementImp implements CarManagement {
 
     @Override
     public boolean checkStatus(HealthRoverCar healthRoverCar, Activity activity) {
-        String request = healthRoverCar.getUrl();
+        String request = healthRoverCar.getUrl() + CarCommands.STATUS.getCarCommands();
         HealthRoverWebSocket webSocket = new HealthRoverWebSocket(activity);
 
-        return   webSocket.createWebSocket(request, activity, CarCommands.STATUS.getCarCommands());
+        return   service.sendGetRequest(request);
     }
 
     public void moveCar(HealthRoverCar healthRoverCar, int speed, int angle, Activity activity) {
         String request = healthRoverCar.getUrl();
         HealthRoverWebSocket webSocket = new HealthRoverWebSocket(activity);
-        webSocket.createWebSocket(request, activity, CarCommands.REQUEST.getCarCommands() + CarCommands.SPEED.getCarCommands() + speed + CarCommands.ANGLE.getCarCommands() + angle);
+        webSocket.createWebSocket(request, activity,  CarCommands.REQUEST.getCarCommands() + CarCommands.SPEED.getCarCommands() + speed + CarCommands.ANGLE.getCarCommands() + angle);
+        //webSocket.createWebSocket(request, activity, CarCommands.SPEED.getCarCommands());
         //Testing TODO remove counter
         countMoveRequest++;
     }
