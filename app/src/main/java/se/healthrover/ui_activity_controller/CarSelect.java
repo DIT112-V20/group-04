@@ -71,7 +71,7 @@ public class CarSelect extends Activity{
                     Toast.makeText(getApplicationContext(), "Select a car...", Toast.LENGTH_SHORT).show();
                 }else {
 
-                    carOnlineConnection = carManagement.checkStatus(healthRoverCar);
+                    carOnlineConnection = carManagement.checkStatus(healthRoverCar, CarSelect.this);
                     if (!carOnlineConnection) {
                         Toast.makeText(getApplicationContext(), "Car is offline...", Toast.LENGTH_SHORT).show();
                     } else {

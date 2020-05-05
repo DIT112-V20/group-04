@@ -22,18 +22,22 @@ public class HealthRoverWebSocket {
         //Testing TODO remove counter
         public static int socketInt = 0;
         public static int socketRestp =  0;
+        private boolean status;
 
 
     public HealthRoverWebSocket(Activity activity){
          socketListener = new SocketListener(activity);
        }
-        public void createWebSocket(String url, Activity activity){
+
+
+        public boolean createWebSocket(String url, Activity activity, String command){
 
             Request request = new Request.Builder()
                     .url(url)
                     .build();
             WebSocket webSocket =  okHttpClient.newWebSocket(request, socketListener);
-
+            webSocket.send(command);
+            return status;
         }
 
 
@@ -66,6 +70,12 @@ public class HealthRoverWebSocket {
             activity.runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
+                    if (text.contains("200")){
+                        status = true;
+                    }
+                    else {
+                        status = false;
+                    }
                     System.out.println(text);
                     //Testing TODO remove counter
                     socketRestp++;
