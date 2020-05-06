@@ -35,6 +35,7 @@ public class ManualControl extends AppCompatActivity {
     private long lastRequest;
     //Testing TODO remove counter
     private static int joystickMove = 0;
+    private int[] values;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,6 +63,7 @@ public class ManualControl extends AppCompatActivity {
         coordinatesText = findViewById(R.id.textView_coordinate);
         healthRoverCar = HealthRoverCar.valueOf(HealthRoverCar.getCarObjectName(carName));
         lastRequest = 0;
+        values = new int[]{0, 0};
 
         final JoystickView joystickController = findViewById(R.id.joystick);
 
@@ -79,8 +81,12 @@ public class ManualControl extends AppCompatActivity {
                                 joystickController.getNormalizedX(),
                                 joystickController.getNormalizedY())
                 );
+                if(values[0] != speed && values[1] != turningAngle){
+                    carManagement.moveCar(healthRoverCar, speed, turningAngle, ManualControl.this);
+                    values[0] = speed;
+                    values[1] = turningAngle;
+                }
 
-                carManagement.moveCar(healthRoverCar, speed, turningAngle, ManualControl.this);
                 //Testing TODO remove counter
                 joystickMove++;
 
@@ -91,8 +97,8 @@ public class ManualControl extends AppCompatActivity {
 
                 //checkRequest(healthRoverCar, speed, turningAngle); TODO implement methods bellow
             }
-        });
-
+        }
+        );
 
         voiceControl.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -155,22 +161,22 @@ public class ManualControl extends AppCompatActivity {
     //Convert strength from joystick to the corresponding car speed
     private int convertSpeed(int strength, int angle) {
         if (angle > 180) {
-            return - strength;
+            return - (strength/10)*10;
         } else {
-            return strength;
+            return (strength/10)*10;
         }
     }
 
     //Converts angle from joystick to the corresponding car angles
     private int convertAngle(int angle) {
         if (angle <= 90 && angle >= 0) {
-            return (90 - angle);
+            return ((90 - angle)/10)*10;
         } else if (angle > 90 && angle <= 180) {
-            return (angle - 90) * (-1);
+            return (((angle - 90) * (-1))/10)*10;
         } else if (angle > 180 && angle <= 270) {
-            return (angle - 270);
+            return ((angle - 270)/10)*10;
         } else {
-            return (angle - 270);
+            return ((angle - 270)/10)*10;
         }
     }
 }

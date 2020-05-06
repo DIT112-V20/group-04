@@ -18,7 +18,7 @@ import okhttp3.WebSocketListener;
 import okio.ByteString;
 import se.healthrover.ui_activity_controller.ManualControl;
 
-public class HealthRoverWebSocket {
+public class HealthRoverWebSocket implements HealthRoverWebService {
 
         private OkHttpClient okHttpClient = new OkHttpClient();
         private SocketListener socketListener;
@@ -32,16 +32,14 @@ public class HealthRoverWebSocket {
          socketListener = new SocketListener(activity);
        }
 
-        public boolean createWebSocket(String url, Activity activity, String command){
+        public void createWebSocket(String url, Activity activity){
 
             Request request = new Request.Builder()
-                    .url(url + command)
+                    .url(url)
                     .build();
             WebSocket webSocket =  okHttpClient.newWebSocket(request, socketListener);
             //webSocket.send(command);
-            System.out.println("command " + command);
             System.out.println("request " + request);
-            return status;
         }
 
 

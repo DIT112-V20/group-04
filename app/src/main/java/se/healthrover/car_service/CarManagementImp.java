@@ -2,6 +2,7 @@ package se.healthrover.car_service;
 
 import android.app.Activity;
 
+import se.healthrover.conectivity.HealthRoverWebService;
 import se.healthrover.conectivity.HttpService;
 import se.healthrover.conectivity.HealthRoverWebSocket;
 import se.healthrover.entities.CarCommands;
@@ -22,9 +23,9 @@ public class CarManagementImp implements CarManagement {
     }
 
     public void moveCar(HealthRoverCar healthRoverCar, int speed, int angle, Activity activity) {
-        String request = healthRoverCar.getUrl();
-        HealthRoverWebSocket webSocket = new HealthRoverWebSocket(activity);
-        webSocket.createWebSocket(request, activity,  CarCommands.REQUEST.getCarCommands() + CarCommands.SPEED.getCarCommands() + speed + CarCommands.ANGLE.getCarCommands() + angle);
+        String request = healthRoverCar.getUrl() + CarCommands.REQUEST.getCarCommands() + CarCommands.SPEED.getCarCommands() + speed + CarCommands.ANGLE.getCarCommands() + angle;
+        HealthRoverWebService webService = new HealthRoverWebSocket(activity);
+        webService.createWebSocket(request, activity );
         //webSocket.createWebSocket(request, activity, CarCommands.SPEED.getCarCommands());
         //Testing TODO remove counter
         countMoveRequest++;
