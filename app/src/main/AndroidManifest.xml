@@ -23,6 +23,10 @@
         <activity android:name=".ui_activity_controller.ManualControl" />
         <activity android:name=".ui_activity_controller.VoiceControl" />
 
+        <meta-data
+            android:name="preloaded_fonts"
+            android:resource="@array/preloaded_fonts" />
+
 
     </application>
 
