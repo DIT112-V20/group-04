@@ -24,7 +24,8 @@ public class ManualControl extends AppCompatActivity {
     private String carName;
     private TextView angleText;
     private TextView strengthText;
-    private TextView coordinatesText;
+    private TextView textSpeedHeader;
+    private TextView textAngleHeader;
     private CarManagement carManagement = new CarManagementImp();
     private int speed;
     private int turningAngle;
@@ -56,7 +57,6 @@ public class ManualControl extends AppCompatActivity {
         header.setText(carName);
         angleText = findViewById(R.id.textView_angle);
         strengthText = findViewById(R.id.textView_strength);
-        coordinatesText = findViewById(R.id.textView_coordinate);
         healthRoverCar = HealthRoverCar.valueOf(HealthRoverCar.getCarObjectName(carName));
         lastRequest = 0;
 
@@ -71,11 +71,6 @@ public class ManualControl extends AppCompatActivity {
                 turningAngle = convertAngle(angle);
                 angleText.setText(turningAngle + "° angle");
                 strengthText.setText(speed + "% speed");
-                coordinatesText.setText(
-                        String.format("x%03d:y%03d",
-                                joystickController.getNormalizedX(),
-                                joystickController.getNormalizedY())
-                );
 
                 //Send request to move the car, but only if REQUEST_DELAY ms have passed since last request sent
                 if (SystemClock.currentThreadTimeMillis() - lastRequest > REQUEST_DELAY) {
