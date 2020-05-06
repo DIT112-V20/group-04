@@ -8,7 +8,7 @@ import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
-import android.widget.ImageView;
+import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 import android.widget.TextView;
@@ -32,7 +32,7 @@ public class VoiceControl extends AppCompatActivity {
     private HealthRoverCar healthRoverCar;
     private String carName;
     private TextView headerVoiceControl;
-    private ImageView speechButton;
+    private ImageButton speechButton;
     private TextView speechToText;
     private int speed = 30;
     private static final int SPEECH_RESULT = 1;
