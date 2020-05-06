@@ -8,9 +8,11 @@
 
     <TextView
         android:id="@+id/headerVoiceControl"
+        style="@style/standardText"
+        android:textSize="15dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text=""
+        android:text="carName"
         custom:layout_constraintBottom_toBottomOf="parent"
         custom:layout_constraintHorizontal_bias="0.498"
         custom:layout_constraintLeft_toLeftOf="parent"

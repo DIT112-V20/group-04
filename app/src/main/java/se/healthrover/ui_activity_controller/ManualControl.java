@@ -69,8 +69,8 @@ public class ManualControl extends AppCompatActivity {
                 //Update ui text
                 speed = convertSpeed(strength, angle);
                 turningAngle = convertAngle(angle);
-                angleText.setText(turningAngle + "° angle");
-                strengthText.setText(speed + "% speed");
+                angleText.setText(turningAngle + "°");
+                strengthText.setText(speed + "%");
 
                 //Send request to move the car, but only if REQUEST_DELAY ms have passed since last request sent
                 if (SystemClock.currentThreadTimeMillis() - lastRequest > REQUEST_DELAY) {
