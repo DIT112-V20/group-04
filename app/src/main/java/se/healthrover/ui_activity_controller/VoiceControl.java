@@ -89,6 +89,7 @@ public class VoiceControl extends AppCompatActivity {
                 int height = LinearLayout.LayoutParams.WRAP_CONTENT;
                 boolean focusable = true; // lets taps outside the popup also dismiss it
                 final PopupWindow popupWindow = new PopupWindow(popupView, width, height, focusable);
+                popupWindow.setElevation(32);
 
                 // Show the popup window
                 popupWindow.showAtLocation(v, Gravity.CENTER, 0, 0);
