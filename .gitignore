@@ -13,3 +13,5 @@
 /captures
 .externalNativeBuild
 .cxx
+/app/src/main/res/raw/dialogflow_access_key.json
+/app/src/main/res/raw/test_agent_credentials.json
