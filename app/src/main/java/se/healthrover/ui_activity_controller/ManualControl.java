@@ -15,10 +15,11 @@ import se.healthrover.R;
 import se.healthrover.car_service.CarManagement;
 import se.healthrover.car_service.CarManagementImp;
 import se.healthrover.entities.HealthRoverCar;
+import se.healthrover.ui_activity_controller.voice_control.SpeechRecognition;
 
 
 public class ManualControl extends AppCompatActivity {
-   private static final int REQUEST_DELAY = 100;
+    private static final int REQUEST_DELAY = 100;
 
     private TextView header;
     private String carName;
@@ -91,7 +92,7 @@ public class ManualControl extends AppCompatActivity {
         voiceControl.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(ManualControl.this, VoiceControl.class);
+                Intent intent = new Intent(ManualControl.this, SpeechRecognition.class);
                 intent.putExtra("carName", healthRoverCar.getCarName());
                 startActivity(intent);
             }

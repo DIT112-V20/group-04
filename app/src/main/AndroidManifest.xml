@@ -21,7 +21,7 @@
             </intent-filter>
         </activity>
         <activity android:name=".ui_activity_controller.ManualControl" />
-        <activity android:name=".ui_activity_controller.VoiceControl" />
+        <activity android:name=".ui_activity_controller.voice_control.SpeechRecognition" />
 
 
     </application>
