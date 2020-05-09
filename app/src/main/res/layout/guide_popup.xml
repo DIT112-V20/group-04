@@ -3,15 +3,21 @@
     android:id="@+id/guidePopup"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:background="@color/colorAccent"
+    android:background="@color/colorLightSeaGreenTransparent"
     android:gravity="bottom">
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
-        android:layout_margin="30dp"
+        android:layout_marginStart="30dp"
+        android:layout_marginTop="30dp"
+        android:layout_marginEnd="30dp"
+        android:layout_marginBottom="30dp"
         android:text="@string/guide_text"
-        android:textSize="18sp" />
+        android:textAlignment="center"
+        android:textSize="18sp"
+        android:textColor="@color/colorWhite"
+        android:fontFamily="@font/raleway_bold"/>
 
 </RelativeLayout>

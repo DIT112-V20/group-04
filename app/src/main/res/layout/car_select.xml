@@ -11,24 +11,26 @@
         android:id="@+id/header"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:fontFamily="@font/raleway"
         android:text="@string/choose_a_car_from_the_list"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.226" />
+        app:layout_constraintVertical_bias="0.226"
+        style="@style/standardText"/>
 
     <Button
         android:id="@+id/connectToCar"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
         android:text="@string/connect"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.919" />
+        app:layout_constraintVertical_bias="0.919"
+        android:drawableLeft="@drawable/ic_wifi_black_24dp"
+        style="@style/standardButton"/>
 
     <ListView
         android:id="@+id/smartCarList"

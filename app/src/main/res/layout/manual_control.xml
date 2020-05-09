@@ -4,15 +4,17 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#E8E0DC"
+    android:background="#FFFFFF"
     tools:context=".ui_activity_controller.ManualControl">
 
 
     <TextView
         android:id="@+id/header"
+        style="@style/standardText"
+        android:textSize="15dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text=""
+        android:text="carName"
         custom:layout_constraintBottom_toBottomOf="parent"
         custom:layout_constraintHorizontal_bias="0.498"
         custom:layout_constraintLeft_toLeftOf="parent"
@@ -20,47 +22,8 @@
         custom:layout_constraintTop_toTopOf="parent"
         custom:layout_constraintVertical_bias="0.08" />
 
-    <TextView
-        android:id="@+id/textView_angle"
-        android:layout_width="117dp"
-        android:layout_height="44dp"
-        android:layout_alignParentEnd="true"
-        android:text="0°"
-        custom:layout_constraintBottom_toBottomOf="parent"
-        custom:layout_constraintEnd_toEndOf="parent"
-        custom:layout_constraintHorizontal_bias="0.54"
-        custom:layout_constraintStart_toStartOf="parent"
-        custom:layout_constraintTop_toTopOf="parent"
-        custom:layout_constraintVertical_bias="0.213" />
 
-    <TextView
-        android:id="@+id/textView_strength"
-        android:layout_width="114dp"
-        android:layout_height="61dp"
-        android:layout_below="@+id/textView_angle"
-        android:layout_alignParentEnd="true"
-        android:text="0%"
 
-        custom:layout_constraintBottom_toBottomOf="parent"
-        custom:layout_constraintEnd_toEndOf="parent"
-        custom:layout_constraintHorizontal_bias="0.097"
-        custom:layout_constraintStart_toStartOf="parent"
-        custom:layout_constraintTop_toTopOf="parent"
-        custom:layout_constraintVertical_bias="0.219" />
-
-    <TextView
-        android:id="@+id/textView_coordinate"
-        android:layout_width="88dp"
-        android:layout_height="54dp"
-        android:layout_below="@+id/textView_strength"
-        android:layout_alignParentEnd="true"
-        android:text="x050:x050"
-        custom:layout_constraintBottom_toBottomOf="parent"
-        custom:layout_constraintEnd_toEndOf="parent"
-        custom:layout_constraintHorizontal_bias="0.907"
-        custom:layout_constraintStart_toStartOf="parent"
-        custom:layout_constraintTop_toTopOf="parent"
-        custom:layout_constraintVertical_bias="0.217" />
 
     <io.github.controlwear.virtual.joystick.android.JoystickView
         android:id="@+id/joystick"
@@ -68,10 +31,10 @@
         android:layout_height="304dp"
         android:layout_alignParentEnd="true"
         android:layout_alignParentBottom="true"
-        custom:JV_backgroundColor="#262B26"
-        custom:JV_borderColor="#4CAF50"
+        custom:JV_backgroundColor="@color/colorLightSeaGreenTransparent"
+        custom:JV_borderColor="@color/colorDeepJungleGreen"
         custom:JV_borderWidth="8dp"
-        custom:JV_buttonColor="#A4E49A55"
+        custom:JV_buttonColor="@color/colorDeepJungleGreen"
         custom:layout_constraintBottom_toBottomOf="parent"
         custom:layout_constraintEnd_toEndOf="parent"
         custom:layout_constraintHorizontal_bias="0.495"
@@ -81,15 +44,88 @@
 
     <Button
         android:id="@+id/voiceControl"
+        style="@style/standardButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:drawableLeft="@drawable/ic_mic_none_white_small"
         android:text="@string/voice_control"
         custom:layout_constraintBottom_toBottomOf="parent"
         custom:layout_constraintEnd_toEndOf="parent"
-        custom:layout_constraintHorizontal_bias="0.492"
         custom:layout_constraintStart_toStartOf="parent"
         custom:layout_constraintTop_toTopOf="parent"
         custom:layout_constraintVertical_bias="0.957" />
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="78dp"
+        android:layout_marginTop="159dp"
+        android:layout_marginEnd="78dp"
+        android:layout_marginBottom="58dp"
+        android:orientation="horizontal"
+        custom:layout_constraintBottom_toTopOf="@+id/joystick"
+        custom:layout_constraintEnd_toEndOf="parent"
+        custom:layout_constraintStart_toStartOf="parent"
+        custom:layout_constraintTop_toTopOf="parent">
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="80dp"
+            android:orientation="vertical"
+            custom:layout_constraintTop_toTopOf="parent">
+
+            <TextView
+                android:id="@+id/textSpeedHeader"
+                style="@style/standardText"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/speed"
+                android:textSize="25dp" />
+
+            <TextView
+                android:id="@+id/textView_strength"
+                style="@style/standardText"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:text="0%"
+                android:textAlignment="center"
+                android:textSize="25dp" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/textAngleHeader"
+                style="@style/standardText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/angle"
+                android:textSize="25dp"
+                tools:layout_editor_absoluteX="244dp"
+                tools:layout_editor_absoluteY="161dp" />
+
+            <TextView
+                android:id="@+id/textView_angle"
+                style="@style/standardText"
+                android:layout_width="91dp"
+                android:layout_height="40dp"
+                android:layout_alignParentEnd="true"
+                android:text="0°"
+                android:textAlignment="center"
+                android:textSize="25dp"
+                custom:layout_constraintBottom_toBottomOf="parent"
+                custom:layout_constraintEnd_toEndOf="parent"
+                custom:layout_constraintHorizontal_bias="0.756"
+                custom:layout_constraintStart_toStartOf="parent"
+                custom:layout_constraintTop_toTopOf="parent"
+                custom:layout_constraintVertical_bias="0.282" />
+
+        </LinearLayout>
+    </LinearLayout>
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
