@@ -33,8 +33,7 @@ public class ManualControl extends AppCompatActivity {
     private Boolean statusCheck;
     private HealthRoverCar healthRoverCar;
     private long lastRequest;
-    //Testing TODO remove counter
-    private static int joystickMove = 0;
+
     private int[] values;
 
     @Override
@@ -81,19 +80,16 @@ public class ManualControl extends AppCompatActivity {
                                 joystickController.getNormalizedX(),
                                 joystickController.getNormalizedY())
                 );
-                if(values[0] != speed && values[1] != turningAngle){
+                if(values[0] != speed || values[1] != turningAngle){
                     carManagement.moveCar(healthRoverCar, speed, turningAngle, ManualControl.this);
                     values[0] = speed;
                     values[1] = turningAngle;
                 }
-
-                //Testing TODO remove counter
-                joystickMove++;
-
-                //Send request to move the car, but only if REQUEST_DELAY ms have passed since last request sent
-//                if (SystemClock.currentThreadTimeMillis() - lastRequest > REQUEST_DELAY) {
-//                    lastRequest = SystemClock.currentThreadTimeMillis();
-//                }
+                if (joystickController.getNormalizedX() == 50 && joystickController.getNormalizedY() == 50){
+                    speed = 0;
+                    turningAngle = 0;
+                    carManagement.moveCar(healthRoverCar, speed, turningAngle, ManualControl.this);
+                }
 
                 //checkRequest(healthRoverCar, speed, turningAngle); TODO implement methods bellow
             }
@@ -149,11 +145,6 @@ public class ManualControl extends AppCompatActivity {
     public void onBackPressed() {
         super.onBackPressed();
         Intent intent = new Intent(ManualControl.this, CarSelect.class);
-        //Testing TODO remove counter
-        System.out.println("Joystick " + joystickMove);
-        System.out.println("Move method calledd " + CarManagementImp.countMoveRequest);
-        System.out.println("Send request " + HealthRoverWebSocket.socketInt);
-        System.out.println("REsponse " + HealthRoverWebSocket.socketRestp);
 
         startActivity(intent);
     }

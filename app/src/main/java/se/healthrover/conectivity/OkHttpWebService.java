@@ -1,6 +1,7 @@
 package se.healthrover.conectivity;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.util.Log;
 
 import org.jetbrains.annotations.NotNull;
@@ -13,14 +14,15 @@ import okhttp3.Callback;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
+import se.healthrover.ui_activity_controller.CarSelect;
 
-public class OkWebService implements HealthRoverWebService {
+public class OkHttpWebService implements HealthRoverWebService {
 
 
     private Activity activity;
     private OkHttpClient client = new OkHttpClient();
 
-    public OkWebService(Activity activity){
+    public OkHttpWebService(Activity activity){
         this.activity = activity;
     }
 
@@ -37,12 +39,13 @@ public class OkWebService implements HealthRoverWebService {
         client.newCall(request).enqueue(new Callback() {
 
             @Override
-            public void onFailure(@NotNull Call call, @NotNull final IOException e) {
+            public void onFailure(@NotNull final Call call, @NotNull final IOException e) {
                 activity.runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
                         Log.i("Error","Failed to connect: "+e.getMessage());
-
+                        System.out.println("error" + e.getMessage());
+                        call.cancel();
                     }
                 });
 
@@ -53,8 +56,10 @@ public class OkWebService implements HealthRoverWebService {
                 activity.runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        System.out.println(response.toString());
+
                         Log.i("Success","Success: "+response.code());
+                        System.out.println(response.message() + " webService onResponse");
+                        System.out.println(response.body().toString() + "webService onResponse2");
 
                     }
                 });

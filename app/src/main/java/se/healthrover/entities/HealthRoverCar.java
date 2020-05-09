@@ -3,8 +3,8 @@ package se.healthrover.entities;
 public enum HealthRoverCar {
     //A list of cars used since a database is not used
     HEALTH_ROVER_CAR1("ws://192.168.1.200/", "HealthRover"),
-    HEALTH_ROVER_CAR2("http://192.168.1.200/", "CAR2"),
-    HEALTH_ROVER_CAR3("http://192.168.1.202/", "CAR3");
+    HEALTH_ROVER_CAR2("http://192.168.1.200/", "Http"),
+    HEALTH_ROVER_CAR3("http://www.mocky.io/v2/5eb0765b3300005000c68e87/", "Mocky");
 
     private final String url;
     private final String carName;

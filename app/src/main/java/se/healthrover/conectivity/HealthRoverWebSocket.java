@@ -22,11 +22,6 @@ public class HealthRoverWebSocket implements HealthRoverWebService {
 
         private OkHttpClient okHttpClient = new OkHttpClient();
         private SocketListener socketListener;
-        //Testing TODO remove counter
-        public static int socketInt = 0;
-        public static int socketRestp =  0;
-        private boolean status;
-
 
     public HealthRoverWebSocket(Activity activity){
          socketListener = new SocketListener(activity);
@@ -38,8 +33,8 @@ public class HealthRoverWebSocket implements HealthRoverWebService {
                     .url(url)
                     .build();
             WebSocket webSocket =  okHttpClient.newWebSocket(request, socketListener);
-            //webSocket.send(command);
-            System.out.println("request " + request);
+            webSocket.send("status");
+            okHttpClient.dispatcher().executorService().shutdown();
         }
 
 
@@ -72,19 +67,8 @@ public class HealthRoverWebSocket implements HealthRoverWebService {
             activity.runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
-                    if (text.contains("200")){
-                        Intent intent = new Intent(activity.getApplication(), ManualControl.class);
-                        intent.putExtra("carName", "HealthRover");
-                        activity.startActivity(intent);
-                        status = true;
-                        System.out.println("response " + text);
-                    }
-                    else {
-                        System.out.println("response " + text);
-                        status = false;
-                    }
-                    //Testing TODO remove counter
-                    socketRestp++;
+
+                    System.out.println("on text response " + text);
                 }
             });
         }
@@ -92,19 +76,17 @@ public class HealthRoverWebSocket implements HealthRoverWebService {
         @Override
         public void onMessage(@NotNull okhttp3.WebSocket webSocket, @NotNull ByteString bytes) {
             super.onMessage(webSocket, bytes);
+            System.out.println("on byte Response " + bytes.hex());
         }
 
         @Override
-        public void onOpen(@NotNull final okhttp3.WebSocket webSocket, @NotNull Response response) {
+        public void onOpen(@NotNull final okhttp3.WebSocket webSocket, @NotNull final Response response) {
             super.onOpen(webSocket, response);
             activity.runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
-                    System.out.println("Sending");
-                    //webSocket.send("");
-                    //Testing TODO remove counter
-                    socketInt++;
-                    System.out.println("\n" + "Send");
+                    System.out.println("on open Sending " + response.message());
+
                 }
             });
         }
