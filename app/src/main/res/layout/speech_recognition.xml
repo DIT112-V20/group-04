@@ -48,23 +48,6 @@
         custom:layout_constraintTop_toTopOf="parent"
         custom:srcCompat="@drawable/ic_mic_white_24dp" />
 
-    <TextView
-        android:id="@+id/speechToText"
-        android:layout_width="171dp"
-        android:layout_height="24dp"
-        android:layout_marginStart="120dp"
-        android:layout_marginTop="201dp"
-        android:layout_marginEnd="120dp"
-        android:layout_marginBottom="77dp"
-        android:gravity="center"
-        android:text=""
-        android:textSize="18sp"
-        custom:layout_constraintBottom_toTopOf="@+id/speechButton"
-        custom:layout_constraintEnd_toEndOf="parent"
-        custom:layout_constraintStart_toStartOf="parent"
-        custom:layout_constraintTop_toTopOf="parent"
-        style="@style/standardText"/>
-
     <Button
         android:id="@+id/guideButton"
         style="@style/standardButton"

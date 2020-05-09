@@ -33,6 +33,7 @@ The android application is developed using an object oriented approach by applyi
 - Arduino IDE
 - GitHub
 - [Virtual Joystick Android library](https://github.com/controlwear/virtual-joystick-android)
+- [DialogFlow API](https://dialogflow.com/)
 
  
 ### Team Overview
