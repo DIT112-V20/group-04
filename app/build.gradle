@@ -24,20 +24,18 @@ android {
         exclude 'META-INF/DEPENDENCIES'
         exclude 'META-INF/INDEX.LIST'
     }
-    //TODO check for lint dependency errors
-    android {
-        lintOptions {
-            abortOnError false
-        }
-    }
+
 
 }
 
 dependencies {
-    // Dialogflow V2 dependencies
-    implementation 'com.google.cloud:google-cloud-dialogflow:2.0.0'
-    //implementation 'io.grpc:grpc-okhttp:1.25.0'
-
+    // Dialogflow V2 needed dependencies
+    implementation ('com.google.cloud:google-cloud-dialogflow:2.0.0') {
+        exclude module: 'commons-logging' // excluding commons-logging due to conflict with classes which are provided by Android
+        exclude module: 'httpclient'      // excluding httpclient due to conflict with classes which are provided by Android
+    }
+    implementation 'io.grpc:grpc-okhttp:1.29.0'
+    // end of DialogFlow dependencies
     implementation 'io.github.controlwear:virtualjoystick:1.10.1'
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation("com.squareup.okhttp3:okhttp:4.5.0")
