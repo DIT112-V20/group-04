@@ -61,7 +61,6 @@ void setup(){
   server.on("/request", HTTP_GET, handleRequest);
   server.on("/status", HTTP_GET, handleStatus);
   server.onNotFound(handleNotFound);
-  server.on("/voiceRequest", HTTP_GET, handleVoiceRequest);
 
   server.begin();
 }
@@ -73,8 +72,7 @@ void loop() {
 //   disregard 0 reading because its a null reading from the sensor
   if (obstacleDetectedFront()){
     stopCar();
-  } else
-  if (WiFi.status() != WL_CONNECTED){
+  } else if (WiFi.status() != WL_CONNECTED){
     stopCar();
     connectToWiFi();
   }
@@ -92,12 +90,6 @@ void connectToWiFi(){
   }
   Serial.println("Connected to the WiFi network");
   Serial.println(WiFi.localIP());
-}
-
-void handleVoiceRequest(){
-
-// ToDo: Add logic for obstacle avoidance
-
 }
 
 void setCarMovement(int newSpeed, int newAngle) {
@@ -133,7 +125,7 @@ void setCarSpeed(int newSpeed){
 void handleRequest() {
   if (!server.hasArg("type") && !server.hasArg("speed") && !server.hasArg("angle")) {
     server.send(404);
-return;
+    return;
   }
   String appRequest = server.arg("type");
   int speedRequest = (server.arg("speed")).toInt();

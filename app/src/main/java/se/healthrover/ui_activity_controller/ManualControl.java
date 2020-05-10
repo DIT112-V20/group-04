@@ -24,6 +24,8 @@ public class ManualControl extends AppCompatActivity {
     private TextView angleText;
     private TextView strengthText;
     private CarManagement carManagement;
+    private TextView textSpeedHeader;
+    private TextView textAngleHeader;
     private int speed;
     private int turningAngle;
     private Button voiceControl;
@@ -88,13 +90,13 @@ public class ManualControl extends AppCompatActivity {
                 strengthText.setText(speed + "% speed");
                 //checkRequest(healthRoverCar, speed, turningAngle); TODO implement methods bellow
             }
-        }
-        );
+        });
+
 
         voiceControl.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(ManualControl.this, VoiceControl.class);
+                Intent intent = new Intent(ManualControl.this, SpeechRecognition.class);
                 intent.putExtra("carName", healthRoverCar.getCarName());
                 startActivity(intent);
             }
@@ -140,7 +142,6 @@ public class ManualControl extends AppCompatActivity {
     public void onBackPressed() {
         super.onBackPressed();
         Intent intent = new Intent(ManualControl.this, CarSelect.class);
-
         startActivity(intent);
     }
 
