@@ -1,20 +1,28 @@
 package se.healthrover.car_service;
 
-import se.healthrover.conectivity.HttpService;
+import android.app.Activity;
+
+import se.healthrover.conectivity.HealthRoverWebService;
+import se.healthrover.conectivity.OkHttpWebService;
 import se.healthrover.entities.CarCommands;
 import se.healthrover.entities.HealthRoverCar;
 
 public class CarManagementImp implements CarManagement {
 
-    private HttpService service = new HttpService();
+    private HealthRoverWebService webService;
 
-    @Override
-    public boolean checkStatus(HealthRoverCar healthRoverCar) {
-        return service.sendGetRequest(healthRoverCar.getUrl() + CarCommands.STATUS.getCarCommands(), true);
+    public CarManagementImp(){
+        webService = new OkHttpWebService();
     }
 
-    public boolean moveCar(HealthRoverCar healthRoverCar, int speed, int angle) {
+    @Override
+    public void checkStatus(HealthRoverCar healthRoverCar, Activity activity) {
+        String request = healthRoverCar.getUrl() + CarCommands.STATUS;
+        webService.createHttpRequest(request, activity);
+    }
+
+    public void moveCar(HealthRoverCar healthRoverCar, int speed, int angle, Activity activity) {
         String request = healthRoverCar.getUrl() + CarCommands.REQUEST.getCarCommands() + CarCommands.SPEED.getCarCommands() + speed + CarCommands.ANGLE.getCarCommands() + angle;
-        return service.sendGetRequest(request, false);
+        webService.createHttpRequest(request, activity );
     }
 }

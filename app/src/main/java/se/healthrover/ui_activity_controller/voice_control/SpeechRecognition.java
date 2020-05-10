@@ -76,7 +76,7 @@ public class SpeechRecognition extends AppCompatActivity {
         headerVoiceControl = findViewById(R.id.headerVoiceControl);
         carName = getIntent().getStringExtra("carName");
         headerVoiceControl.setText(carName);
-        healthRoverCar = HealthRoverCar.valueOf(HealthRoverCar.getCarObjectName(carName));
+        healthRoverCar = HealthRoverCar.valueOf(HealthRoverCar.getCarObjectNameByCarName(carName));
         manualControlButton = findViewById(R.id.manualControl);
         guideButton = findViewById(R.id.guideButton);
         speechButton = findViewById(R.id.speechButton);
@@ -186,15 +186,15 @@ public class SpeechRecognition extends AppCompatActivity {
                 if (speed < SPEED_CHECK) {
                     speed = speed * NEGATION;
                 }
-                carManagement.moveCar(healthRoverCar, speed, Integer.parseInt(CarCommands.NO_ANGLE.getCarCommands()));
+                carManagement.moveCar(healthRoverCar, speed, Integer.parseInt(CarCommands.NO_ANGLE.getCarCommands()), this);
                 break;
             case "stop":
-                carManagement.moveCar(healthRoverCar, Integer.parseInt(CarCommands.NO_MOVEMENT.getCarCommands()), Integer.parseInt(CarCommands.NO_ANGLE.getCarCommands()));
+                carManagement.moveCar(healthRoverCar, Integer.parseInt(CarCommands.NO_MOVEMENT.getCarCommands()), Integer.parseInt(CarCommands.NO_ANGLE.getCarCommands()), this);
                 break;
             case "increase":
                 if (speed < Integer.parseInt(CarCommands.VC_MAX_VELOCITY.getCarCommands()) && speed > Integer.parseInt(CarCommands.VC_MIN_VELOCITY.getCarCommands())) {
                     speed += VELOCITY_MODIFIER;
-                    carManagement.moveCar(healthRoverCar, speed, Integer.parseInt(CarCommands.NO_ANGLE.getCarCommands()));
+                    carManagement.moveCar(healthRoverCar, speed, Integer.parseInt(CarCommands.NO_ANGLE.getCarCommands()), this);
                 } else {
                     Toast.makeText(SpeechRecognition.this, "Maximum velocity reached", Toast.LENGTH_SHORT).show();
                 }
@@ -202,22 +202,22 @@ public class SpeechRecognition extends AppCompatActivity {
             case "decrease":
                 if (speed > Integer.parseInt(CarCommands.VC_MIN_VELOCITY.getCarCommands())) {
                     speed -= VELOCITY_MODIFIER;
-                    carManagement.moveCar(healthRoverCar, speed, Integer.parseInt(CarCommands.NO_ANGLE.getCarCommands()));
+                    carManagement.moveCar(healthRoverCar, speed, Integer.parseInt(CarCommands.NO_ANGLE.getCarCommands()), this);
                 } else {
                     Toast.makeText(SpeechRecognition.this, "Minimum velocity reached", Toast.LENGTH_SHORT).show();
                 }
                 break;
             case "left":
-                carManagement.moveCar(healthRoverCar, speed, Integer.parseInt(CarCommands.LEFT_ANGLE.getCarCommands()));
+                carManagement.moveCar(healthRoverCar, speed, Integer.parseInt(CarCommands.LEFT_ANGLE.getCarCommands()), this);
                 break;
             case "right":
-                carManagement.moveCar(healthRoverCar, speed, Integer.parseInt(CarCommands.RIGHT_ANGLE.getCarCommands()));
+                carManagement.moveCar(healthRoverCar, speed, Integer.parseInt(CarCommands.RIGHT_ANGLE.getCarCommands()), this);
                 break;
             case "reverse":
                 if(speed>SPEED_CHECK) {
                     speed = speed * NEGATION;
                 }
-                carManagement.moveCar(healthRoverCar, speed, Integer.parseInt(CarCommands.NO_ANGLE.getCarCommands()));
+                carManagement.moveCar(healthRoverCar, speed, Integer.parseInt(CarCommands.NO_ANGLE.getCarCommands()), this);
                 break;
             default:
                 Toast.makeText(SpeechRecognition.this, "Invalid command", Toast.LENGTH_SHORT).show();

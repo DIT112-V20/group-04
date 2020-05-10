@@ -1,7 +1,6 @@
 package se.healthrover.ui_activity_controller;
 
 import android.app.Activity;
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
@@ -50,13 +49,12 @@ public class CarSelect extends Activity{
 
         carList = findViewById(R.id.smartCarList);
         carList.setAdapter(adapter);
-
         //Once a car is selected the name is retrieved and used to initialize the car object that is to be controlled
         carList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
 
                 String carName = carList.getItemAtPosition(position).toString();
-                healthRoverCar = HealthRoverCar.valueOf(HealthRoverCar.getCarObjectName(carName));
+                healthRoverCar = HealthRoverCar.valueOf(HealthRoverCar.getCarObjectNameByCarName(carName));
 
                 Toast.makeText(getApplicationContext(), "You selected " + carName, Toast.LENGTH_SHORT).show();
             }
@@ -71,15 +69,8 @@ public class CarSelect extends Activity{
                 if (healthRoverCar == null){
                     Toast.makeText(getApplicationContext(), "Select a car...", Toast.LENGTH_SHORT).show();
                 }else {
+                    carManagement.checkStatus(healthRoverCar, CarSelect.this);
 
-                    carOnlineConnection = carManagement.checkStatus(healthRoverCar);
-                    if (!carOnlineConnection) {
-                        Toast.makeText(getApplicationContext(), "Car is offline...", Toast.LENGTH_SHORT).show();
-                    } else {
-                        Intent intent = new Intent(CarSelect.this, ManualControl.class);
-                        intent.putExtra("carName", healthRoverCar.getCarName());
-                        startActivity(intent);
-                    }
                 }
             }
         });

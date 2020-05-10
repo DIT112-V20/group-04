@@ -68,8 +68,8 @@ void loop() {
   server.handleClient();
 
   frontSensorReading = getMedianSensorReading(NR_OF_READINGS);
-  // Stop when distance is less than MIN_OBSTACLE_DISTANCE and
-  // disregard 0 reading because its a null reading from the sensor
+//   Stop when distance is less than MIN_OBSTACLE_DISTANCE and
+//   disregard 0 reading because its a null reading from the sensor
   if (obstacleDetectedFront()){
     stopCar();
   } else if (WiFi.status() != WL_CONNECTED){
@@ -108,10 +108,7 @@ void stopCar() {
 void setCarSpeed(int newSpeed){
   if(newSpeed == 0){
     stopCar();
-  }else if(obstacleDetectedFront()){
-   stopCar();
-  }
-  else if(newSpeed < carSpeed){
+  }else if(newSpeed < carSpeed){
     while(newSpeed < carSpeed){
       carSpeed--;
       car.setSpeed(carSpeed);
@@ -145,7 +142,7 @@ void handleRequest() {
   }
 }
 void handleStatus(){
-  server.send(200);
+  server.send(200, "text/plain", "status");
 }
 void handleNotFound(){
   server.send(404);
