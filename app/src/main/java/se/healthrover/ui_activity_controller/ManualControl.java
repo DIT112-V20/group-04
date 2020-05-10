@@ -87,8 +87,8 @@ public class ManualControl extends AppCompatActivity {
                     carManagement.moveCar(healthRoverCar, speed, turningAngle, ManualControl.this);
                 }
                 //Update the UI speed and angle
-                angleText.setText(turningAngle + "° angle");
-                strengthText.setText(speed + "% speed");
+                angleText.setText(turningAngle + "°");
+                strengthText.setText(speed + "%");
                 //checkRequest(healthRoverCar, speed, turningAngle); TODO implement methods bellow
             }
         });
