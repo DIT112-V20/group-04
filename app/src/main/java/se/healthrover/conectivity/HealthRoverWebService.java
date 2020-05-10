@@ -4,5 +4,5 @@ import android.app.Activity;
 
 public interface HealthRoverWebService {
 
-    void createWebSocket(String request, Activity activity);
+    void createHttpRequest(String request, Activity activity);
 }

@@ -20,19 +20,20 @@ import se.healthrover.ui_activity_controller.ManualControl;
 
 public class HealthRoverWebSocket implements HealthRoverWebService {
 
-        private OkHttpClient okHttpClient = new OkHttpClient();
-        private SocketListener socketListener;
+        private OkHttpClient okHttpClient;
 
     public HealthRoverWebSocket(Activity activity){
-         socketListener = new SocketListener(activity);
+
+         okHttpClient = new OkHttpClient();
        }
 
-        public void createWebSocket(String url, Activity activity){
+        public void createHttpRequest(String url, Activity activity){
+
 
             Request request = new Request.Builder()
                     .url(url)
                     .build();
-            WebSocket webSocket =  okHttpClient.newWebSocket(request, socketListener);
+            WebSocket webSocket =  okHttpClient.newWebSocket(request, new SocketListener(activity));
             webSocket.send("status");
             okHttpClient.dispatcher().executorService().shutdown();
         }
@@ -85,6 +86,10 @@ public class HealthRoverWebSocket implements HealthRoverWebService {
             activity.runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
+                    if (response.message().equals("status")){
+                        Intent intent = new Intent(activity, ManualControl.class);
+                        activity.startActivity(intent);
+                    }
                     System.out.println("on open Sending " + response.message());
 
                 }

@@ -133,7 +133,7 @@ void setCarSpeed(int newSpeed){
 void handleRequest() {
   if (!server.hasArg("type") && !server.hasArg("speed") && !server.hasArg("angle")) {
     server.send(404);
-    return;
+return;
   }
   String appRequest = server.arg("type");
   int speedRequest = (server.arg("speed")).toInt();
@@ -150,7 +150,7 @@ void handleRequest() {
   }
 }
 void handleStatus(){
-  server.send(200, "text/plain", "200");
+  server.send(200, "text/plain", "status");
 }
 void handleNotFound(){
   server.send(404);

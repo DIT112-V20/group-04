@@ -61,7 +61,7 @@ public class VoiceControl extends AppCompatActivity {
         headerVoiceControl = findViewById(R.id.headerVoiceControl);
         carName = getIntent().getStringExtra("carName");
         headerVoiceControl.setText(carName);
-        healthRoverCar = HealthRoverCar.valueOf(HealthRoverCar.getCarObjectName(carName));
+        healthRoverCar = HealthRoverCar.valueOf(HealthRoverCar.getCarObjectNameByCarName(carName));
         manualControlButton = findViewById(R.id.manualControl);
         guideButton = findViewById(R.id.guideButton);
         speechButton = findViewById(R.id.speechButton);
