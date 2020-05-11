@@ -25,7 +25,7 @@
 
 
 
-    <io.github.controlwear.virtual.joystick.android.JoystickView
+    <se.healthrover.entities.HealthRoverJoystick
         android:id="@+id/joystick"
         android:layout_width="342dp"
         android:layout_height="304dp"
