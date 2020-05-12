@@ -55,8 +55,7 @@ public class SpeechRecognition extends AppCompatActivity {
     private static final int NEGATION = -1;
     private static final int SPEED_CHECK = 0;
     private static final int SPEECH_RESULT = 1;
-    // Change UUID to own dialogflow project-id
-    private static final String UUID = "anna-dpmiju";
+    private static final String UUID = "HealthRover";
 
     //Create the activity
     @Override
@@ -81,6 +80,8 @@ public class SpeechRecognition extends AppCompatActivity {
         manualControlButton = findViewById(R.id.manualControl);
         guideButton = findViewById(R.id.guideButton);
         speechButton = findViewById(R.id.speechButton);
+
+        connectDialogflow();
 
         manualControlButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -128,20 +129,6 @@ public class SpeechRecognition extends AppCompatActivity {
                 startActivityForResult(speechIntent, SPEECH_RESULT);
             }
         });
-        // Try catch block to set up the connection to Dialogflow API
-        // using a private access key. Add your own API key under src/res/raw
-        try {
-            InputStream stream = getResources().openRawResource(R.raw.test_agent_credentials);
-            GoogleCredentials credentials = GoogleCredentials.fromStream(stream);
-            String projectId = ((ServiceAccountCredentials)credentials).getProjectId();
-            SessionsSettings.Builder settingsBuilder = SessionsSettings.newBuilder();
-            SessionsSettings sessionsSettings = settingsBuilder.setCredentialsProvider(FixedCredentialsProvider.create(credentials)).build();
-            sessionsClient = SessionsClient.create(sessionsSettings);
-            session = SessionName.of(projectId, UUID);
-
-        } catch (Exception e) {
-            Toast.makeText(SpeechRecognition.this, "Can't access the Dialogflow API..", Toast.LENGTH_SHORT).show();
-        }
     }
     // Using back button to return to Car select page
     @Override
@@ -161,6 +148,23 @@ public class SpeechRecognition extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
     }
 
+    // Method to set up the connection to Dialogflow API
+    // using a private access key. Add your own API key under src/res/raw
+    private void connectDialogflow(){
+        try {
+            InputStream stream = getResources().openRawResource(R.raw.dialogflow_access_key);
+            GoogleCredentials credentials = GoogleCredentials.fromStream(stream);
+            String projectId = ((ServiceAccountCredentials)credentials).getProjectId();
+            SessionsSettings.Builder settingsBuilder = SessionsSettings.newBuilder();
+            SessionsSettings sessionsSettings = settingsBuilder.setCredentialsProvider(FixedCredentialsProvider.create(credentials)).build();
+            sessionsClient = SessionsClient.create(sessionsSettings);
+            session = SessionName.of(projectId, UUID);
+
+        } catch (Exception e) {
+            Toast.makeText(SpeechRecognition.this, "Can't access the Dialogflow API..", Toast.LENGTH_SHORT).show();
+        }
+    }
+
     // Send requested query to the Dialogflow API
     private void sendVoiceCommand(String command) {
         QueryInput queryInput = QueryInput.newBuilder().setText(TextInput.newBuilder().setText(command).setLanguageCode("en-US")).build();
@@ -177,6 +181,8 @@ public class SpeechRecognition extends AppCompatActivity {
                 // Taking only the integer value from the receivedAngle String which includes not used characters
                 receivedAngle = CharMatcher.inRange('0', '9').retainFrom(receivedAngle);
 
+                // Here we check for empty values to be able to call driveCarCommand with
+                // default values, otherwise it will use user-specified ones
                 if(!receivedAngle.equals("") && receivedSpeed.equals("")){
                     driveCarCommand(receivedCommand, speed,  Integer.parseInt(receivedAngle));
                 }else if(receivedAngle.equals("") && !receivedSpeed.equals("")){
