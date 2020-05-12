@@ -2,6 +2,7 @@ package se.healthrover.ui_activity_controller;
 
 import android.app.Activity;
 import android.os.Bundle;
+import android.view.Gravity;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -21,6 +22,7 @@ public class CarSelect extends Activity{
     private HealthRoverCar healthRoverCar;
     private boolean carOnlineConnection;
     private CarManagement carManagement = new CarManagementImp();
+    private static int TOAST_OFFSET = 165;
 
     //Create the activity
     @Override
@@ -56,7 +58,9 @@ public class CarSelect extends Activity{
                 String carName = carList.getItemAtPosition(position).toString();
                 healthRoverCar = HealthRoverCar.valueOf(HealthRoverCar.getCarObjectNameByCarName(carName));
 
-                Toast.makeText(getApplicationContext(), "You selected " + carName, Toast.LENGTH_SHORT).show();
+                Toast selectionToast = Toast.makeText(getApplicationContext(), "You selected " + carName, Toast.LENGTH_SHORT);
+                selectionToast.setGravity(Gravity.TOP, 0 , TOAST_OFFSET);
+                selectionToast.show();
             }
         });
 
@@ -67,10 +71,11 @@ public class CarSelect extends Activity{
             @Override
             public void onClick(View v) {
                 if (healthRoverCar == null){
-                    Toast.makeText(getApplicationContext(), "Select a car...", Toast.LENGTH_SHORT).show();
+                    Toast noCarSelectedToast = Toast.makeText(getApplicationContext(), "Select a car...", Toast.LENGTH_SHORT);
+                    noCarSelectedToast.setGravity(Gravity.TOP,0, TOAST_OFFSET);
+                    noCarSelectedToast.show();
                 }else {
                     carManagement.checkStatus(healthRoverCar, CarSelect.this);
-
                 }
             }
         });
