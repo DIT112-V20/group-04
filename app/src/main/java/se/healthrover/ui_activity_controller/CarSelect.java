@@ -58,9 +58,7 @@ public class CarSelect extends Activity{
                 String carName = carList.getItemAtPosition(position).toString();
                 healthRoverCar = HealthRoverCar.valueOf(HealthRoverCar.getCarObjectNameByCarName(carName));
 
-                Toast selectionToast = Toast.makeText(getApplicationContext(), "You selected " + carName, Toast.LENGTH_SHORT);
-                selectionToast.setGravity(Gravity.TOP, 0 , TOAST_OFFSET);
-                selectionToast.show();
+                showCustomToast("You selected " + carName);
             }
         });
 
@@ -71,9 +69,7 @@ public class CarSelect extends Activity{
             @Override
             public void onClick(View v) {
                 if (healthRoverCar == null){
-                    Toast noCarSelectedToast = Toast.makeText(getApplicationContext(), "Select a car...", Toast.LENGTH_SHORT);
-                    noCarSelectedToast.setGravity(Gravity.TOP,0, TOAST_OFFSET);
-                    noCarSelectedToast.show();
+                    showCustomToast("Select a car...");
                 }else {
                     carManagement.checkStatus(healthRoverCar, CarSelect.this);
                 }
@@ -88,4 +84,10 @@ public class CarSelect extends Activity{
         finish();
     }
 
+    //Shows a customized toast message with the given string
+    private void showCustomToast(String text) {
+        Toast customToast = Toast.makeText(getApplicationContext(), text, Toast.LENGTH_SHORT);
+        customToast.setGravity(Gravity.TOP,0, TOAST_OFFSET);
+        customToast.show();
+    }
 }
