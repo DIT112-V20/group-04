@@ -9,7 +9,7 @@
 
 
     <TextView
-        android:id="@+id/header"
+        android:id="@+id/chooseCarText"
         style="@style/standardText"
         android:textSize="15dp"
         android:layout_width="wrap_content"
@@ -21,8 +21,6 @@
         custom:layout_constraintRight_toRightOf="parent"
         custom:layout_constraintTop_toTopOf="parent"
         custom:layout_constraintVertical_bias="0.08" />
-
-
 
 
     <se.healthrover.entities.HealthRoverJoystick

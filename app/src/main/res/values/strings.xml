@@ -1,9 +1,9 @@
 <resources>
     <string name="app_name">HealthRover</string>
+    <string name="choose_car_text">CHOOSE A CAR FROM THE LIST:</string>
+    <string name="connect_to_car_text">CONNECT</string>
     <string name="Forward">forward</string>
     <string name="Stop">stop</string>
-    <string name="choose_a_car_from_the_list">CHOOSE A CAR FROM THE LIST:</string>
-    <string name="connect">CONNECT</string>
     <string name="voice_control">Voice Control</string>
     <string name="manual_control">Manual Control</string>
     <string name="guide_button">Guide</string>

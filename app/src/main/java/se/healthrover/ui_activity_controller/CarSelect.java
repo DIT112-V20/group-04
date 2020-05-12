@@ -44,7 +44,7 @@ public class CarSelect extends Activity{
         carOnlineConnection = false;
         healthRoverCar = null;
         setContentView(R.layout.car_select);
-        connectToCarSelected = findViewById(R.id.connectToCar);
+        connectToCarSelected = findViewById(R.id.connectToCarButton);
 
         ArrayAdapter adapter = new ArrayAdapter<>(this,
                 R.layout.car_select_list_item, HealthRoverCar.getListOfCarNames());

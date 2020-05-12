@@ -8,11 +8,11 @@
     tools:context=".ui_activity_controller.CarSelect">
 
     <TextView
-        android:id="@+id/header"
+        android:id="@+id/chooseCarText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:fontFamily="@font/raleway"
-        android:text="@string/choose_a_car_from_the_list"
+        android:text="@string/choose_car_text"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -21,8 +21,8 @@
         style="@style/standardText"/>
 
     <Button
-        android:id="@+id/connectToCar"
-        android:text="@string/connect"
+        android:id="@+id/connectToCarButton"
+        android:text="@string/connect_to_car_text"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.498"
