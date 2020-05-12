@@ -15,6 +15,7 @@ import se.healthrover.car_service.CarManagement;
 import se.healthrover.car_service.CarManagementImp;
 import se.healthrover.entities.HealthRoverCar;
 import se.healthrover.entities.HealthRoverJoystick;
+import se.healthrover.ui_activity_controller.error_handling.ActivityExceptionHandler;
 import se.healthrover.ui_activity_controller.voice_control.SpeechRecognition;
 
 
@@ -38,6 +39,7 @@ public class ManualControl extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Thread.setDefaultUncaughtExceptionHandler(new ActivityExceptionHandler(this, healthRoverCar));
         initialize();
 
     }
@@ -45,6 +47,7 @@ public class ManualControl extends AppCompatActivity {
     @Override
     protected void onRestart() {
         super.onRestart();
+        Thread.setDefaultUncaughtExceptionHandler(new ActivityExceptionHandler(this, healthRoverCar));
         initialize();
     }
 

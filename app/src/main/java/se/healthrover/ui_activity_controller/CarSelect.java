@@ -13,6 +13,7 @@ import se.healthrover.R;
 import se.healthrover.car_service.CarManagement;
 import se.healthrover.car_service.CarManagementImp;
 import se.healthrover.entities.HealthRoverCar;
+import se.healthrover.ui_activity_controller.error_handling.ActivityExceptionHandler;
 
 public class CarSelect extends Activity{
 
@@ -26,6 +27,7 @@ public class CarSelect extends Activity{
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Thread.setDefaultUncaughtExceptionHandler(new ActivityExceptionHandler(this, healthRoverCar));
         initialize();
 
     }
@@ -33,6 +35,7 @@ public class CarSelect extends Activity{
     @Override
     protected void onRestart() {
         super.onRestart();
+        Thread.setDefaultUncaughtExceptionHandler(new ActivityExceptionHandler(this, healthRoverCar));
         initialize();
     }
 
@@ -52,10 +55,8 @@ public class CarSelect extends Activity{
         //Once a car is selected the name is retrieved and used to initialize the car object that is to be controlled
         carList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
-
                 String carName = carList.getItemAtPosition(position).toString();
                 healthRoverCar = HealthRoverCar.valueOf(HealthRoverCar.getCarObjectNameByCarName(carName));
-
                 Toast.makeText(getApplicationContext(), "You selected " + carName, Toast.LENGTH_SHORT).show();
             }
         });

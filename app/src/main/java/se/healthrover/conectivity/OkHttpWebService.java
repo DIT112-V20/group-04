@@ -49,36 +49,38 @@ public class OkHttpWebService implements HealthRoverWebService {
                     @Override
                     public void run() {
                         Log.i("Error","Failed to connect: "+e.getMessage());
-                        System.out.println("error" + e.getMessage());
-                        call.cancel();
+                        client.dispatcher().cancelAll();
                     }
                 });
 
             }
             @Override
-            public void onResponse(@NotNull Call call, @NotNull final Response response) {
+            public void onResponse(@NotNull final Call call, @NotNull final Response response) {
                 activity.runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        try {
-                            responseData = response.body().string();
-                            if (responseData.equals(HTTP_STATUS_RESPONSE)){
-                                Intent intent = new Intent(activity, ManualControl.class);
-                                intent.putExtra("carName", HealthRoverCar.getCarNameByUrl(url.substring(0,20)));
-                                activity.startActivity(intent);
+                        if(response.isSuccessful()) {
+                            try {
+                                responseData = response.body().string();
+                                Log.i("Success", "Success: " + response.code());
+                                if (responseData.equals(HTTP_STATUS_RESPONSE)) {
+                                    Intent intent = new Intent(activity, ManualControl.class);
+                                    intent.putExtra("carName", HealthRoverCar.getCarNameByUrl(url.substring(0, 20)));
+                                    activity.startActivity(intent);
+                                }
+                            } catch (IOException e) {
+                                Log.i("Error", "Error: " + e.getMessage());
+                                client.dispatcher().cancelAll();
                             }
-                        } catch (IOException e) {
-                            e.printStackTrace();
-                            Log.i("Success","Success: "+response.code());
                         }
-
+                        else {
+                            client.dispatcher().cancelAll();
+                        }
 
                     }
                 });
-
-
-
             }});
+
 
     }
 }
