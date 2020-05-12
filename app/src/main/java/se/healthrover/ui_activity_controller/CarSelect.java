@@ -47,7 +47,7 @@ public class CarSelect extends Activity{
         connectToCarSelected = findViewById(R.id.connectToCar);
 
         ArrayAdapter adapter = new ArrayAdapter<>(this,
-                android.R.layout.simple_list_item_1, HealthRoverCar.getListOfCarNames());
+                R.layout.car_select_list_item, HealthRoverCar.getListOfCarNames());
 
         carList = findViewById(R.id.smartCarList);
         carList.setAdapter(adapter);
