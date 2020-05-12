@@ -8,18 +8,14 @@ import android.widget.Toast;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
-import java.util.Objects;
-import java.util.concurrent.CountDownLatch;
 
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
-import okhttp3.ResponseBody;
 import se.healthrover.R;
 import se.healthrover.entities.HealthRoverCar;
-import se.healthrover.ui_activity_controller.CarSelect;
 import se.healthrover.ui_activity_controller.ManualControl;
 
 public class OkHttpWebService implements HealthRoverWebService {
@@ -51,9 +47,9 @@ public class OkHttpWebService implements HealthRoverWebService {
                     @Override
                     public void run() {
                         if (url.contains(HTTP_STATUS_RESPONSE)){
-                            Toast.makeText(activity, "Car is offline....", Toast.LENGTH_LONG).show();
+                            Toast.makeText(activity, activity.getString(R.string.carIsOffline), Toast.LENGTH_LONG).show();
                         }
-                        Log.i("Error","Failed to connect: "+e.getMessage());
+                        Log.i(activity.getString(R.string.logTitleError),activity.getString(R.string.logConnectionFail) + e.getMessage());
                         client.dispatcher().cancelAll();
                     }
                 });
@@ -67,14 +63,14 @@ public class OkHttpWebService implements HealthRoverWebService {
                         if(response.isSuccessful()) {
                             try {
                                 responseData = response.body().string();
-                                Log.i("Success", "Success: " + response.code());
+                                Log.i(activity.getString(R.string.logSuccess), activity.getString(R.string.logSuccess) + response.code());
                                 if (responseData.equals(HTTP_STATUS_RESPONSE)) {
                                     Intent intent = new Intent(activity, ManualControl.class);
                                     intent.putExtra(activity.getString(R.string.carName), HealthRoverCar.getCarNameByUrl(url.substring(0, 20)));
                                     activity.startActivity(intent);
                                 }
                             } catch (IOException e) {
-                                Log.i("Error", "Error: " + e.getMessage());
+                                Log.i(activity.getString(R.string.logTitleError), activity.getString(R.string.logTitleError) + e.getMessage());
                                 client.dispatcher().cancelAll();
                             }
                         }

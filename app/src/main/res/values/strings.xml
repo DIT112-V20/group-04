@@ -23,7 +23,11 @@
     <string name="degreeSymbol">°</string>
     <string name="crashErrorIntent">crashError</string>
     <string name="crashErrorMessage">An unexpected error occurred</string>
-
+    <string name="carIsOffline">Car is offline....</string>
+    <string name="logTitleError">Error</string>
+    <string name="logConnectionFail">Failed to connect: </string>
+    <string name="logSuccess">Success</string>
+    <string name="logCrashTitle">Crash message: </string>
 
 
 

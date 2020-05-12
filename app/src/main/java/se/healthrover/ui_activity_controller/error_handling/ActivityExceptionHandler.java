@@ -28,10 +28,13 @@ public class ActivityExceptionHandler implements Thread.UncaughtExceptionHandler
     }
     @Override
     public void uncaughtException(@NonNull Thread t, @NonNull Throwable e) {
-        Log.i("Error", "Crash message: " + e.getMessage());
+        Log.i(activity.getString(R.string.logTitleError), activity.getString(R.string.logCrashTitle) + e.getMessage());
         Intent intent = new Intent(activity, CarSelect.class);
         if (healthRoverCar != null){
-            carManagement.moveCar(healthRoverCar, Integer.parseInt(CarCommands.NO_MOVEMENT.getCarCommands()), Integer.parseInt(CarCommands.NO_ANGLE.getCarCommands()), activity);
+            carManagement.moveCar(healthRoverCar,
+                Integer.parseInt(CarCommands.NO_MOVEMENT.getCarCommands()),
+                Integer.parseInt(CarCommands.NO_ANGLE.getCarCommands()),
+                activity);
         }
         intent.putExtra(activity.getString(R.string.crashErrorIntent), activity.getString(R.string.crashErrorMessage));
         activity.startActivity(intent);
