@@ -36,7 +36,7 @@
         android:id="@+id/smartCarList"
         android:layout_width="305dp"
         android:choiceMode="singleChoice"
-        android:listSelector="@android:color/darker_gray"
+        android:listSelector="@color/colorLightSeaGreenTransparent"
         android:layout_height="309dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
