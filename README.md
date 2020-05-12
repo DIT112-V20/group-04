@@ -1,4 +1,6 @@
 # group-04 HealthRover
+## Travic CI
+[![Build Status](https://travis-ci.com/DIT112-V20/group-04.svg?branch=master)](https://travis-ci.com/DIT112-V20/group-04)
 ## What
 The HealthRover is aimed towards a hospital environment and will deliver medicine/medical equipment to a desired location using manual control, without the need for human contact. The HealthRover will primarily be using voice control and will be functional inside a hospital where there is Wifi connectivity.
 
