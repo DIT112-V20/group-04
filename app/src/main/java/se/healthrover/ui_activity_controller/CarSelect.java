@@ -22,7 +22,7 @@ public class CarSelect extends Activity{
     private HealthRoverCar healthRoverCar;
     private boolean carOnlineConnection;
     private CarManagement carManagement = new CarManagementImp();
-    private static int TOAST_OFFSET = 165;
+    private UserInterfaceUtilities uiHelper = new UserInterfaceUtilities();
 
     //Create the activity
     @Override
@@ -58,7 +58,7 @@ public class CarSelect extends Activity{
                 String carName = carList.getItemAtPosition(position).toString();
                 healthRoverCar = HealthRoverCar.valueOf(HealthRoverCar.getCarObjectNameByCarName(carName));
 
-                showCustomToast("You selected " + carName);
+                uiHelper.showCustomToast(getApplicationContext(), "You selected " + carName);
             }
         });
 
@@ -69,7 +69,7 @@ public class CarSelect extends Activity{
             @Override
             public void onClick(View v) {
                 if (healthRoverCar == null){
-                    showCustomToast("Select a car...");
+                    uiHelper.showCustomToast(getApplicationContext(),"Select a car...");
                 }else {
                     carManagement.checkStatus(healthRoverCar, CarSelect.this);
                 }
@@ -82,12 +82,5 @@ public class CarSelect extends Activity{
         super.onBackPressed();
         finishAffinity();
         finish();
-    }
-
-    //Shows a customized toast message with the given string
-    private void showCustomToast(String text) {
-        Toast customToast = Toast.makeText(getApplicationContext(), text, Toast.LENGTH_SHORT);
-        customToast.setGravity(Gravity.TOP,0, TOAST_OFFSET);
-        customToast.show();
     }
 }
