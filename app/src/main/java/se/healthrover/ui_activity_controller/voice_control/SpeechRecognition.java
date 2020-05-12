@@ -37,6 +37,7 @@ import se.healthrover.entities.CarCommands;
 import se.healthrover.entities.HealthRoverCar;
 import se.healthrover.ui_activity_controller.CarSelect;
 import se.healthrover.ui_activity_controller.ManualControl;
+import se.healthrover.ui_activity_controller.UserInterfaceUtilities;
 
 public class SpeechRecognition extends AppCompatActivity {
 
@@ -50,6 +51,7 @@ public class SpeechRecognition extends AppCompatActivity {
     private SessionName session;
     private SessionsClient sessionsClient;
     private int speed = 30;
+    private UserInterfaceUtilities uiHelper = new UserInterfaceUtilities();
     private static final int VELOCITY_MODIFIER = 10;
     private static final int NEGATION = -1;
     private static final int SPEED_CHECK = 0;
@@ -92,29 +94,7 @@ public class SpeechRecognition extends AppCompatActivity {
         guideButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // Inflate the layout of the popup window
-                LayoutInflater inflater = (LayoutInflater)
-                        getSystemService(LAYOUT_INFLATER_SERVICE);
-                View popupView = inflater.inflate(R.layout.guide_popup, null);
-
-                // Create the popup window
-                int width = LinearLayout.LayoutParams.WRAP_CONTENT;
-                int height = LinearLayout.LayoutParams.WRAP_CONTENT;
-                boolean focusable = true; // lets taps outside the popup also dismiss it
-                final PopupWindow popupWindow = new PopupWindow(popupView, width, height, focusable);
-                popupWindow.setElevation(32);
-
-                // Show the popup window
-                popupWindow.showAtLocation(v, Gravity.CENTER, 0, 0);
-
-                // Dismiss the popup window when touched
-                popupView.setOnTouchListener(new View.OnTouchListener() {
-                    @Override
-                    public boolean onTouch(View v, MotionEvent event) {
-                        popupWindow.dismiss();
-                        return true;
-                    }
-                });
+                uiHelper.showCustomPopup(getApplicationContext(), R.layout.guide_popup, v);
             }
         });
 
