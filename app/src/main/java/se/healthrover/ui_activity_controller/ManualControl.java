@@ -59,7 +59,7 @@ public class ManualControl extends AppCompatActivity {
         healthRoverJoystick = new HealthRoverJoystick(this);
         header = findViewById(R.id.header);
         voiceControl = findViewById(R.id.voiceControl);
-        carName = getIntent().getStringExtra(getString(R.string.carName));
+        carName = getIntent().getStringExtra(getString(R.string.car_name));
         header.setText(carName);
         angleText = findViewById(R.id.textView_angle);
         strengthText = findViewById(R.id.textView_strength);
@@ -82,8 +82,8 @@ public class ManualControl extends AppCompatActivity {
                 carManagement.moveCar(healthRoverCar, speed, turningAngle, ManualControl.this);
 
                 //Update the UI speed and angle
-                angleText.setText(turningAngle + getString(R.string.degreeSymbol));
-                strengthText.setText(speed + getString(R.string.percentageSign));
+                angleText.setText(turningAngle + getString(R.string.degree_symbol));
+                strengthText.setText(speed + getString(R.string.percentage_sign));
             }
         });
 
@@ -92,7 +92,7 @@ public class ManualControl extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(ManualControl.this, SpeechRecognition.class);
-                intent.putExtra(getString(R.string.carName), healthRoverCar.getCarName());
+                intent.putExtra(getString(R.string.car_name), healthRoverCar.getCarName());
                 startActivity(intent);
             }
         });

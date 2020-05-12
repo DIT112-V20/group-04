@@ -79,7 +79,7 @@ public class CarSelect extends Activity{
     }
     //Checks if the activity is loaded after a crash and prints it out if it exists
     private void checkForErrorMessage() {
-        String errorMessage = getIntent().getStringExtra(getString(R.string.crashErrorIntent));
+        String errorMessage = getIntent().getStringExtra(getString(R.string.crash_error_intent));
         if (errorMessage!=null){
             Toast.makeText(this, errorMessage, Toast.LENGTH_LONG).show();
         }
