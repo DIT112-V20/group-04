@@ -130,7 +130,7 @@ public class SpeechRecognition extends AppCompatActivity {
         // Try catch block to set up the connection to Dialogflow API
         // using a private access key. Add your own API key under src/res/raw
         try {
-            InputStream stream = getResources().openRawResource(R.raw.dialogflow_access_key);
+            InputStream stream = getResources().openRawResource(R.raw.test_agent_credentials);
             GoogleCredentials credentials = GoogleCredentials.fromStream(stream);
             String projectId = ((ServiceAccountCredentials)credentials).getProjectId();
             SessionsSettings.Builder settingsBuilder = SessionsSettings.newBuilder();
@@ -170,8 +170,13 @@ public class SpeechRecognition extends AppCompatActivity {
     public void processResponse(DetectIntentResponse response) {
         if (response != null) {
             try {
-                String receivedCommand = response.getQueryResult().getParameters().getFieldsOrThrow("movement").getStringValue();
-                driveCarCommand(receivedCommand);
+                String receivedCommand = response.getQueryResult().getParameters().getFieldsOrThrow("direction").getStringValue();
+                String receivedSpeed = response.getQueryResult().getParameters().getFieldsOrThrow("speed").getStringValue();
+                if(receivedSpeed.equals("")){
+                    driveCarCommand(receivedCommand, speed);
+                }else{
+                    driveCarCommand(receivedCommand, Integer.parseInt(receivedSpeed));
+                }
             }catch (IllegalArgumentException e){
                 Toast.makeText(SpeechRecognition.this, "I couldn't correlate that to a valid command! Please try again!", Toast.LENGTH_LONG).show();
             }
@@ -180,9 +185,10 @@ public class SpeechRecognition extends AppCompatActivity {
         }
     }
 
-    private void driveCarCommand(String command) {
+    private void driveCarCommand(String command, int receivedSpeed) {
         switch (command) {
             case "forward":
+                speed = receivedSpeed;
                 if (speed < SPEED_CHECK) {
                     speed = speed * NEGATION;
                 }
@@ -206,14 +212,18 @@ public class SpeechRecognition extends AppCompatActivity {
                 } else {
                     Toast.makeText(SpeechRecognition.this, "Minimum velocity reached", Toast.LENGTH_SHORT).show();
                 }
+
                 break;
             case "left":
+                speed = receivedSpeed;
                 carManagement.moveCar(healthRoverCar, speed, Integer.parseInt(CarCommands.LEFT_ANGLE.getCarCommands()), this);
                 break;
             case "right":
+                speed = receivedSpeed;
                 carManagement.moveCar(healthRoverCar, speed, Integer.parseInt(CarCommands.RIGHT_ANGLE.getCarCommands()), this);
                 break;
             case "reverse":
+                speed = receivedSpeed;
                 if(speed>SPEED_CHECK) {
                     speed = speed * NEGATION;
                 }
