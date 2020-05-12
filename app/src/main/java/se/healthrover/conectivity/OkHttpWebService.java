@@ -52,10 +52,6 @@ public class OkHttpWebService implements HealthRoverWebService {
                     public void run() {
                         if (url.contains(HTTP_STATUS_RESPONSE)){
                             Toast.makeText(activity, "Car is offline....", Toast.LENGTH_LONG).show();
-                        }else{
-                            Toast.makeText(activity, "Car connection lost...", Toast.LENGTH_LONG).show();
-                            Intent intent = new Intent(activity, CarSelect.class);
-                            activity.startActivity(intent);
                         }
                         Log.i("Error","Failed to connect: "+e.getMessage());
                         client.dispatcher().cancelAll();

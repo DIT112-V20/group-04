@@ -78,8 +78,9 @@ public class ManualControl extends AppCompatActivity {
                 if (joystickController.getNormalizedX() == JOYSTICK_CENTER && joystickController.getNormalizedY() == JOYSTICK_CENTER){
                     speed = 0;
                     turningAngle = 0;
-                    carManagement.moveCar(healthRoverCar, speed, turningAngle, ManualControl.this);
                 }
+                carManagement.moveCar(healthRoverCar, speed, turningAngle, ManualControl.this);
+
                 //Update the UI speed and angle
                 angleText.setText(turningAngle + getString(R.string.degreeSymbol));
                 strengthText.setText(speed + getString(R.string.percentageSign));
