@@ -26,16 +26,19 @@ public class ActivityExceptionHandler implements Thread.UncaughtExceptionHandler
         carManagement = new CarManagementImp();
         this.healthRoverCar = healthRoverCar;
     }
+    // The method handles runtime exceptions
     @Override
     public void uncaughtException(@NonNull Thread t, @NonNull Throwable e) {
         Log.i(activity.getString(R.string.logTitleError), activity.getString(R.string.logCrashTitle) + e.getMessage());
         Intent intent = new Intent(activity, CarSelect.class);
+        // If exception occurs while the car is in movement it will send stop request to the smartcar
         if (healthRoverCar != null){
             carManagement.moveCar(healthRoverCar,
                 Integer.parseInt(CarCommands.NO_MOVEMENT.getCarCommands()),
                 Integer.parseInt(CarCommands.NO_ANGLE.getCarCommands()),
                 activity);
         }
+        // When the main page is loaded after application restart
         intent.putExtra(activity.getString(R.string.crashErrorIntent), activity.getString(R.string.crashErrorMessage));
         activity.startActivity(intent);
         android.os.Process.killProcess(android.os.Process.myPid());

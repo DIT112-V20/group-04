@@ -43,9 +43,11 @@ public class OkHttpWebService implements HealthRoverWebService {
 
             @Override
             public void onFailure(@NotNull final Call call, @NotNull final IOException e) {
+
                 activity.runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
+                        //If the status request fails a message is displayed in the application
                         if (url.contains(HTTP_STATUS_RESPONSE)){
                             Toast.makeText(activity, activity.getString(R.string.carIsOffline), Toast.LENGTH_LONG).show();
                         }
@@ -64,6 +66,7 @@ public class OkHttpWebService implements HealthRoverWebService {
                             try {
                                 responseData = response.body().string();
                                 Log.i(activity.getString(R.string.logSuccess), activity.getString(R.string.logSuccess) + response.code());
+                                //If status request is successful the manual control page is loaded and the car name is passed as a parameter
                                 if (responseData.equals(HTTP_STATUS_RESPONSE)) {
                                     Intent intent = new Intent(activity, ManualControl.class);
                                     intent.putExtra(activity.getString(R.string.carName), HealthRoverCar.getCarNameByUrl(url.substring(0, 20)));

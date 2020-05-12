@@ -53,6 +53,7 @@ public class CarSelect extends Activity{
 
         carList = findViewById(R.id.smartCarList);
         carList.setAdapter(adapter);
+
         //Once a car is selected the name is retrieved and used to initialize the car object that is to be controlled
         carList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
@@ -61,7 +62,6 @@ public class CarSelect extends Activity{
                 Toast.makeText(getApplicationContext(), "You selected " + carName, Toast.LENGTH_SHORT).show();
             }
         });
-
 
         //Connect to car button is pressed and we call the get status method in order to verify that the car is online
         connectToCarSelected.setOnClickListener(new View.OnClickListener() {
@@ -77,7 +77,7 @@ public class CarSelect extends Activity{
             }
         });
     }
-
+    //Checks if the activity is loaded after a crash and prints it out if it exists
     private void checkForErrorMessage() {
         String errorMessage = getIntent().getStringExtra(getString(R.string.crashErrorIntent));
         if (errorMessage!=null){

@@ -35,7 +35,7 @@ public enum HealthRoverCar {
         }
         return enumName;
     }
-
+    //Retrieves the enumerating object name by given url
     public static String getCarNameByUrl(String url){
         String carName = "";
         for (HealthRoverCar healthRoverCar: HealthRoverCar.values()){
