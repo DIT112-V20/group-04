@@ -26,6 +26,7 @@ import com.google.cloud.dialogflow.v2.SessionName;
 import com.google.cloud.dialogflow.v2.SessionsClient;
 import com.google.cloud.dialogflow.v2.SessionsSettings;
 import com.google.cloud.dialogflow.v2.TextInput;
+import com.google.common.base.CharMatcher;
 
 import java.io.InputStream;
 import java.util.ArrayList;
@@ -172,10 +173,18 @@ public class SpeechRecognition extends AppCompatActivity {
             try {
                 String receivedCommand = response.getQueryResult().getParameters().getFieldsOrThrow("direction").getStringValue();
                 String receivedSpeed = response.getQueryResult().getParameters().getFieldsOrThrow("speed").getStringValue();
-                if(receivedSpeed.equals("")){
-                    driveCarCommand(receivedCommand, speed);
+                String receivedAngle = response.getQueryResult().getParameters().getFieldsOrThrow("angle").getStringValue();
+                // Taking only the integer value from the receivedAngle String which includes not used characters
+                receivedAngle = CharMatcher.inRange('0', '9').retainFrom(receivedAngle);
+
+                if(!receivedAngle.equals("") && receivedSpeed.equals("")){
+                    driveCarCommand(receivedCommand, speed,  Integer.parseInt(receivedAngle));
+                }else if(receivedAngle.equals("") && !receivedSpeed.equals("")){
+                    driveCarCommand(receivedCommand, Integer.parseInt(receivedSpeed), Integer.parseInt(CarCommands.DEFAULT_ANGLE.getCarCommands()));
+                }else if(receivedAngle.equals("") && receivedSpeed.equals("")){
+                    driveCarCommand(receivedCommand, speed, Integer.parseInt(CarCommands.DEFAULT_ANGLE.getCarCommands()));
                 }else{
-                    driveCarCommand(receivedCommand, Integer.parseInt(receivedSpeed));
+                    driveCarCommand(receivedCommand, Integer.parseInt(receivedSpeed), Integer.parseInt(receivedAngle));
                 }
             }catch (IllegalArgumentException e){
                 Toast.makeText(SpeechRecognition.this, "I couldn't correlate that to a valid command! Please try again!", Toast.LENGTH_LONG).show();
@@ -185,7 +194,7 @@ public class SpeechRecognition extends AppCompatActivity {
         }
     }
 
-    private void driveCarCommand(String command, int receivedSpeed) {
+    private void driveCarCommand(String command, int receivedSpeed, int receivedAngle) {
         switch (command) {
             case "forward":
                 speed = receivedSpeed;
@@ -212,15 +221,14 @@ public class SpeechRecognition extends AppCompatActivity {
                 } else {
                     Toast.makeText(SpeechRecognition.this, "Minimum velocity reached", Toast.LENGTH_SHORT).show();
                 }
-
                 break;
             case "left":
                 speed = receivedSpeed;
-                carManagement.moveCar(healthRoverCar, speed, Integer.parseInt(CarCommands.LEFT_ANGLE.getCarCommands()), this);
+                carManagement.moveCar(healthRoverCar, speed, (receivedAngle * NEGATION), this);
                 break;
             case "right":
                 speed = receivedSpeed;
-                carManagement.moveCar(healthRoverCar, speed, Integer.parseInt(CarCommands.RIGHT_ANGLE.getCarCommands()), this);
+                carManagement.moveCar(healthRoverCar, speed, receivedAngle, this);
                 break;
             case "reverse":
                 speed = receivedSpeed;
