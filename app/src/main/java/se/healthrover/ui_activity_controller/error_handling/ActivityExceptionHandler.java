@@ -3,10 +3,11 @@ package se.healthrover.ui_activity_controller.error_handling;
 import android.app.Activity;
 import android.content.Intent;
 import android.util.Log;
-import android.widget.Toast;
+
 
 import androidx.annotation.NonNull;
 
+import se.healthrover.R;
 import se.healthrover.car_service.CarManagement;
 import se.healthrover.car_service.CarManagementImp;
 import se.healthrover.entities.CarCommands;
@@ -18,14 +19,13 @@ public class ActivityExceptionHandler implements Thread.UncaughtExceptionHandler
     private Activity activity;
     private CarManagement carManagement;
     private HealthRoverCar healthRoverCar;
-    private static final int RESTART_TIME_OUT = 5;
+    private static final int RESTART_TIME_OUT = 2;
 
     public ActivityExceptionHandler(Activity activity, HealthRoverCar healthRoverCar) {
         this.activity = activity;
         carManagement = new CarManagementImp();
         this.healthRoverCar = healthRoverCar;
     }
-
     @Override
     public void uncaughtException(@NonNull Thread t, @NonNull Throwable e) {
         Log.i("Error", "Crash message: " + e.getMessage());
@@ -33,7 +33,7 @@ public class ActivityExceptionHandler implements Thread.UncaughtExceptionHandler
         if (healthRoverCar != null){
             carManagement.moveCar(healthRoverCar, Integer.parseInt(CarCommands.NO_MOVEMENT.getCarCommands()), Integer.parseInt(CarCommands.NO_ANGLE.getCarCommands()), activity);
         }
-        Toast.makeText(activity,"Application is restarting", Toast.LENGTH_LONG).show();
+        intent.putExtra(activity.getString(R.string.crashErrorIntent), activity.getString(R.string.crashErrorMessage));
         activity.startActivity(intent);
         android.os.Process.killProcess(android.os.Process.myPid());
         System.exit(RESTART_TIME_OUT);

@@ -3,6 +3,7 @@ package se.healthrover.conectivity;
 import android.app.Activity;
 import android.content.Intent;
 import android.util.Log;
+import android.widget.Toast;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -16,6 +17,7 @@ import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
 import okhttp3.ResponseBody;
+import se.healthrover.R;
 import se.healthrover.entities.HealthRoverCar;
 import se.healthrover.ui_activity_controller.CarSelect;
 import se.healthrover.ui_activity_controller.ManualControl;
@@ -48,6 +50,9 @@ public class OkHttpWebService implements HealthRoverWebService {
                 activity.runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
+                        if (url.contains("status")){
+                            Toast.makeText(activity, "Car is offline....", Toast.LENGTH_LONG).show();
+                        }
                         Log.i("Error","Failed to connect: "+e.getMessage());
                         client.dispatcher().cancelAll();
                     }
@@ -65,7 +70,7 @@ public class OkHttpWebService implements HealthRoverWebService {
                                 Log.i("Success", "Success: " + response.code());
                                 if (responseData.equals(HTTP_STATUS_RESPONSE)) {
                                     Intent intent = new Intent(activity, ManualControl.class);
-                                    intent.putExtra("carName", HealthRoverCar.getCarNameByUrl(url.substring(0, 20)));
+                                    intent.putExtra(activity.getString(R.string.carName), HealthRoverCar.getCarNameByUrl(url.substring(0, 20)));
                                     activity.startActivity(intent);
                                 }
                             } catch (IOException e) {

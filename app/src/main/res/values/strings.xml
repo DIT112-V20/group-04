@@ -18,4 +18,14 @@
     </string>
     <string name="speed">SPEED:</string>
     <string name="angle">ANGLE:</string>
+    <string name="carName">CarName</string>
+    <string name="percentageSign">%</string>
+    <string name="degreeSymbol">°</string>
+    <string name="crashErrorIntent">crashError</string>
+    <string name="crashErrorMessage">An unexpected error occurred</string>
+
+
+
+
+
 </resources>

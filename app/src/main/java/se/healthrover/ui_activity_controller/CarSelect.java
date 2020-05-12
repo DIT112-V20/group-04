@@ -41,6 +41,7 @@ public class CarSelect extends Activity{
 
     //Used to initialize the elements on the activity once it¨s loaded
     private void initialize(){
+        checkForErrorMessage();
         //setting up by default everything to false and loading the car names into the listView and adapter
         carOnlineConnection = false;
         healthRoverCar = null;
@@ -76,6 +77,14 @@ public class CarSelect extends Activity{
             }
         });
     }
+
+    private void checkForErrorMessage() {
+        String errorMessage = getIntent().getStringExtra(getString(R.string.crashErrorIntent));
+        if (errorMessage!=null){
+            Toast.makeText(this, errorMessage, Toast.LENGTH_LONG).show();
+        }
+    }
+
     //Using back button to exit application
     @Override
     public void onBackPressed() {
