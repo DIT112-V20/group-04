@@ -15,4 +15,7 @@
     </string>
     <string name="speed">SPEED:</string>
     <string name="angle">ANGLE:</string>
+    <string name="info_text" >
+        Info goes here...
+    </string>
 </resources>
