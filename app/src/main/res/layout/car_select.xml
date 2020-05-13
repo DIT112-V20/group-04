@@ -9,34 +9,35 @@
 
     <TextView
         android:id="@+id/chooseCarText"
+        style="@style/standardText"
+        android:text="@string/choose_car_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:fontFamily="@font/raleway"
-        android:text="@string/choose_car_text"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.226"
-        style="@style/standardText"/>
+        />
 
     <Button
         android:id="@+id/connectToCarButton"
+        style="@style/standardButton"
         android:text="@string/connect_to_car_text"
+        android:drawableStart="@drawable/ic_wifi_white_24dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.919"
-        android:drawableLeft="@drawable/ic_wifi_white_24dp"
-        style="@style/standardButton"/>
+        />
 
     <ListView
         android:id="@+id/smartCarList"
+        style="@style/standard_list"
         android:layout_width="305dp"
         android:choiceMode="singleChoice"
-        android:listSelector="@color/colorLightSeaGreenTransparent"
         android:layout_height="309dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"

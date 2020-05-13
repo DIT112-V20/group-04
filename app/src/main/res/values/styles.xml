@@ -9,14 +9,9 @@
         <item name="fontFamily">@font/raleway</item>
     </style>
 
-    <style
-        name="standardButton">
-        <item name="android:layout_width">
-            wrap_content
-        </item>
-        <item name="android:layout_height">
-            wrap_content
-        </item>
+    <style name="standardButton">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
         <item name="android:background">@drawable/button_primary</item>
         <item name="android:textColor">@color/colorWhite</item>
         <item name="fontFamily">@font/raleway_semibold</item>
@@ -27,5 +22,39 @@
 
     <style name="standardText">
         <item name="android:textColor">@color/colorDeepJungleGreen</item>
+    </style>
+
+    <style name="standard_list">
+        <item name="android:listSelector">@color/colorLightSeaGreenTransparent</item>
+    </style>
+
+    <style name="standard_list_item">
+        <item name="android:textColor">@color/colorDeepJungleGreen</item>
+        <item name="android:layout_width">fill_parent</item>
+        <item name="android:layout_height">fill_parent</item>
+        <item name="android:padding">10dip</item>
+        <item name="android:textSize">20sp</item>
+
+    </style>
+
+    <style name="standard_popup">
+        <item name="android:background">@color/colorLightSeaGreenTransparent</item>
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:gravity">bottom</item>
+    </style>
+
+    <style name="standard_popup_text">
+        <item name="android:fontFamily">@font/raleway_bold</item>
+        <item name="android:textColor">@color/colorWhite</item>
+        <item name="android:textSize">18sp</item>
+        <item name="android:textAlignment">textStart</item>
+        <item name="android:layout_marginStart">30dp</item>
+        <item name="android:layout_marginEnd">30dp</item>
+        <item name="android:layout_marginTop">30dp</item>
+        <item name="android:layout_marginBottom">30dp</item>
+        <item name="android:layout_centerInParent">true</item>
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
     </style>
 </resources>
