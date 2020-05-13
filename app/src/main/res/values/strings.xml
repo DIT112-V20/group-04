@@ -27,4 +27,14 @@
     </string>
     <string name="select_car_prompt">Select a car first...</string>
     <string name="selected_car_message">"You selected "</string>
+    <string name="car_name">CarName</string>
+    <string name="percentage_sign">%</string>
+    <string name="degree_symbol">°</string>
+    <string name="crash_error_intent">crashError</string>
+    <string name="crash_error_message">An unexpected error occurred</string>
+    <string name="car_is_offline">Car is offline....</string>
+    <string name="log_title_error">Error</string>
+    <string name="log_connection_fail">Failed to connect: </string>
+    <string name="log_success">Success</string>
+    <string name="log_crash_title">Crash message: </string>
 </resources>

@@ -36,6 +36,7 @@ import se.healthrover.car_service.CarManagementImp;
 import se.healthrover.entities.CarCommands;
 import se.healthrover.entities.HealthRoverCar;
 import se.healthrover.ui_activity_controller.CarSelect;
+import se.healthrover.ui_activity_controller.error_handling.ActivityExceptionHandler;
 import se.healthrover.ui_activity_controller.ManualControl;
 import se.healthrover.ui_activity_controller.UserInterfaceUtilities;
 
@@ -63,6 +64,7 @@ public class SpeechRecognition extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Thread.setDefaultUncaughtExceptionHandler(new ActivityExceptionHandler(this, healthRoverCar));
         initialize();
 
     }
@@ -70,6 +72,7 @@ public class SpeechRecognition extends AppCompatActivity {
     @Override
     protected void onRestart() {
         super.onRestart();
+        Thread.setDefaultUncaughtExceptionHandler(new ActivityExceptionHandler(this, healthRoverCar));
         initialize();
     }
     // Using the method to load and initialize the content of the page

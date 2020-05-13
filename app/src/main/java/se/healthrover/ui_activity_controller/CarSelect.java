@@ -12,6 +12,7 @@ import se.healthrover.R;
 import se.healthrover.car_service.CarManagement;
 import se.healthrover.car_service.CarManagementImp;
 import se.healthrover.entities.HealthRoverCar;
+import se.healthrover.ui_activity_controller.error_handling.ActivityExceptionHandler;
 
 public class CarSelect extends Activity{
 
@@ -27,6 +28,7 @@ public class CarSelect extends Activity{
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Thread.setDefaultUncaughtExceptionHandler(new ActivityExceptionHandler(this, healthRoverCar));
         initialize();
 
     }
@@ -34,11 +36,13 @@ public class CarSelect extends Activity{
     @Override
     protected void onRestart() {
         super.onRestart();
+        Thread.setDefaultUncaughtExceptionHandler(new ActivityExceptionHandler(this, healthRoverCar));
         initialize();
     }
 
     //Used to initialize the elements on the activity once it¨s loaded
     private void initialize(){
+        checkForErrorMessage();
         //setting up by default everything to false and loading the car names into the listView and adapter
         carOnlineConnection = false;
         healthRoverCar = null;
@@ -51,17 +55,16 @@ public class CarSelect extends Activity{
 
         carList = findViewById(R.id.smartCarList);
         carList.setAdapter(adapter);
+
         //Once a car is selected the name is retrieved and used to initialize the car object that is to be controlled
         carList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
-
                 String carName = carList.getItemAtPosition(position).toString();
                 healthRoverCar = HealthRoverCar.valueOf(HealthRoverCar.getCarObjectNameByCarName(carName));
 
                 uiHelper.showCustomToast(getApplicationContext(), getString(R.string.selected_car_message) + carName);
             }
         });
-
 
         //Connect to car button is pressed and we call the get status method in order to verify that the car is online
         connectToCarSelected.setOnClickListener(new View.OnClickListener() {
@@ -83,6 +86,14 @@ public class CarSelect extends Activity{
             }
         });
     }
+    //Checks if the activity is loaded after a crash and prints it out if it exists
+    private void checkForErrorMessage() {
+        String errorMessage = getIntent().getStringExtra(getString(R.string.crash_error_intent));
+        if (errorMessage!=null){
+            Toast.makeText(this, errorMessage, Toast.LENGTH_LONG).show();
+        }
+    }
+
     //Using back button to exit application
     @Override
     public void onBackPressed() {
