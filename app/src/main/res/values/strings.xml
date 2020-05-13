@@ -15,6 +15,14 @@
     <string name="speed">SPEED:</string>
     <string name="angle">ANGLE:</string>
     <string name="info_text" >
-        Info goes here...
+        CREDITS\n
+        \n
+        Library: smartcar_shield\n
+        Copyright (c) 2019 Dimitris Platis\n
+        License: MIT\n
+        \n
+        Library: virtual-joystick-android\n
+        Copyright (c) 2016 Damien Brun\n
+        License: Apache 2.0
     </string>
 </resources>
