@@ -58,7 +58,7 @@ public class CarSelect extends Activity{
                 String carName = carList.getItemAtPosition(position).toString();
                 healthRoverCar = HealthRoverCar.valueOf(HealthRoverCar.getCarObjectNameByCarName(carName));
 
-                uiHelper.showCustomToast(getApplicationContext(), "You selected " + carName);
+                uiHelper.showCustomToast(getApplicationContext(), getString(R.string.selected_car_message) + carName);
             }
         });
 
@@ -69,7 +69,7 @@ public class CarSelect extends Activity{
             @Override
             public void onClick(View v) {
                 if (healthRoverCar == null){
-                    uiHelper.showCustomToast(getApplicationContext(),"Select a car...");
+                    uiHelper.showCustomToast(getApplicationContext(), getString(R.string.select_car_prompt));
                 }else {
                     carManagement.checkStatus(healthRoverCar, CarSelect.this);
                 }
