@@ -7,21 +7,18 @@
     android:background="#FFFFFF"
     tools:context=".ui_activity_controller.ManualControl">
 
-
     <TextView
         android:id="@+id/chooseCarText"
         style="@style/standardText"
-        android:textSize="15dp"
+        android:textSize="15sp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="carName"
         custom:layout_constraintBottom_toBottomOf="parent"
         custom:layout_constraintHorizontal_bias="0.498"
         custom:layout_constraintLeft_toLeftOf="parent"
         custom:layout_constraintRight_toRightOf="parent"
         custom:layout_constraintTop_toTopOf="parent"
         custom:layout_constraintVertical_bias="0.08" />
-
 
     <se.healthrover.entities.HealthRoverJoystick
         android:id="@+id/joystick"
@@ -45,7 +42,7 @@
         style="@style/standardButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:drawableLeft="@drawable/ic_mic_none_white_small"
+        android:drawableStart="@drawable/ic_mic_none_white_small"
         android:text="@string/voice_control"
         custom:layout_constraintBottom_toBottomOf="parent"
         custom:layout_constraintEnd_toEndOf="parent"
@@ -69,7 +66,7 @@
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginRight="80dp"
+            android:layout_marginEnd="80dp"
             android:orientation="vertical"
             custom:layout_constraintTop_toTopOf="parent">
 
@@ -79,16 +76,15 @@
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/speed"
-                android:textSize="25dp" />
+                android:textSize="25sp" />
 
             <TextView
                 android:id="@+id/textView_strength"
                 style="@style/standardText"
                 android:layout_width="fill_parent"
                 android:layout_height="fill_parent"
-                android:text="0%"
                 android:textAlignment="center"
-                android:textSize="25dp" />
+                android:textSize="25sp" />
         </LinearLayout>
 
         <LinearLayout
@@ -102,7 +98,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/angle"
-                android:textSize="25dp"
+                android:textSize="25sp"
                 tools:layout_editor_absoluteX="244dp"
                 tools:layout_editor_absoluteY="161dp" />
 
@@ -111,10 +107,8 @@
                 style="@style/standardText"
                 android:layout_width="91dp"
                 android:layout_height="40dp"
-                android:layout_alignParentEnd="true"
-                android:text="0°"
                 android:textAlignment="center"
-                android:textSize="25dp"
+                android:textSize="25sp"
                 custom:layout_constraintBottom_toBottomOf="parent"
                 custom:layout_constraintEnd_toEndOf="parent"
                 custom:layout_constraintHorizontal_bias="0.756"
@@ -124,6 +118,4 @@
 
         </LinearLayout>
     </LinearLayout>
-
-
 </androidx.constraintlayout.widget.ConstraintLayout>
