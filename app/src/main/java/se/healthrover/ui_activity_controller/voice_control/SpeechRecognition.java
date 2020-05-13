@@ -152,7 +152,7 @@ public class SpeechRecognition extends AppCompatActivity {
     // using a private access key. Add your own API key under src/res/raw
     private void connectDialogflow(){
         try {
-            InputStream stream = getResources().openRawResource(R.raw.dialogflow_access_key);
+            InputStream stream = getResources().openRawResource(R.raw.test_agent_credentials);
             GoogleCredentials credentials = GoogleCredentials.fromStream(stream);
             String projectId = ((ServiceAccountCredentials)credentials).getProjectId();
             SessionsSettings.Builder settingsBuilder = SessionsSettings.newBuilder();
@@ -183,14 +183,18 @@ public class SpeechRecognition extends AppCompatActivity {
 
                 // Here we check for empty values to be able to call driveCarCommand with
                 // default values, otherwise it will use user-specified ones
-                if(!receivedAngle.equals("") && receivedSpeed.equals("")){
-                    driveCarCommand(receivedCommand, speed,  Integer.parseInt(receivedAngle));
-                }else if(receivedAngle.equals("") && !receivedSpeed.equals("")){
-                    driveCarCommand(receivedCommand, Integer.parseInt(receivedSpeed), Integer.parseInt(CarCommands.DEFAULT_ANGLE.getCarCommands()));
-                }else if(receivedAngle.equals("") && receivedSpeed.equals("")){
-                    driveCarCommand(receivedCommand, speed, Integer.parseInt(CarCommands.DEFAULT_ANGLE.getCarCommands()));
+                if(speedValidation(Integer.parseInt(receivedSpeed))) {
+                    if (!receivedAngle.equals("") && receivedSpeed.equals("")) {
+                        driveCarCommand(receivedCommand, speed, Integer.parseInt(receivedAngle));
+                    } else if (receivedAngle.equals("") && !receivedSpeed.equals("")) {
+                        driveCarCommand(receivedCommand, Integer.parseInt(receivedSpeed), Integer.parseInt(CarCommands.DEFAULT_ANGLE.getCarCommands()));
+                    } else if (receivedAngle.equals("") && receivedSpeed.equals("")) {
+                        driveCarCommand(receivedCommand, speed, Integer.parseInt(CarCommands.DEFAULT_ANGLE.getCarCommands()));
+                    } else {
+                        driveCarCommand(receivedCommand, Integer.parseInt(receivedSpeed), Integer.parseInt(receivedAngle));
+                    }
                 }else{
-                    driveCarCommand(receivedCommand, Integer.parseInt(receivedSpeed), Integer.parseInt(receivedAngle));
+                    Toast.makeText(SpeechRecognition.this, "The requested speed is too high, try again!", Toast.LENGTH_SHORT).show();
                 }
             }catch (IllegalArgumentException e){
                 Toast.makeText(SpeechRecognition.this, "I couldn't correlate that to a valid command! Please try again!", Toast.LENGTH_LONG).show();
@@ -198,6 +202,11 @@ public class SpeechRecognition extends AppCompatActivity {
         } else {
             Toast.makeText(SpeechRecognition.this, "There was some communication issue. Please Try again!", Toast.LENGTH_LONG).show();
         }
+    }
+
+    // Method to validate that requested speed is always within boundaries
+    private Boolean speedValidation(int speed) {
+        return speed <= Integer.parseInt(CarCommands.VC_MAX_VELOCITY.getCarCommands());
     }
 
     private void driveCarCommand(String command, int receivedSpeed, int receivedAngle) {
