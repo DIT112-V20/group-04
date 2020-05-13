@@ -20,7 +20,7 @@
         <item name="android:drawablePadding">5dp</item>
     </style>
 
-    <style name="standardText">
+    <style name="standard_text">
         <item name="android:textColor">@color/colorDeepJungleGreen</item>
     </style>
 

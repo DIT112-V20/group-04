@@ -55,7 +55,7 @@ public class CarSelectTest {
 
     @Test
     public void connectButtonClickTest(){
-        onView(withId(R.id.connectToCar)).perform(click());
+        onView(withId(R.id.connectToCarButton)).perform(click());
 
         }
 
