@@ -183,7 +183,7 @@ public class SpeechRecognition extends AppCompatActivity {
 
                 // Here we check for empty values to be able to call driveCarCommand with
                 // default values, otherwise it will use user-specified ones
-                if(speedValidation(receivedSpeed) && angleValidation(receivedSpeed)) {
+                if(speedValidation(receivedSpeed) && angleValidation(receivedAngle)) {
                     if (!receivedAngle.equals("") && receivedSpeed.equals("")) {
                         driveCarCommand(receivedCommand, speed, Integer.parseInt(receivedAngle));
                     } else if (receivedAngle.equals("") && !receivedSpeed.equals("")) {
