@@ -25,4 +25,5 @@
         Copyright© 2016 Damien Brun\n
         License: Apache 2.0
     </string>
+    <string name="select_car_prompt">Select a car first...</string>
 </resources>

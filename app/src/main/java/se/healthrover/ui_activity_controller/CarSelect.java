@@ -69,7 +69,7 @@ public class CarSelect extends Activity{
             @Override
             public void onClick(View v) {
                 if (healthRoverCar == null){
-                    uiHelper.showCustomToast(getApplicationContext(),"Select a car...");
+                    uiHelper.showCustomToast(getApplicationContext(),getString(R.string.select_car_prompt));
                 }else {
                     carManagement.checkStatus(healthRoverCar, CarSelect.this);
                 }
