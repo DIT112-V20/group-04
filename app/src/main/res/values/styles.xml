@@ -9,7 +9,11 @@
         <item name="fontFamily">@font/raleway</item>
     </style>
 
-    <style name="standardButton">
+    <style name="standard_view">
+        <item name="android:background">@color/colorWhite</item>
+    </style>
+
+    <style name="standard_button">
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:background">@drawable/button_primary</item>
@@ -32,7 +36,7 @@
         <item name="android:textColor">@color/colorDeepJungleGreen</item>
         <item name="android:layout_width">fill_parent</item>
         <item name="android:layout_height">fill_parent</item>
-        <item name="android:padding">10dip</item>
+        <item name="android:padding">10dp</item>
         <item name="android:textSize">20sp</item>
 
     </style>
