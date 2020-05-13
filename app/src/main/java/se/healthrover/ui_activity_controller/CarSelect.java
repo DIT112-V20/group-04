@@ -17,11 +17,13 @@ import se.healthrover.ui_activity_controller.error_handling.ActivityExceptionHan
 
 public class CarSelect extends Activity{
 
+    private Button infoButton;
     private Button connectToCarSelected;
     private ListView carList;
     private HealthRoverCar healthRoverCar;
     private boolean carOnlineConnection;
     private CarManagement carManagement = new CarManagementImp();
+    private UserInterfaceUtilities uiHelper = new UserInterfaceUtilities();
 
     //Create the activity
     @Override
@@ -46,10 +48,11 @@ public class CarSelect extends Activity{
         carOnlineConnection = false;
         healthRoverCar = null;
         setContentView(R.layout.car_select);
-        connectToCarSelected = findViewById(R.id.connectToCar);
+        connectToCarSelected = findViewById(R.id.connectToCarButton);
+        infoButton = findViewById(R.id.infoButton);
 
         ArrayAdapter adapter = new ArrayAdapter<>(this,
-                android.R.layout.simple_list_item_1, HealthRoverCar.getListOfCarNames());
+                R.layout.car_select_list_item, HealthRoverCar.getListOfCarNames());
 
         carList = findViewById(R.id.smartCarList);
         carList.setAdapter(adapter);
@@ -59,7 +62,8 @@ public class CarSelect extends Activity{
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
                 String carName = carList.getItemAtPosition(position).toString();
                 healthRoverCar = HealthRoverCar.valueOf(HealthRoverCar.getCarObjectNameByCarName(carName));
-                Toast.makeText(getApplicationContext(), "You selected " + carName, Toast.LENGTH_SHORT).show();
+
+                uiHelper.showCustomToast(getApplicationContext(), getString(R.string.selected_car_message) + carName);
             }
         });
 
@@ -69,11 +73,17 @@ public class CarSelect extends Activity{
             @Override
             public void onClick(View v) {
                 if (healthRoverCar == null){
-                    Toast.makeText(getApplicationContext(), "Select a car...", Toast.LENGTH_SHORT).show();
+                    uiHelper.showCustomToast(getApplicationContext(), getString(R.string.select_car_prompt));
                 }else {
                     carManagement.checkStatus(healthRoverCar, CarSelect.this);
-
                 }
+            }
+        });
+
+        infoButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                uiHelper.showCustomPopup(getApplicationContext(), R.layout.info_popup, v);
             }
         });
     }
@@ -92,5 +102,4 @@ public class CarSelect extends Activity{
         finishAffinity();
         finish();
     }
-
 }
