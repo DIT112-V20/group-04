@@ -2,13 +2,11 @@ package se.healthrover.ui_activity_controller;
 
 import android.app.Activity;
 import android.os.Bundle;
-import android.view.Gravity;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
-import android.widget.Toast;
 
 import se.healthrover.R;
 import se.healthrover.car_service.CarManagement;
@@ -17,6 +15,7 @@ import se.healthrover.entities.HealthRoverCar;
 
 public class CarSelect extends Activity{
 
+    private Button infoButton;
     private Button connectToCarSelected;
     private ListView carList;
     private HealthRoverCar healthRoverCar;
@@ -45,6 +44,7 @@ public class CarSelect extends Activity{
         healthRoverCar = null;
         setContentView(R.layout.car_select);
         connectToCarSelected = findViewById(R.id.connectToCarButton);
+        infoButton = findViewById(R.id.infoButton);
 
         ArrayAdapter adapter = new ArrayAdapter<>(this,
                 R.layout.car_select_list_item, HealthRoverCar.getListOfCarNames());
@@ -73,6 +73,13 @@ public class CarSelect extends Activity{
                 }else {
                     carManagement.checkStatus(healthRoverCar, CarSelect.this);
                 }
+            }
+        });
+
+        infoButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                uiHelper.showCustomPopup(getApplicationContext(), R.layout.info_popup, v);
             }
         });
     }
