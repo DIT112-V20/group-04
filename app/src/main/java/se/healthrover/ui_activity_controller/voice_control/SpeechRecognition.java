@@ -183,7 +183,7 @@ public class SpeechRecognition extends AppCompatActivity {
 
                 // Here we check for empty values to be able to call driveCarCommand with
                 // default values, otherwise it will use user-specified ones
-                if(speedValidation(Integer.parseInt(receivedSpeed))) {
+                if(speedValidation(receivedSpeed) && angleValidation(receivedSpeed)) {
                     if (!receivedAngle.equals("") && receivedSpeed.equals("")) {
                         driveCarCommand(receivedCommand, speed, Integer.parseInt(receivedAngle));
                     } else if (receivedAngle.equals("") && !receivedSpeed.equals("")) {
@@ -194,7 +194,7 @@ public class SpeechRecognition extends AppCompatActivity {
                         driveCarCommand(receivedCommand, Integer.parseInt(receivedSpeed), Integer.parseInt(receivedAngle));
                     }
                 }else{
-                    Toast.makeText(SpeechRecognition.this, "The requested speed is too high, try again!", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(SpeechRecognition.this, "One of the requested values are out of limits, try again!", Toast.LENGTH_SHORT).show();
                 }
             }catch (IllegalArgumentException e){
                 Toast.makeText(SpeechRecognition.this, "I couldn't correlate that to a valid command! Please try again!", Toast.LENGTH_LONG).show();
@@ -205,8 +205,22 @@ public class SpeechRecognition extends AppCompatActivity {
     }
 
     // Method to validate that requested speed is always within boundaries
-    private Boolean speedValidation(int speed) {
-        return speed <= Integer.parseInt(CarCommands.VC_MAX_VELOCITY.getCarCommands());
+    private Boolean speedValidation(String speed) {
+        if(speed.equals("")){
+            return true;
+        }else {
+            return Integer.parseInt(speed) <= Integer.parseInt(CarCommands.VC_MAX_VELOCITY.getCarCommands());
+        }
+    }
+
+    // Method to validate that the requested angle is always within boundaries
+    private Boolean angleValidation(String angle){
+        if(angle.equals("")){
+            return true;
+        }else{
+            return Integer.parseInt(angle) <= Integer.parseInt(CarCommands.DEFAULT_ANGLE.getCarCommands()) &&
+                    Integer.parseInt(angle) >= (Integer.parseInt(CarCommands.DEFAULT_ANGLE.getCarCommands())*NEGATION);
+        }
     }
 
     private void driveCarCommand(String command, int receivedSpeed, int receivedAngle) {
