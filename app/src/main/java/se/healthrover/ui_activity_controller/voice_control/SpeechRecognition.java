@@ -47,10 +47,10 @@ public class SpeechRecognition extends AppCompatActivity {
     private String carName;
     private TextView headerVoiceControl;
     private ImageView speechButton;
-    private CarManagement carManagement = new CarManagementImp();
     private SessionName session;
     private SessionsClient sessionsClient;
     private int speed = 30;
+    private CarManagement carManagement;
     private static final int VELOCITY_MODIFIER = 10;
     private static final int NEGATION = -1;
     private static final int SPEED_CHECK = 0;
@@ -70,6 +70,11 @@ public class SpeechRecognition extends AppCompatActivity {
         super.onRestart();
         initialize();
     }
+
+    public SpeechRecognition(){
+        carManagement = new CarManagementImp();
+    }
+
     // Using the method to load and initialize the content of the page
     private void initialize() {
         setContentView(R.layout.speech_recognition);
@@ -152,7 +157,7 @@ public class SpeechRecognition extends AppCompatActivity {
     // using a private access key. Add your own API key under src/res/raw
     private void connectDialogflow(){
         try {
-            InputStream stream = getResources().openRawResource(R.raw.test_agent_credentials);
+            InputStream stream = getResources().openRawResource(R.raw.dialogflow_access_key);
             GoogleCredentials credentials = GoogleCredentials.fromStream(stream);
             String projectId = ((ServiceAccountCredentials)credentials).getProjectId();
             SessionsSettings.Builder settingsBuilder = SessionsSettings.newBuilder();
@@ -175,6 +180,7 @@ public class SpeechRecognition extends AppCompatActivity {
     public void processResponse(DetectIntentResponse response) {
         if (response != null) {
             try {
+
                 String receivedCommand = response.getQueryResult().getParameters().getFieldsOrThrow("direction").getStringValue();
                 String receivedSpeed = response.getQueryResult().getParameters().getFieldsOrThrow("speed").getStringValue();
                 String receivedAngle = response.getQueryResult().getParameters().getFieldsOrThrow("angle").getStringValue();
