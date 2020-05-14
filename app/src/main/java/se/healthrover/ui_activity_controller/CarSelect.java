@@ -7,7 +7,6 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
-import android.widget.Toast;
 
 import se.healthrover.R;
 import se.healthrover.car_service.CarManagement;
@@ -91,7 +90,7 @@ public class CarSelect extends Activity{
     private void checkForErrorMessage() {
         String errorMessage = getIntent().getStringExtra(getString(R.string.crash_error_intent));
         if (errorMessage!=null){
-            Toast.makeText(this, errorMessage, Toast.LENGTH_LONG).show();
+            uiHelper.showCustomToast(getApplicationContext(), errorMessage);
         }
     }
 
