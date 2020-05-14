@@ -8,7 +8,7 @@
 
     <TextView
         android:id="@+id/headerVoiceControl"
-        style="@style/standardText"
+        style="@style/standard_text"
         android:textSize="15sp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -31,7 +31,7 @@
         custom:layout_constraintStart_toStartOf="parent"
         custom:layout_constraintTop_toTopOf="parent"
         custom:layout_constraintVertical_bias="0.957"
-        style="@style/standardButton"
+        style="@style/standard_button"
         android:drawableStart="@drawable/ic_directions_car_white_24dp"/>
 
     <ImageButton
@@ -50,7 +50,7 @@
 
     <Button
         android:id="@+id/guideButton"
-        style="@style/standardButton"
+        style="@style/standard_button"
         android:layout_width="44dp"
         android:layout_height="44dp"
         android:layout_marginTop="8dp"

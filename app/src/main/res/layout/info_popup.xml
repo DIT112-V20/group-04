@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/guidePopup"
+    android:id="@+id/infoPopup"
     style="@style/standard_popup">
 
     <TextView
-        android:text="@string/guide_text"
-        style="@style/standard_popup_text"/>
+        style="@style/standard_popup_text"
+        android:text="@string/info_text" />
 
 </RelativeLayout>
