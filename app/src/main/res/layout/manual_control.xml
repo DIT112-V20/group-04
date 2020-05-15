@@ -64,6 +64,7 @@
         custom:layout_constraintTop_toTopOf="parent">
 
         <LinearLayout
+            android:id="@+id/layoutSpeed"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginEnd="80dp"
@@ -88,6 +89,7 @@
         </LinearLayout>
 
         <LinearLayout
+            android:id="@+id/layoutAngle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="vertical">

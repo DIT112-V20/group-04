@@ -33,6 +33,7 @@ import se.healthrover.entities.HealthRoverCar;
 import se.healthrover.ui_activity_controller.CarSelect;
 import se.healthrover.ui_activity_controller.ManualControl;
 import se.healthrover.ui_activity_controller.UserInterfaceUtilities;
+import se.healthrover.ui_activity_controller.error_handling.ActivityExceptionHandler;
 
 public class SpeechRecognition extends AppCompatActivity {
 
