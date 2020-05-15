@@ -2,6 +2,8 @@ package se.healthrover.entities;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.view.View;
+import android.widget.PopupWindow;
 
 import com.google.cloud.dialogflow.v2.QueryInput;
 import com.google.cloud.dialogflow.v2.SessionName;
@@ -62,8 +64,11 @@ public class ObjectFactory {
     public Intent getIntent(Activity oldActivity, Class<?> newActivity){
         return new Intent(oldActivity,newActivity);
     }
-    public Intent getVoiceIntent(String recognizerIntent){
+    public Intent getIntent(String recognizerIntent){
         return new Intent(recognizerIntent);
     }
 
+    public PopupWindow getPopupWindow(View popupView, int width, int height, boolean focusable){
+        return new PopupWindow(popupView, width, height, focusable);
+    }
 }

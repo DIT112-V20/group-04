@@ -116,7 +116,7 @@ public class SpeechRecognition extends AppCompatActivity {
         speechButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent speechIntent = ObjectFactory.getInstance().getVoiceIntent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
+                Intent speechIntent = ObjectFactory.getInstance().getIntent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
                 speechIntent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
                 speechIntent.putExtra(RecognizerIntent.EXTRA_PROMPT, getString(R.string.voice_pop_up_message));
                 startActivityForResult(speechIntent, SPEECH_RESULT);
@@ -135,7 +135,9 @@ public class SpeechRecognition extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         if(requestCode == SPEECH_RESULT && resultCode == RESULT_OK){
+            assert data != null;
             ArrayList<String> spokenWords = data.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
+            assert spokenWords != null;
             sendVoiceCommand(spokenWords.get(0));
         }
         super.onActivityResult(requestCode, resultCode, data);
@@ -174,6 +176,8 @@ public class SpeechRecognition extends AppCompatActivity {
                 String receivedAngle = response.getQueryResult().getParameters().getFieldsOrThrow(DIALOGFLOW_RESPONSE_KEY_ANGLE).getStringValue();
                 // Taking only the integer value from the receivedAngle String which includes not used characters
                 receivedAngle = CharMatcher.inRange('0', '9').retainFrom(receivedAngle);
+
+                System.out.println(response.getQueryResult().getParameters().toString());
 
                 // Here we check for empty values to be able to call driveCarCommand with
                 // default values, otherwise it will use user-specified ones
