@@ -4,13 +4,15 @@
     <string name="connect_to_car_text">CONNECT</string>
     <string name="voice_control">Voice Control</string>
     <string name="manual_control">Manual Control</string>
-    <string name="guide_text">The SmartCar is able to understand you, try to steer it with your voice!\n\n
+    <string name="guide_text">The SmartCar understands both simple voice commands and more complex ones, that specify both direction, speed and angle in one sentence\n\n
         The SmartCar can:\n
         - Move forward\n
         - Reverse\
         - Stop\n
         - Change speed\n
-        - Turn\n
+        - Turn left and right\n
+        - Specify degrees for turning\n\n
+        F.e. Turn right with 40 degrees and speed 30\n
     </string>
     <string name="speed">SPEED:</string>
     <string name="angle">ANGLE:</string>
@@ -25,16 +27,23 @@
         Copyright© 2016 Damien Brun\n
         License: Apache 2.0
     </string>
-    <string name="select_car_prompt">Select a car first...</string>
+    <string name="select_car_prompt">Select a car first…</string>
     <string name="selected_car_message">"You selected "</string>
     <string name="car_name">CarName</string>
     <string name="percentage_sign">%</string>
     <string name="degree_symbol">°</string>
     <string name="crash_error_intent">crashError</string>
     <string name="crash_error_message">An unexpected error occurred</string>
-    <string name="car_is_offline">Car is offline....</string>
+    <string name="car_is_offline">Car is offline…</string>
     <string name="log_title_error">Error</string>
     <string name="log_connection_fail">Failed to connect: </string>
     <string name="log_success">Success</string>
     <string name="log_crash_title">Crash message: </string>
+    <string name="invalid_command">Invalid command provided! Please try again!</string>
+    <string name="dialogflow_connection_fail">Could not access the Dialogflow API…</string>
+    <string name="dialogflow_response_out_of_limits">One of the requested values are out of limits, try again!</string>
+    <string name="dialogflow_no_correlation_matched">We could not correlate that to a valid command! Please try again!</string>
+    <string name="dialogflow_connection_issue">There was some communication issue. Please Try again!</string>
+    <string name="voice_control_max_velocity">Maximum velocity reached!</string>
+    <string name="voice_control_min_velocity">Minimum velocity reached!</string>
 </resources>
