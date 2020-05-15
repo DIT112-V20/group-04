@@ -13,6 +13,7 @@ import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 import android.widget.TextView;
 import android.widget.Toast;
+import se.healthrover.ui_activity_controller.UserInterfaceUtilities;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
@@ -51,6 +52,7 @@ public class SpeechRecognition extends AppCompatActivity {
     private SessionsClient sessionsClient;
     private int speed = 30;
     private CarManagement carManagement;
+    private UserInterfaceUtilities userInterfaceUtilities;
     private static final int VELOCITY_MODIFIER = 10;
     private static final int NEGATION = -1;
     private static final int SPEED_CHECK = 0;
@@ -73,13 +75,14 @@ public class SpeechRecognition extends AppCompatActivity {
 
     public SpeechRecognition(){
         carManagement = new CarManagementImp();
+        userInterfaceUtilities = new UserInterfaceUtilities();
     }
 
     // Using the method to load and initialize the content of the page
     private void initialize() {
         setContentView(R.layout.speech_recognition);
         headerVoiceControl = findViewById(R.id.headerVoiceControl);
-        carName = getIntent().getStringExtra("carName");
+        carName = getIntent().getStringExtra(getString(R.string.car_name));
         headerVoiceControl.setText(carName);
         healthRoverCar = HealthRoverCar.valueOf(HealthRoverCar.getCarObjectNameByCarName(carName));
         manualControlButton = findViewById(R.id.manualControl);
@@ -92,36 +95,14 @@ public class SpeechRecognition extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(SpeechRecognition.this, ManualControl.class);
-                intent.putExtra("carName", healthRoverCar.getCarName());
+                intent.putExtra(getString(R.string.car_name), healthRoverCar.getCarName());
                 startActivity(intent);
             }
         });
         guideButton.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) {
-                // Inflate the layout of the popup window
-                LayoutInflater inflater = (LayoutInflater)
-                        getSystemService(LAYOUT_INFLATER_SERVICE);
-                View popupView = inflater.inflate(R.layout.guide_popup, null);
-
-                // Create the popup window
-                int width = LinearLayout.LayoutParams.WRAP_CONTENT;
-                int height = LinearLayout.LayoutParams.WRAP_CONTENT;
-                boolean focusable = true; // lets taps outside the popup also dismiss it
-                final PopupWindow popupWindow = new PopupWindow(popupView, width, height, focusable);
-                popupWindow.setElevation(32);
-
-                // Show the popup window
-                popupWindow.showAtLocation(v, Gravity.CENTER, 0, 0);
-
-                // Dismiss the popup window when touched
-                popupView.setOnTouchListener(new View.OnTouchListener() {
-                    @Override
-                    public boolean onTouch(View v, MotionEvent event) {
-                        popupWindow.dismiss();
-                        return true;
-                    }
-                });
+            public void onClick(View view) {
+                userInterfaceUtilities.showCustomPopup(SpeechRecognition.this, R.layout.guide_popup, view);
             }
         });
 
@@ -166,7 +147,7 @@ public class SpeechRecognition extends AppCompatActivity {
             session = SessionName.of(projectId, UUID);
 
         } catch (Exception e) {
-            Toast.makeText(SpeechRecognition.this, "Can't access the Dialogflow API..", Toast.LENGTH_SHORT).show();
+            userInterfaceUtilities.showCustomToast(SpeechRecognition.this, "Can't access the Dialogflow API...");
         }
     }
 
@@ -200,13 +181,13 @@ public class SpeechRecognition extends AppCompatActivity {
                         driveCarCommand(receivedCommand, Integer.parseInt(receivedSpeed), Integer.parseInt(receivedAngle));
                     }
                 }else{
-                    Toast.makeText(SpeechRecognition.this, "One of the requested values are out of limits, try again!", Toast.LENGTH_SHORT).show();
+                    userInterfaceUtilities.showCustomToast(SpeechRecognition.this, "One of the requested values are out of limits, try again!");
                 }
             }catch (IllegalArgumentException e){
-                Toast.makeText(SpeechRecognition.this, "I couldn't correlate that to a valid command! Please try again!", Toast.LENGTH_LONG).show();
+                userInterfaceUtilities.showCustomToast(SpeechRecognition.this, "I couldn't correlate that to a valid command! Please try again!");
             }
         } else {
-            Toast.makeText(SpeechRecognition.this, "There was some communication issue. Please Try again!", Toast.LENGTH_LONG).show();
+            userInterfaceUtilities.showCustomToast(SpeechRecognition.this, "There was some communication issue. Please Try again!");
         }
     }
 
@@ -246,7 +227,7 @@ public class SpeechRecognition extends AppCompatActivity {
                     speed += VELOCITY_MODIFIER;
                     carManagement.moveCar(healthRoverCar, speed, Integer.parseInt(CarCommands.NO_ANGLE.getCarCommands()), this);
                 } else {
-                    Toast.makeText(SpeechRecognition.this, "Maximum velocity reached", Toast.LENGTH_SHORT).show();
+                    userInterfaceUtilities.showCustomToast(SpeechRecognition.this, "Maximum velocity reached");
                 }
                 break;
             case "decrease":
@@ -254,7 +235,7 @@ public class SpeechRecognition extends AppCompatActivity {
                     speed -= VELOCITY_MODIFIER;
                     carManagement.moveCar(healthRoverCar, speed, Integer.parseInt(CarCommands.NO_ANGLE.getCarCommands()), this);
                 } else {
-                    Toast.makeText(SpeechRecognition.this, "Minimum velocity reached", Toast.LENGTH_SHORT).show();
+                    userInterfaceUtilities.showCustomToast(SpeechRecognition.this, "Minimum velocity reached");
                 }
                 break;
             case "left":
@@ -273,7 +254,7 @@ public class SpeechRecognition extends AppCompatActivity {
                 carManagement.moveCar(healthRoverCar, speed, Integer.parseInt(CarCommands.NO_ANGLE.getCarCommands()), this);
                 break;
             default:
-                Toast.makeText(SpeechRecognition.this, "Invalid command", Toast.LENGTH_SHORT).show();
+                userInterfaceUtilities.showCustomToast(SpeechRecognition.this, "Invalid command");
                 break;
         }
     }
