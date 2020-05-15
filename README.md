@@ -36,8 +36,7 @@ The android application is developed using an object oriented approach by applyi
 - GitHub
 - [Virtual Joystick Android library](https://github.com/controlwear/virtual-joystick-android)
 - [DialogFlow API](https://dialogflow.com/)
-- [Jacoco test report gradle plugin](https://github.com/vanniktech/gradle-android-junit-jacoco-plugin)
-
+- [Dexmaker Mockito](https://mvnrepository.com/artifact/com.google.dexmaker/dexmaker-mockito/1.2)
 
  
 ### Team Overview
