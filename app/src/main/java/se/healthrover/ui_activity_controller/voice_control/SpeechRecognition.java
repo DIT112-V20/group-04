@@ -33,7 +33,6 @@ import se.healthrover.entities.HealthRoverCar;
 import se.healthrover.ui_activity_controller.CarSelect;
 import se.healthrover.ui_activity_controller.ManualControl;
 import se.healthrover.ui_activity_controller.UserInterfaceUtilities;
-import se.healthrover.ui_activity_controller.error_handling.ActivityExceptionHandler;
 
 public class SpeechRecognition extends AppCompatActivity {
 
@@ -53,6 +52,16 @@ public class SpeechRecognition extends AppCompatActivity {
     private static final int SPEED_CHECK = 0;
     private static final int SPEECH_RESULT = 1;
     private static final String UUID = "HealthRover";
+    private static final String DIALOGFLOW_RESPONSE_KEY_DIRECTION = "direction";
+    private static final String DIALOGFLOW_RESPONSE_KEY_SPEED = "speed";
+    private static final String DIALOGFLOW_RESPONSE_KEY_ANGLE = "angle";
+    private static final String DIALOGFLOW_DIRECTION_VALUE_FORWARD = "forward";
+    private static final String DIALOGFLOW_DIRECTION_VALUE_REVERSE = "reverse";
+    private static final String DIALOGFLOW_DIRECTION_VALUE_STOP = "stop";
+    private static final String DIALOGFLOW_DIRECTION_VALUE_INCREASE = "increase";
+    private static final String DIALOGFLOW_DIRECTION_VALUE_DECREASE = "decrease";
+    private static final String DIALOGFLOW_DIRECTION_VALUE_LEFT = "left";
+    private static final String DIALOGFLOW_DIRECTION_VALUE_RIGHT = "right";
 
 
     //Create the activity
@@ -158,9 +167,9 @@ public class SpeechRecognition extends AppCompatActivity {
         if (response != null) {
             try {
 
-                String receivedCommand = response.getQueryResult().getParameters().getFieldsOrThrow("direction").getStringValue();
-                String receivedSpeed = response.getQueryResult().getParameters().getFieldsOrThrow("speed").getStringValue();
-                String receivedAngle = response.getQueryResult().getParameters().getFieldsOrThrow("angle").getStringValue();
+                String receivedCommand = response.getQueryResult().getParameters().getFieldsOrThrow(DIALOGFLOW_RESPONSE_KEY_DIRECTION).getStringValue();
+                String receivedSpeed = response.getQueryResult().getParameters().getFieldsOrThrow(DIALOGFLOW_RESPONSE_KEY_SPEED).getStringValue();
+                String receivedAngle = response.getQueryResult().getParameters().getFieldsOrThrow(DIALOGFLOW_RESPONSE_KEY_ANGLE).getStringValue();
                 // Taking only the integer value from the receivedAngle String which includes not used characters
                 receivedAngle = CharMatcher.inRange('0', '9').retainFrom(receivedAngle);
 
@@ -208,17 +217,17 @@ public class SpeechRecognition extends AppCompatActivity {
 
     private void driveCarCommand(String command, int receivedSpeed, int receivedAngle) {
         switch (command) {
-            case "forward":
+            case DIALOGFLOW_DIRECTION_VALUE_FORWARD:
                 speed = receivedSpeed;
                 if (speed < SPEED_CHECK) {
                     speed = speed * NEGATION;
                 }
                 carManagement.moveCar(healthRoverCar, speed, Integer.parseInt(CarCommands.NO_ANGLE.getCarCommands()), this);
                 break;
-            case "stop":
+            case DIALOGFLOW_DIRECTION_VALUE_STOP:
                 carManagement.moveCar(healthRoverCar, Integer.parseInt(CarCommands.NO_MOVEMENT.getCarCommands()), Integer.parseInt(CarCommands.NO_ANGLE.getCarCommands()), this);
                 break;
-            case "increase":
+            case DIALOGFLOW_DIRECTION_VALUE_INCREASE:
                 if (speed < Integer.parseInt(CarCommands.VC_MAX_VELOCITY.getCarCommands()) && speed > Integer.parseInt(CarCommands.VC_MIN_VELOCITY.getCarCommands())) {
                     speed += VELOCITY_MODIFIER;
                     carManagement.moveCar(healthRoverCar, speed, Integer.parseInt(CarCommands.NO_ANGLE.getCarCommands()), this);
@@ -226,7 +235,7 @@ public class SpeechRecognition extends AppCompatActivity {
                     userInterfaceUtilities.showCustomToast(SpeechRecognition.this, getString(R.string.voice_control_max_velocity));
                 }
                 break;
-            case "decrease":
+            case DIALOGFLOW_DIRECTION_VALUE_DECREASE:
                 if (speed > Integer.parseInt(CarCommands.VC_MIN_VELOCITY.getCarCommands())) {
                     speed -= VELOCITY_MODIFIER;
                     carManagement.moveCar(healthRoverCar, speed, Integer.parseInt(CarCommands.NO_ANGLE.getCarCommands()), this);
@@ -234,15 +243,15 @@ public class SpeechRecognition extends AppCompatActivity {
                     userInterfaceUtilities.showCustomToast(SpeechRecognition.this, getString(R.string.voice_control_min_velocity));
                 }
                 break;
-            case "left":
+            case DIALOGFLOW_DIRECTION_VALUE_LEFT:
                 speed = receivedSpeed;
                 carManagement.moveCar(healthRoverCar, speed, (receivedAngle * NEGATION), this);
                 break;
-            case "right":
+            case DIALOGFLOW_DIRECTION_VALUE_RIGHT:
                 speed = receivedSpeed;
                 carManagement.moveCar(healthRoverCar, speed, receivedAngle, this);
                 break;
-            case "reverse":
+            case DIALOGFLOW_DIRECTION_VALUE_REVERSE:
                 speed = receivedSpeed;
                 if(speed>SPEED_CHECK) {
                     speed = speed * NEGATION;
