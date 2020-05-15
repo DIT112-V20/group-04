@@ -39,4 +39,11 @@
     <string name="log_connection_fail">Failed to connect: </string>
     <string name="log_success">Success</string>
     <string name="log_crash_title">Crash message: </string>
+    <string name="invalid_command">Invalid command provided! Please try again!</string>
+    <string name="dialogflow_connection_fail">Could not access the Dialogflow API…</string>
+    <string name="dialogflow_response_out_of_limits">One of the requested values are out of limits, try again!</string>
+    <string name="dialogflow_no_correlation_matched">We could not correlate that to a valid command! Please try again!</string>
+    <string name="dialogflow_connection_issue">There was some communication issue. Please Try again!</string>
+    <string name="voice_control_max_velocity">Maximum velocity reached!</string>
+    <string name="voice_control_min_velocity">Minimum velocity reached!</string>
 </resources>

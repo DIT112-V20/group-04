@@ -54,6 +54,7 @@ public class SpeechRecognition extends AppCompatActivity {
     private static final int SPEECH_RESULT = 1;
     private static final String UUID = "HealthRover";
 
+
     //Create the activity
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -142,7 +143,7 @@ public class SpeechRecognition extends AppCompatActivity {
             session = SessionName.of(projectId, UUID);
 
         } catch (Exception e) {
-            userInterfaceUtilities.showCustomToast(SpeechRecognition.this, "Can't access the Dialogflow API...");
+            userInterfaceUtilities.showCustomToast(SpeechRecognition.this, getString(R.string.dialogflow_connection_fail));
         }
     }
 
@@ -176,13 +177,13 @@ public class SpeechRecognition extends AppCompatActivity {
                         driveCarCommand(receivedCommand, Integer.parseInt(receivedSpeed), Integer.parseInt(receivedAngle));
                     }
                 }else{
-                    userInterfaceUtilities.showCustomToast(SpeechRecognition.this, "One of the requested values are out of limits, try again!");
+                    userInterfaceUtilities.showCustomToast(SpeechRecognition.this, getString(R.string.dialogflow_response_out_of_limits));
                 }
             }catch (IllegalArgumentException e){
-                userInterfaceUtilities.showCustomToast(SpeechRecognition.this, "I couldn't correlate that to a valid command! Please try again!");
+                userInterfaceUtilities.showCustomToast(SpeechRecognition.this, getString(R.string.dialogflow_no_correlation_matched));
             }
         } else {
-            userInterfaceUtilities.showCustomToast(SpeechRecognition.this, "There was some communication issue. Please Try again!");
+            userInterfaceUtilities.showCustomToast(SpeechRecognition.this, getString(R.string.dialogflow_connection_issue));
         }
     }
 
@@ -222,7 +223,7 @@ public class SpeechRecognition extends AppCompatActivity {
                     speed += VELOCITY_MODIFIER;
                     carManagement.moveCar(healthRoverCar, speed, Integer.parseInt(CarCommands.NO_ANGLE.getCarCommands()), this);
                 } else {
-                    userInterfaceUtilities.showCustomToast(SpeechRecognition.this, "Maximum velocity reached");
+                    userInterfaceUtilities.showCustomToast(SpeechRecognition.this, getString(R.string.voice_control_max_velocity));
                 }
                 break;
             case "decrease":
@@ -230,7 +231,7 @@ public class SpeechRecognition extends AppCompatActivity {
                     speed -= VELOCITY_MODIFIER;
                     carManagement.moveCar(healthRoverCar, speed, Integer.parseInt(CarCommands.NO_ANGLE.getCarCommands()), this);
                 } else {
-                    userInterfaceUtilities.showCustomToast(SpeechRecognition.this, "Minimum velocity reached");
+                    userInterfaceUtilities.showCustomToast(SpeechRecognition.this, getString(R.string.voice_control_min_velocity));
                 }
                 break;
             case "left":
@@ -249,7 +250,7 @@ public class SpeechRecognition extends AppCompatActivity {
                 carManagement.moveCar(healthRoverCar, speed, Integer.parseInt(CarCommands.NO_ANGLE.getCarCommands()), this);
                 break;
             default:
-                userInterfaceUtilities.showCustomToast(SpeechRecognition.this, "Invalid command");
+                userInterfaceUtilities.showCustomToast(SpeechRecognition.this, getString(R.string.invalid_command));
                 break;
         }
     }
