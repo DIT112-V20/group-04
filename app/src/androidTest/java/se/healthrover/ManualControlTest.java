@@ -106,7 +106,6 @@ public class ManualControlTest {
         assertNotNull(view);
         view = manualControl.findViewById(R.id.layoutSpeed);
         assertNotNull(view);
-
     }
 
     /* Test Case 2
@@ -154,7 +153,7 @@ public class ManualControlTest {
 
     // Close activity under test
     @After
-    public void tearDown() throws Exception {
+    public void tearDown() {
         manualControl = null;
         Intents.release();
     }

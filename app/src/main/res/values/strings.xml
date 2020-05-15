@@ -46,4 +46,5 @@
     <string name="dialogflow_connection_issue">There was some communication issue. Please Try again!</string>
     <string name="voice_control_max_velocity">Maximum velocity reached!</string>
     <string name="voice_control_min_velocity">Minimum velocity reached!</string>
+    <string name="voice_pop_up_message">Listening…</string>
 </resources>

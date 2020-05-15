@@ -15,14 +15,14 @@ import com.google.cloud.dialogflow.v2.SessionsClient;
 // the request query is sent to the API and
 // the response is captured
 
-class RequestTask extends AsyncTask<Void, Void, DetectIntentResponse> {
+public class RequestTask extends AsyncTask<Void, Void, DetectIntentResponse> {
     @SuppressLint("StaticFieldLeak")
     private Activity activity;
     private SessionName session;
     private SessionsClient sessionsClient;
     private QueryInput queryInput;
 
-    RequestTask(Activity activity, SessionName session, SessionsClient sessionsClient, QueryInput queryInput){
+    public RequestTask(Activity activity, SessionName session, SessionsClient sessionsClient, QueryInput queryInput){
         this.activity = activity;
         this.session = session;
         this.sessionsClient = sessionsClient;
