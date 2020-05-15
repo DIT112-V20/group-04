@@ -4,13 +4,15 @@
     <string name="connect_to_car_text">CONNECT</string>
     <string name="voice_control">Voice Control</string>
     <string name="manual_control">Manual Control</string>
-    <string name="guide_text">The SmartCar is able to understand you, try to steer it with your voice!\n\n
+    <string name="guide_text">The SmartCar understands both simple voice commands and more complex ones, that specify both direction, speed and angle in one sentence\n\n
         The SmartCar can:\n
         - Move forward\n
         - Reverse\
         - Stop\n
         - Change speed\n
-        - Turn\n
+        - Turn left and right\n
+        - Specify degrees for turning\n\n
+        F.e. Turn right with 40 degrees and speed 30\n
     </string>
     <string name="speed">SPEED:</string>
     <string name="angle">ANGLE:</string>
