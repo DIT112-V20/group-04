@@ -34,19 +34,23 @@ public class ObjectFactory {
      }
 
 
-    public CarManagement getCarManagement() {
-        return new CarManagementImp();
+    public CarManagement getCarManagement(HealthRoverWebService healthRoverWebService) {
+            return new CarManagementImp(healthRoverWebService);
     }
 
     public HealthRoverJoystick getHealthRoverJoystick(Activity activity) {
         return new HealthRoverJoystick(activity);
     }
-    public HealthRoverWebService getWebService() {
-        return new OkHttpWebService();
+    public HealthRoverWebService getWebService(HealthRoverWebService healthRoverWebService) {
+        if (healthRoverWebService == null){
+            return new OkHttpWebService();
+        }
+        else
+            return healthRoverWebService;
     }
 
-    public ActivityExceptionHandler getExceptionHandler(Activity activity, HealthRoverCar healthRoverCar){
-        return new ActivityExceptionHandler(activity, healthRoverCar);
+    public ActivityExceptionHandler getExceptionHandler(Activity activity, HealthRoverCar healthRoverCar, HealthRoverWebService healthRoverWebService){
+        return new ActivityExceptionHandler(activity, healthRoverCar, healthRoverWebService);
     }
 
     public UserInterfaceUtilities getInterfaceUtilities(){

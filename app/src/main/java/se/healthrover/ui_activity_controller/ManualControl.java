@@ -12,6 +12,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import io.github.controlwear.virtual.joystick.android.JoystickView;
 import se.healthrover.R;
 import se.healthrover.car_service.CarManagement;
+import se.healthrover.conectivity.HealthRoverWebService;
 import se.healthrover.entities.HealthRoverCar;
 import se.healthrover.entities.HealthRoverJoystick;
 import se.healthrover.entities.ObjectFactory;
@@ -31,6 +32,7 @@ public class ManualControl extends AppCompatActivity {
     private HealthRoverCar healthRoverCar;
     private HealthRoverJoystick healthRoverJoystick;
     private static final int JOYSTICK_CENTER = 50;
+    private HealthRoverWebService healthRoverWebService;
     // Can be used to reduce number of request send (1 of 4 blocks of code)
     // private int[] lastSpeedAndAngleValues;
 
@@ -38,26 +40,35 @@ public class ManualControl extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Thread.setDefaultUncaughtExceptionHandler(ObjectFactory.getInstance().getExceptionHandler(this, healthRoverCar));
+        Thread.setDefaultUncaughtExceptionHandler(ObjectFactory.getInstance().getExceptionHandler(this, healthRoverCar, healthRoverWebService));
         initialize();
     }
     //On restart refresh the content
     @Override
     protected void onRestart() {
         super.onRestart();
-        Thread.setDefaultUncaughtExceptionHandler(ObjectFactory.getInstance().getExceptionHandler(this, healthRoverCar));
+        Thread.setDefaultUncaughtExceptionHandler(ObjectFactory.getInstance().getExceptionHandler(this, healthRoverCar, healthRoverWebService));
         initialize();
     }
 
     public ManualControl(){
-        carManagement =ObjectFactory.getInstance().getCarManagement();
+        carManagement =ObjectFactory.getInstance().getCarManagement(getHealthRoverWebService());
+    }
+
+    private HealthRoverWebService getHealthRoverWebService() {
+        return healthRoverWebService;
+    }
+
+    public void setHealthRoverWebService(HealthRoverWebService healthRoverWebService){
+        this.healthRoverWebService = healthRoverWebService;
+        carManagement = ObjectFactory.getInstance().getCarManagement(healthRoverWebService);
     }
 
     // Using the method to load and initialize the content
     private void initialize(){
         setContentView(R.layout.manual_control);
         healthRoverJoystick = ObjectFactory.getInstance().getHealthRoverJoystick(this);
-        header = findViewById(R.id.chooseCarText);
+        header = findViewById(R.id.manualControlHeaderText);
         voiceControl = findViewById(R.id.voiceControl);
         carName = getIntent().getStringExtra(getString(R.string.car_name));
         header.setText(carName);
