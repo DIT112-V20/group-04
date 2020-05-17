@@ -57,7 +57,7 @@ public class ManualControl extends AppCompatActivity {
     private void initialize(){
         setContentView(R.layout.manual_control);
         healthRoverJoystick = ObjectFactory.getInstance().getHealthRoverJoystick(this);
-        header = findViewById(R.id.chooseCarText);
+        header = findViewById(R.id.manualControlHeaderText);
         voiceControl = findViewById(R.id.voiceControl);
         carName = getIntent().getStringExtra(getString(R.string.car_name));
         header.setText(carName);

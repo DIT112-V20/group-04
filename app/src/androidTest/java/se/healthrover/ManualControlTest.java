@@ -89,7 +89,7 @@ public class ManualControlTest {
 
         View view = manualControl.findViewById(R.id.joystick);
         assertNotNull(view);
-        TextView textView = manualControl.findViewById(R.id.chooseCarText);
+        TextView textView = manualControl.findViewById(R.id.manualControlHeaderText);
         assertNotNull(textView);
         assertEquals(testHealthRover.getCarName() , textView.getText());
         view = manualControl.findViewById(R.id.voiceControl);
