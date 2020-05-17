@@ -27,9 +27,9 @@ import java.util.ArrayList;
 
 import se.healthrover.R;
 import se.healthrover.car_service.CarManagement;
-import se.healthrover.car_service.CarManagementImp;
 import se.healthrover.entities.CarCommands;
 import se.healthrover.entities.HealthRoverCar;
+import se.healthrover.entities.ObjectFactory;
 import se.healthrover.ui_activity_controller.CarSelect;
 import se.healthrover.ui_activity_controller.ManualControl;
 import se.healthrover.ui_activity_controller.UserInterfaceUtilities;
@@ -68,6 +68,7 @@ public class SpeechRecognition extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Thread.setDefaultUncaughtExceptionHandler(ObjectFactory.getInstance().getExceptionHandler(this, healthRoverCar));
         initialize();
 
     }
@@ -75,12 +76,13 @@ public class SpeechRecognition extends AppCompatActivity {
     @Override
     protected void onRestart() {
         super.onRestart();
+        Thread.setDefaultUncaughtExceptionHandler(ObjectFactory.getInstance().getExceptionHandler(this, healthRoverCar));
         initialize();
     }
 
     public SpeechRecognition(){
-        carManagement = new CarManagementImp();
-        userInterfaceUtilities = new UserInterfaceUtilities();
+        carManagement = ObjectFactory.getInstance().getCarManagement();
+        userInterfaceUtilities = ObjectFactory.getInstance().getInterfaceUtilities();
     }
 
     // Using the method to load and initialize the content of the page
@@ -99,7 +101,7 @@ public class SpeechRecognition extends AppCompatActivity {
         manualControlButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(SpeechRecognition.this, ManualControl.class);
+                Intent intent = ObjectFactory.getInstance().getIntent(SpeechRecognition.this, ManualControl.class);
                 intent.putExtra(getString(R.string.car_name), healthRoverCar.getCarName());
                 startActivity(intent);
             }
@@ -114,9 +116,9 @@ public class SpeechRecognition extends AppCompatActivity {
         speechButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent speechIntent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
+                Intent speechIntent = ObjectFactory.getInstance().getIntent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
                 speechIntent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
-                speechIntent.putExtra(RecognizerIntent.EXTRA_PROMPT, "Listening...");
+                speechIntent.putExtra(RecognizerIntent.EXTRA_PROMPT, getString(R.string.voice_pop_up_message));
                 startActivityForResult(speechIntent, SPEECH_RESULT);
             }
         });
@@ -125,7 +127,7 @@ public class SpeechRecognition extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         super.onBackPressed();
-        Intent intent = new Intent(SpeechRecognition.this, CarSelect.class);
+        Intent intent = ObjectFactory.getInstance().getIntent(SpeechRecognition.this, CarSelect.class);
         startActivity(intent);
     }
 
@@ -133,7 +135,9 @@ public class SpeechRecognition extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         if(requestCode == SPEECH_RESULT && resultCode == RESULT_OK){
+            assert data != null;
             ArrayList<String> spokenWords = data.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
+            assert spokenWords != null;
             sendVoiceCommand(spokenWords.get(0));
         }
         super.onActivityResult(requestCode, resultCode, data);
@@ -172,6 +176,8 @@ public class SpeechRecognition extends AppCompatActivity {
                 String receivedAngle = response.getQueryResult().getParameters().getFieldsOrThrow(DIALOGFLOW_RESPONSE_KEY_ANGLE).getStringValue();
                 // Taking only the integer value from the receivedAngle String which includes not used characters
                 receivedAngle = CharMatcher.inRange('0', '9').retainFrom(receivedAngle);
+
+                System.out.println(response.getQueryResult().getParameters().toString());
 
                 // Here we check for empty values to be able to call driveCarCommand with
                 // default values, otherwise it will use user-specified ones

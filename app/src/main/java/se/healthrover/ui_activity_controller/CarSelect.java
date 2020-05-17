@@ -10,9 +10,8 @@ import android.widget.ListView;
 
 import se.healthrover.R;
 import se.healthrover.car_service.CarManagement;
-import se.healthrover.car_service.CarManagementImp;
 import se.healthrover.entities.HealthRoverCar;
-import se.healthrover.ui_activity_controller.error_handling.ActivityExceptionHandler;
+import se.healthrover.entities.ObjectFactory;
 
 public class CarSelect extends Activity{
 
@@ -21,14 +20,19 @@ public class CarSelect extends Activity{
     private ListView carList;
     private HealthRoverCar healthRoverCar;
     private boolean carOnlineConnection;
-    private CarManagement carManagement = new CarManagementImp();
-    private UserInterfaceUtilities uiHelper = new UserInterfaceUtilities();
+    private CarManagement carManagement;
+    private UserInterfaceUtilities uiHelper;
+
+    public CarSelect() {
+        carManagement = ObjectFactory.getInstance().getCarManagement();
+        uiHelper = ObjectFactory.getInstance().getInterfaceUtilities();
+    }
 
     //Create the activity
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Thread.setDefaultUncaughtExceptionHandler(new ActivityExceptionHandler(this, healthRoverCar));
+        Thread.setDefaultUncaughtExceptionHandler(ObjectFactory.getInstance().getExceptionHandler(this, healthRoverCar));
         initialize();
 
     }
@@ -36,7 +40,7 @@ public class CarSelect extends Activity{
     @Override
     protected void onRestart() {
         super.onRestart();
-        Thread.setDefaultUncaughtExceptionHandler(new ActivityExceptionHandler(this, healthRoverCar));
+        Thread.setDefaultUncaughtExceptionHandler(ObjectFactory.getInstance().getExceptionHandler(this, healthRoverCar));
         initialize();
     }
 

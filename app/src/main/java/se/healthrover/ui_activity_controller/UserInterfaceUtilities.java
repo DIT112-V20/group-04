@@ -1,5 +1,6 @@
 package se.healthrover.ui_activity_controller;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -8,6 +9,8 @@ import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 import android.widget.Toast;
+
+import se.healthrover.entities.ObjectFactory;
 
 //Common utilities used in the application
 public class UserInterfaceUtilities {
@@ -24,17 +27,19 @@ public class UserInterfaceUtilities {
         // Inflate the layout of the popup window
         LayoutInflater inflater = (LayoutInflater)
                 applicationContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        assert inflater != null;
         final View popupView = inflater.inflate(layout, null);
 
         // Create the popup window
         int width = LinearLayout.LayoutParams.WRAP_CONTENT;
         int height = LinearLayout.LayoutParams.WRAP_CONTENT;
         boolean focusable = true; // lets taps outside the popup also dismiss it
-        final PopupWindow popupWindow = new PopupWindow(popupView, width, height, focusable);
+        final PopupWindow popupWindow = ObjectFactory.getInstance().getPopupWindow(popupView, width, height, focusable);
         popupWindow.setElevation(32);
 
         // Dismiss the popup window when touched
         popupView.setOnTouchListener(new View.OnTouchListener() {
+            @SuppressLint("ClickableViewAccessibility")
             @Override
             public boolean onTouch(View v, MotionEvent event) {
                 popupWindow.dismiss();

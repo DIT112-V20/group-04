@@ -4,14 +4,13 @@ import android.app.Activity;
 import android.content.Intent;
 import android.util.Log;
 
-
 import androidx.annotation.NonNull;
 
 import se.healthrover.R;
 import se.healthrover.car_service.CarManagement;
-import se.healthrover.car_service.CarManagementImp;
 import se.healthrover.entities.CarCommands;
 import se.healthrover.entities.HealthRoverCar;
+import se.healthrover.entities.ObjectFactory;
 import se.healthrover.ui_activity_controller.CarSelect;
 
 public class ActivityExceptionHandler implements Thread.UncaughtExceptionHandler {
@@ -23,14 +22,14 @@ public class ActivityExceptionHandler implements Thread.UncaughtExceptionHandler
 
     public ActivityExceptionHandler(Activity activity, HealthRoverCar healthRoverCar) {
         this.activity = activity;
-        carManagement = new CarManagementImp();
+        carManagement = ObjectFactory.getInstance().getCarManagement();
         this.healthRoverCar = healthRoverCar;
     }
     // The method handles runtime exceptions
     @Override
     public void uncaughtException(@NonNull Thread t, @NonNull Throwable e) {
         Log.i(activity.getString(R.string.log_title_error), activity.getString(R.string.log_crash_title) + e.getMessage());
-        Intent intent = new Intent(activity, CarSelect.class);
+        Intent intent = ObjectFactory.getInstance().getIntent(activity, CarSelect.class);
         // If exception occurs while the car is in movement it will send stop request to the smartcar
         if (healthRoverCar != null){
             carManagement.moveCar(healthRoverCar,
