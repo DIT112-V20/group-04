@@ -3,21 +3,21 @@ package se.healthrover.car_service;
 import android.app.Activity;
 
 import se.healthrover.conectivity.HealthRoverWebService;
-import se.healthrover.conectivity.OkHttpWebService;
 import se.healthrover.entities.CarCommands;
 import se.healthrover.entities.HealthRoverCar;
+import se.healthrover.entities.ObjectFactory;
 
 public class CarManagementImp implements CarManagement {
 
     private HealthRoverWebService webService;
 
     public CarManagementImp(){
-        webService = new OkHttpWebService();
+        webService = ObjectFactory.getInstance().getWebService();
     }
 
     @Override
     public void checkStatus(HealthRoverCar healthRoverCar, Activity activity) {
-        String request = healthRoverCar.getUrl() + CarCommands.STATUS;
+        String request = healthRoverCar.getUrl();// + CarCommands.STATUS.getCarCommands();
         webService.createHttpRequest(request, activity);
     }
 

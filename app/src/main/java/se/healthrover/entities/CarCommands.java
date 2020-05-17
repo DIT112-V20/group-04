@@ -6,8 +6,7 @@ public enum CarCommands {
     ANGLE("&angle="), STATUS("status"), SPEED("&speed="), REQUEST("request?type=move"),
 
     //A list of predefined constant values for the SmartCar.
-    NO_ANGLE("0"), NO_MOVEMENT("0"), LEFT_ANGLE("-90"), RIGHT_ANGLE("90"),
-    VC_MAX_VELOCITY("50"), VC_MIN_VELOCITY("10");
+    NO_ANGLE("0"), NO_MOVEMENT("0"), VC_MAX_VELOCITY("50"), VC_MIN_VELOCITY("10"), DEFAULT_ANGLE("90");
 
     private final String carCommands;
 

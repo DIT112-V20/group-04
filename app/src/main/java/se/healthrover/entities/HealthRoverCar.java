@@ -2,9 +2,9 @@ package se.healthrover.entities;
 
 public enum HealthRoverCar {
     //A list of cars used since a database is not used
-    HEALTH_ROVER_CAR1("http://192.168.1.200/", "SmartCar"),
-    HEALTH_ROVER_CAR2("http://www.mocky.io/v2/5eb7abae310000003cc8a214", "Http"),
-    HEALTH_ROVER_CAR3("http://www.mocky.io/v2/5eb0765b3300005000c68e87/", "Mocky");
+    HEALTH_ROVER_CAR1("http://www.mocky.io/v2/5ebea8433100007800c5d4c0", "static IP"),
+    HEALTH_ROVER_CAR2("http://fsdkafjl", "car2"),
+    HEALTH_ROVER_CAR3("http://192.168.137.154/", "Eduroam");
 
     private final String url;
     private final String carName;
@@ -35,7 +35,7 @@ public enum HealthRoverCar {
         }
         return enumName;
     }
-
+    //Retrieves the enumerating object name by given url
     public static String getCarNameByUrl(String url){
         String carName = "";
         for (HealthRoverCar healthRoverCar: HealthRoverCar.values()){

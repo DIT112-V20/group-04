@@ -3,16 +3,10 @@ package se.healthrover.ui_activity_controller.voice_control;
 import android.content.Intent;
 import android.os.Bundle;
 import android.speech.RecognizerIntent;
-import android.view.Gravity;
-import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.PopupWindow;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
@@ -26,17 +20,19 @@ import com.google.cloud.dialogflow.v2.SessionName;
 import com.google.cloud.dialogflow.v2.SessionsClient;
 import com.google.cloud.dialogflow.v2.SessionsSettings;
 import com.google.cloud.dialogflow.v2.TextInput;
+import com.google.common.base.CharMatcher;
 
 import java.io.InputStream;
 import java.util.ArrayList;
 
 import se.healthrover.R;
 import se.healthrover.car_service.CarManagement;
-import se.healthrover.car_service.CarManagementImp;
 import se.healthrover.entities.CarCommands;
 import se.healthrover.entities.HealthRoverCar;
+import se.healthrover.entities.ObjectFactory;
 import se.healthrover.ui_activity_controller.CarSelect;
 import se.healthrover.ui_activity_controller.ManualControl;
+import se.healthrover.ui_activity_controller.UserInterfaceUtilities;
 
 public class SpeechRecognition extends AppCompatActivity {
 
@@ -46,21 +42,33 @@ public class SpeechRecognition extends AppCompatActivity {
     private String carName;
     private TextView headerVoiceControl;
     private ImageView speechButton;
-    private CarManagement carManagement = new CarManagementImp();
     private SessionName session;
     private SessionsClient sessionsClient;
     private int speed = 30;
+    private CarManagement carManagement;
+    private UserInterfaceUtilities userInterfaceUtilities;
     private static final int VELOCITY_MODIFIER = 10;
     private static final int NEGATION = -1;
     private static final int SPEED_CHECK = 0;
     private static final int SPEECH_RESULT = 1;
-    // Change UUID to own dialogflow project-id
-    private static final String UUID = "anna-dpmiju";
+    private static final String UUID = "HealthRover";
+    private static final String DIALOGFLOW_RESPONSE_KEY_DIRECTION = "direction";
+    private static final String DIALOGFLOW_RESPONSE_KEY_SPEED = "speed";
+    private static final String DIALOGFLOW_RESPONSE_KEY_ANGLE = "angle";
+    private static final String DIALOGFLOW_DIRECTION_VALUE_FORWARD = "forward";
+    private static final String DIALOGFLOW_DIRECTION_VALUE_REVERSE = "reverse";
+    private static final String DIALOGFLOW_DIRECTION_VALUE_STOP = "stop";
+    private static final String DIALOGFLOW_DIRECTION_VALUE_INCREASE = "increase";
+    private static final String DIALOGFLOW_DIRECTION_VALUE_DECREASE = "decrease";
+    private static final String DIALOGFLOW_DIRECTION_VALUE_LEFT = "left";
+    private static final String DIALOGFLOW_DIRECTION_VALUE_RIGHT = "right";
+
 
     //Create the activity
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Thread.setDefaultUncaughtExceptionHandler(ObjectFactory.getInstance().getExceptionHandler(this, healthRoverCar));
         initialize();
 
     }
@@ -68,67 +76,76 @@ public class SpeechRecognition extends AppCompatActivity {
     @Override
     protected void onRestart() {
         super.onRestart();
+        Thread.setDefaultUncaughtExceptionHandler(ObjectFactory.getInstance().getExceptionHandler(this, healthRoverCar));
         initialize();
     }
+
+    public SpeechRecognition(){
+        carManagement = ObjectFactory.getInstance().getCarManagement();
+        userInterfaceUtilities = ObjectFactory.getInstance().getInterfaceUtilities();
+    }
+
     // Using the method to load and initialize the content of the page
     private void initialize() {
         setContentView(R.layout.speech_recognition);
         headerVoiceControl = findViewById(R.id.headerVoiceControl);
-        carName = getIntent().getStringExtra("carName");
+        carName = getIntent().getStringExtra(getString(R.string.car_name));
         headerVoiceControl.setText(carName);
         healthRoverCar = HealthRoverCar.valueOf(HealthRoverCar.getCarObjectNameByCarName(carName));
         manualControlButton = findViewById(R.id.manualControl);
         guideButton = findViewById(R.id.guideButton);
         speechButton = findViewById(R.id.speechButton);
 
+        connectDialogflow();
+
         manualControlButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(SpeechRecognition.this, ManualControl.class);
-                intent.putExtra("carName", healthRoverCar.getCarName());
+                Intent intent = ObjectFactory.getInstance().getIntent(SpeechRecognition.this, ManualControl.class);
+                intent.putExtra(getString(R.string.car_name), healthRoverCar.getCarName());
                 startActivity(intent);
             }
         });
         guideButton.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) {
-                // Inflate the layout of the popup window
-                LayoutInflater inflater = (LayoutInflater)
-                        getSystemService(LAYOUT_INFLATER_SERVICE);
-                View popupView = inflater.inflate(R.layout.guide_popup, null);
-
-                // Create the popup window
-                int width = LinearLayout.LayoutParams.WRAP_CONTENT;
-                int height = LinearLayout.LayoutParams.WRAP_CONTENT;
-                boolean focusable = true; // lets taps outside the popup also dismiss it
-                final PopupWindow popupWindow = new PopupWindow(popupView, width, height, focusable);
-                popupWindow.setElevation(32);
-
-                // Show the popup window
-                popupWindow.showAtLocation(v, Gravity.CENTER, 0, 0);
-
-                // Dismiss the popup window when touched
-                popupView.setOnTouchListener(new View.OnTouchListener() {
-                    @Override
-                    public boolean onTouch(View v, MotionEvent event) {
-                        popupWindow.dismiss();
-                        return true;
-                    }
-                });
+            public void onClick(View view) {
+                userInterfaceUtilities.showCustomPopup(SpeechRecognition.this, R.layout.guide_popup, view);
             }
         });
 
         speechButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent speechIntent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
+                Intent speechIntent = ObjectFactory.getInstance().getIntent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
                 speechIntent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
-                speechIntent.putExtra(RecognizerIntent.EXTRA_PROMPT, "Listening...");
+                speechIntent.putExtra(RecognizerIntent.EXTRA_PROMPT, getString(R.string.voice_pop_up_message));
                 startActivityForResult(speechIntent, SPEECH_RESULT);
             }
         });
-        // Try catch block to set up the connection to Dialogflow API
-        // using a private access key. Add your own API key under src/res/raw
+    }
+    // Using back button to return to Car select page
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        Intent intent = ObjectFactory.getInstance().getIntent(SpeechRecognition.this, CarSelect.class);
+        startActivity(intent);
+    }
+
+    // Convert speech to String send the corresponding String to Dialogflow
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        if(requestCode == SPEECH_RESULT && resultCode == RESULT_OK){
+            assert data != null;
+            ArrayList<String> spokenWords = data.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
+            assert spokenWords != null;
+            sendVoiceCommand(spokenWords.get(0));
+        }
+        super.onActivityResult(requestCode, resultCode, data);
+    }
+
+    // Method to set up the connection to Dialogflow API
+    // using a private access key. Add your own API key under src/res/raw
+    private void connectDialogflow(){
         try {
             InputStream stream = getResources().openRawResource(R.raw.dialogflow_access_key);
             GoogleCredentials credentials = GoogleCredentials.fromStream(stream);
@@ -139,25 +156,8 @@ public class SpeechRecognition extends AppCompatActivity {
             session = SessionName.of(projectId, UUID);
 
         } catch (Exception e) {
-            Toast.makeText(SpeechRecognition.this, "Can't access the Dialogflow API..", Toast.LENGTH_SHORT).show();
+            userInterfaceUtilities.showCustomToast(SpeechRecognition.this, getString(R.string.dialogflow_connection_fail));
         }
-    }
-    // Using back button to return to Car select page
-    @Override
-    public void onBackPressed() {
-        super.onBackPressed();
-        Intent intent = new Intent(SpeechRecognition.this, CarSelect.class);
-        startActivity(intent);
-    }
-
-    // Convert speech to String send the corresponding String to Dialogflow
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        if(requestCode == SPEECH_RESULT && resultCode == RESULT_OK){
-            ArrayList<String> spokenWords = data.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
-            sendVoiceCommand(spokenWords.get(0));
-        }
-        super.onActivityResult(requestCode, resultCode, data);
     }
 
     // Send requested query to the Dialogflow API
@@ -170,57 +170,102 @@ public class SpeechRecognition extends AppCompatActivity {
     public void processResponse(DetectIntentResponse response) {
         if (response != null) {
             try {
-                String receivedCommand = response.getQueryResult().getParameters().getFieldsOrThrow("movement").getStringValue();
-                driveCarCommand(receivedCommand);
+
+                String receivedCommand = response.getQueryResult().getParameters().getFieldsOrThrow(DIALOGFLOW_RESPONSE_KEY_DIRECTION).getStringValue();
+                String receivedSpeed = response.getQueryResult().getParameters().getFieldsOrThrow(DIALOGFLOW_RESPONSE_KEY_SPEED).getStringValue();
+                String receivedAngle = response.getQueryResult().getParameters().getFieldsOrThrow(DIALOGFLOW_RESPONSE_KEY_ANGLE).getStringValue();
+                // Taking only the integer value from the receivedAngle String which includes not used characters
+                receivedAngle = CharMatcher.inRange('0', '9').retainFrom(receivedAngle);
+
+                System.out.println(response.getQueryResult().getParameters().toString());
+
+                // Here we check for empty values to be able to call driveCarCommand with
+                // default values, otherwise it will use user-specified ones
+                if(speedValidation(receivedSpeed) && angleValidation(receivedAngle)) {
+                    if (!receivedAngle.equals("") && receivedSpeed.equals("")) {
+                        driveCarCommand(receivedCommand, speed, Integer.parseInt(receivedAngle));
+                    } else if (receivedAngle.equals("") && !receivedSpeed.equals("")) {
+                        driveCarCommand(receivedCommand, Integer.parseInt(receivedSpeed), Integer.parseInt(CarCommands.DEFAULT_ANGLE.getCarCommands()));
+                    } else if (receivedAngle.equals("") && receivedSpeed.equals("")) {
+                        driveCarCommand(receivedCommand, speed, Integer.parseInt(CarCommands.DEFAULT_ANGLE.getCarCommands()));
+                    } else {
+                        driveCarCommand(receivedCommand, Integer.parseInt(receivedSpeed), Integer.parseInt(receivedAngle));
+                    }
+                }else{
+                    userInterfaceUtilities.showCustomToast(SpeechRecognition.this, getString(R.string.dialogflow_response_out_of_limits));
+                }
             }catch (IllegalArgumentException e){
-                Toast.makeText(SpeechRecognition.this, "I couldn't correlate that to a valid command! Please try again!", Toast.LENGTH_LONG).show();
+                userInterfaceUtilities.showCustomToast(SpeechRecognition.this, getString(R.string.dialogflow_no_correlation_matched));
             }
         } else {
-            Toast.makeText(SpeechRecognition.this, "There was some communication issue. Please Try again!", Toast.LENGTH_LONG).show();
+            userInterfaceUtilities.showCustomToast(SpeechRecognition.this, getString(R.string.dialogflow_connection_issue));
         }
     }
 
-    private void driveCarCommand(String command) {
+    // Method to validate that requested speed is always within boundaries
+    private Boolean speedValidation(String speed) {
+        if(speed.equals("")){
+            return true;
+        }else {
+            return Integer.parseInt(speed) <= Integer.parseInt(CarCommands.VC_MAX_VELOCITY.getCarCommands());
+        }
+    }
+
+    // Method to validate that the requested angle is always within boundaries
+    private Boolean angleValidation(String angle){
+        if(angle.equals("")){
+            return true;
+        }else{
+            return Integer.parseInt(angle) <= Integer.parseInt(CarCommands.DEFAULT_ANGLE.getCarCommands()) &&
+                    Integer.parseInt(angle) >= (Integer.parseInt(CarCommands.DEFAULT_ANGLE.getCarCommands())*NEGATION);
+        }
+    }
+
+    private void driveCarCommand(String command, int receivedSpeed, int receivedAngle) {
         switch (command) {
-            case "forward":
+            case DIALOGFLOW_DIRECTION_VALUE_FORWARD:
+                speed = receivedSpeed;
                 if (speed < SPEED_CHECK) {
                     speed = speed * NEGATION;
                 }
                 carManagement.moveCar(healthRoverCar, speed, Integer.parseInt(CarCommands.NO_ANGLE.getCarCommands()), this);
                 break;
-            case "stop":
+            case DIALOGFLOW_DIRECTION_VALUE_STOP:
                 carManagement.moveCar(healthRoverCar, Integer.parseInt(CarCommands.NO_MOVEMENT.getCarCommands()), Integer.parseInt(CarCommands.NO_ANGLE.getCarCommands()), this);
                 break;
-            case "increase":
+            case DIALOGFLOW_DIRECTION_VALUE_INCREASE:
                 if (speed < Integer.parseInt(CarCommands.VC_MAX_VELOCITY.getCarCommands()) && speed > Integer.parseInt(CarCommands.VC_MIN_VELOCITY.getCarCommands())) {
                     speed += VELOCITY_MODIFIER;
                     carManagement.moveCar(healthRoverCar, speed, Integer.parseInt(CarCommands.NO_ANGLE.getCarCommands()), this);
                 } else {
-                    Toast.makeText(SpeechRecognition.this, "Maximum velocity reached", Toast.LENGTH_SHORT).show();
+                    userInterfaceUtilities.showCustomToast(SpeechRecognition.this, getString(R.string.voice_control_max_velocity));
                 }
                 break;
-            case "decrease":
+            case DIALOGFLOW_DIRECTION_VALUE_DECREASE:
                 if (speed > Integer.parseInt(CarCommands.VC_MIN_VELOCITY.getCarCommands())) {
                     speed -= VELOCITY_MODIFIER;
                     carManagement.moveCar(healthRoverCar, speed, Integer.parseInt(CarCommands.NO_ANGLE.getCarCommands()), this);
                 } else {
-                    Toast.makeText(SpeechRecognition.this, "Minimum velocity reached", Toast.LENGTH_SHORT).show();
+                    userInterfaceUtilities.showCustomToast(SpeechRecognition.this, getString(R.string.voice_control_min_velocity));
                 }
                 break;
-            case "left":
-                carManagement.moveCar(healthRoverCar, speed, Integer.parseInt(CarCommands.LEFT_ANGLE.getCarCommands()), this);
+            case DIALOGFLOW_DIRECTION_VALUE_LEFT:
+                speed = receivedSpeed;
+                carManagement.moveCar(healthRoverCar, speed, (receivedAngle * NEGATION), this);
                 break;
-            case "right":
-                carManagement.moveCar(healthRoverCar, speed, Integer.parseInt(CarCommands.RIGHT_ANGLE.getCarCommands()), this);
+            case DIALOGFLOW_DIRECTION_VALUE_RIGHT:
+                speed = receivedSpeed;
+                carManagement.moveCar(healthRoverCar, speed, receivedAngle, this);
                 break;
-            case "reverse":
+            case DIALOGFLOW_DIRECTION_VALUE_REVERSE:
+                speed = receivedSpeed;
                 if(speed>SPEED_CHECK) {
                     speed = speed * NEGATION;
                 }
                 carManagement.moveCar(healthRoverCar, speed, Integer.parseInt(CarCommands.NO_ANGLE.getCarCommands()), this);
                 break;
             default:
-                Toast.makeText(SpeechRecognition.this, "Invalid command", Toast.LENGTH_SHORT).show();
+                userInterfaceUtilities.showCustomToast(SpeechRecognition.this, getString(R.string.invalid_command));
                 break;
         }
     }

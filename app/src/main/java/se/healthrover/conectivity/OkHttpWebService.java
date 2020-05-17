@@ -8,17 +8,17 @@ import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
 import java.util.Objects;
-import java.util.concurrent.CountDownLatch;
 
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
-import okhttp3.ResponseBody;
+import se.healthrover.R;
 import se.healthrover.entities.HealthRoverCar;
-import se.healthrover.ui_activity_controller.CarSelect;
+import se.healthrover.entities.ObjectFactory;
 import se.healthrover.ui_activity_controller.ManualControl;
+import se.healthrover.ui_activity_controller.UserInterfaceUtilities;
 
 public class OkHttpWebService implements HealthRoverWebService {
 
@@ -26,10 +26,12 @@ public class OkHttpWebService implements HealthRoverWebService {
     private OkHttpClient client;
     private String responseData;
     private static final String HTTP_STATUS_RESPONSE = "status";
+    private UserInterfaceUtilities userInterfaceUtilities;
 
 
     public OkHttpWebService(){
-        client = new OkHttpClient();
+        client = ObjectFactory.getInstance().getOkHttpClient();
+        userInterfaceUtilities = ObjectFactory.getInstance().getInterfaceUtilities();
     }
 
 
@@ -45,40 +47,45 @@ public class OkHttpWebService implements HealthRoverWebService {
 
             @Override
             public void onFailure(@NotNull final Call call, @NotNull final IOException e) {
+
                 activity.runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        Log.i("Error","Failed to connect: "+e.getMessage());
-                        System.out.println("error" + e.getMessage());
-                        call.cancel();
+                        //If the status request fails a message is displayed in the application
+                        if (url.contains(HTTP_STATUS_RESPONSE)){
+                            userInterfaceUtilities.showCustomToast(activity, activity.getString(R.string.car_is_offline));
+                        }
+                        Log.i(activity.getString(R.string.log_title_error),activity.getString(R.string.log_connection_fail) + e.getMessage());
+                        client.dispatcher().cancelAll();
                     }
                 });
 
             }
             @Override
-            public void onResponse(@NotNull Call call, @NotNull final Response response) {
+            public void onResponse(@NotNull final Call call, @NotNull final Response response) {
                 activity.runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        try {
-                            responseData = response.body().string();
-                            if (responseData.equals(HTTP_STATUS_RESPONSE)){
-                                Intent intent = new Intent(activity, ManualControl.class);
-                                intent.putExtra("carName", HealthRoverCar.getCarNameByUrl(url.substring(0,20)));
-                                activity.startActivity(intent);
+                        if(response.isSuccessful()) {
+                            try {
+                                responseData = Objects.requireNonNull(response.body()).string();
+                                Log.i(activity.getString(R.string.log_success), activity.getString(R.string.log_success) + response.code());
+                                //If status request is successful the manual control page is loaded and the car name is passed as a parameter
+                                if (responseData.equals(HTTP_STATUS_RESPONSE)) {
+                                    Intent intent = ObjectFactory.getInstance().getIntent(activity, ManualControl.class);
+                                    intent.putExtra(activity.getString(R.string.car_name), HealthRoverCar.getCarNameByUrl(url.substring(0, 20)));
+                                    activity.startActivity(intent);
+                                }
+                            } catch (IOException e) {
+                                Log.i(activity.getString(R.string.log_title_error), activity.getString(R.string.log_title_error) + e.getMessage());
+                                client.dispatcher().cancelAll();
                             }
-                        } catch (IOException e) {
-                            e.printStackTrace();
-                            Log.i("Success","Success: "+response.code());
                         }
-
 
                     }
                 });
-
-
-
             }});
+
 
     }
 }
