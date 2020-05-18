@@ -8,6 +8,8 @@ env:
     # Set the minimum Android API to support
     # Note: Not all of them work well with Travis
     - ANDROID_TARGET=android-21
+    # Codcov token
+    - CODECOV_TOKEN="b2a0428d-3c42-4c5e-b7c6-1563a33e76c6"
 
 before_cache:
   - rm -f $HOME/.gradle/caches/modules-2/modules-2.lock
