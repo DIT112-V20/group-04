@@ -59,9 +59,11 @@ void loop() {
   server.handleClient();
 
   frontSensorReading = front.getDistance();
-  // Stop when distance is less than MIN_OBSTACLE_DISTANCE and
+  // OBSTACLE AVOIDANCE
+  // Stop when distance from the front sensor is less than MIN_OBSTACLE_DISTANCE and
+  // the car is moving forward,
   // disregard 0 reading because its a null reading from the sensor
-  if (frontSensorReading <= MIN_OBSTACLE_DISTANCE && frontSensorReading > 0){
+  if (frontSensorReading <= MIN_OBSTACLE_DISTANCE && frontSensorReading > 0 && carSpeed > 0){
     car.setSpeed(STOP);
   }else if (WiFi.status() != WL_CONNECTED){
     car.setSpeed(STOP);
