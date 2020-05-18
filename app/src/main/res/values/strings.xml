@@ -29,6 +29,8 @@
     </string>
     <string name="select_car_prompt">Select a car first…</string>
     <string name="selected_car_message">"You selected "</string>
+    <string name="connection_success">"Connected to "</string>
+    <string name="connection_failure">"Can not connect to "</string>
     <string name="car_name">CarName</string>
     <string name="percentage_sign">%</string>
     <string name="degree_symbol">°</string>
