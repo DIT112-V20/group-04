@@ -51,7 +51,7 @@ public class ResponseHandler {
         });
     }
 
-    public void handleFailure(String string, final Activity activity, final String url){
+    public void handleFailure(final Activity activity, final String url){
         activity.runOnUiThread(new Runnable() {
             @Override
             public void run() {
@@ -68,16 +68,25 @@ public class ResponseHandler {
             @Override
             public void run() {
                 if (responseData.equals(HTTP_STATUS_RESPONSE)) {
-                    Intent intent = ObjectFactory.getInstance().getIntent(activity, ManualControl.class);
-                    intent.putExtra(activity.getString(R.string.car_name), HealthRoverCar.getCarNameByUrl(url.substring(0, 20)));
-                    activity.startActivity(intent);
-                    makeSpeaker(activity, activity.getString(R.string.connection_success) + HealthRoverCar.getCarNameByUrl(url.substring(0, 20)));
+                    handleSuccessStatus(activity, url);
+                }
+                else if(responseData.equals(HTTP_OBSTACLE_RESPONSE)){
+                    handleObstacleDetection(activity);
                 }
             }
         });
     }
 
-    private void handleObstacleDetection(){
+    private void handleObstacleDetection(Activity activity){
+        userInterfaceUtilities.showCustomToast(activity, activity.getString(R.string.obstacle_detection));
+        makeVibrator(activity);
+        makeSpeaker(activity, activity.getString(R.string.obstacle_detection));
+    }
 
+    private void handleSuccessStatus(Activity activity, String url){
+        Intent intent = ObjectFactory.getInstance().getIntent(activity, ManualControl.class);
+        intent.putExtra(activity.getString(R.string.car_name), HealthRoverCar.getCarNameByUrl(url.substring(0, 20)));
+        activity.startActivity(intent);
+        makeSpeaker(activity, activity.getString(R.string.connection_success) + HealthRoverCar.getCarNameByUrl(url.substring(0, 20)));
     }
 }

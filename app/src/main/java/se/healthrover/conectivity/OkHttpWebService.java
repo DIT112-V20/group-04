@@ -54,7 +54,7 @@ public class OkHttpWebService implements HealthRoverWebService {
                     public void run() {
                         //If the status request fails a message is displayed in the application
                         if (url.contains(HTTP_STATUS_RESPONSE)){
-                            responseHandler.handleFailure(HTTP_STATUS_RESPONSE, activity, url);
+                            responseHandler.handleFailure(activity, url);
                         }
                         Log.i(activity.getString(R.string.log_title_error),activity.getString(R.string.log_connection_fail) + e.getMessage());
                         client.dispatcher().cancelAll();
