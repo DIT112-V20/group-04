@@ -106,7 +106,7 @@ public class CarSelectTest  {
      *   check that the activity is loaded,
      *   click the info button,
      *   verify that the info popup is loaded,
-     *   verify the text in the popup.*/
+     *   verify the text in the popup.
     @Test
     public void testCase_3_infoButtonDisplaysInfoPopup(){
         assertNotNull(carSelect);
@@ -114,7 +114,8 @@ public class CarSelectTest  {
         onView(withId(R.id.infoPopup)).inRoot(RootMatchers.isPlatformPopup()).check(matches(isDisplayed()));
         onView(withText(R.string.info_text)).check(matches(isDisplayed()));
     }
-
+    Commented in order to see if this causes the CI build to fail
+*/
     @After
     public void tearDown(){
         carSelect = null;
