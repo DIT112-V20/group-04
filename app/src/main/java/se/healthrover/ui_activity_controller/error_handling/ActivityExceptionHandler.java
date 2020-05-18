@@ -35,6 +35,7 @@ public class ActivityExceptionHandler implements Thread.UncaughtExceptionHandler
             carManagement.moveCar(healthRoverCar,
                 Integer.parseInt(CarCommands.NO_MOVEMENT.getCarCommands()),
                 Integer.parseInt(CarCommands.NO_ANGLE.getCarCommands()),
+                CarCommands.CONTROL.getCarCommands(),
                 activity);
         }
         // When the main page is loaded after application restart

@@ -6,5 +6,5 @@ import se.healthrover.entities.HealthRoverCar;
 public interface CarManagement {
 
     void checkStatus(HealthRoverCar healthRoverCar, Activity activity);
-    void moveCar(HealthRoverCar healthRoverCar, int speed, int angle, Activity activity);
+    void moveCar(HealthRoverCar healthRoverCar, int speed, int angle, String controlType, Activity activity);
 }
