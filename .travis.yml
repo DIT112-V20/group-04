@@ -82,3 +82,6 @@ notifications:
         - guslarcaan@student.gu.se
       on_success: always
       on_failure: always
+
+after_success:
+    - bash <(curl -s https://codecov.io/bash)
