@@ -8,8 +8,6 @@ env:
     # Set the minimum Android API to support
     # Note: Not all of them work well with Travis
     - ANDROID_TARGET=android-21
-    # Codecov token
-    - CODECOV_TOKEN="b2a0428d-3c42-4c5e-b7c6-1563a33e76c6"
 
 before_cache:
   - rm -f $HOME/.gradle/caches/modules-2/modules-2.lock
@@ -84,6 +82,4 @@ notifications:
         - guslarcaan@student.gu.se
       on_success: always
       on_failure: always
-      
- after_success:     
-      - bash <(curl -s https://codecov.io/bash)
+
