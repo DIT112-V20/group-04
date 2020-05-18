@@ -27,11 +27,13 @@ public class OkHttpWebService implements HealthRoverWebService {
     private String responseData;
     private static final String HTTP_STATUS_RESPONSE = "status";
     private UserInterfaceUtilities userInterfaceUtilities;
+    private ResponseHandler responseHandler;
 
 
     public OkHttpWebService(){
         client = ObjectFactory.getInstance().getOkHttpClient();
         userInterfaceUtilities = ObjectFactory.getInstance().getInterfaceUtilities();
+        responseHandler = ObjectFactory.getInstance().getResponseHandler();
     }
 
 
@@ -53,7 +55,7 @@ public class OkHttpWebService implements HealthRoverWebService {
                     public void run() {
                         //If the status request fails a message is displayed in the application
                         if (url.contains(HTTP_STATUS_RESPONSE)){
-                            userInterfaceUtilities.showCustomToast(activity, activity.getString(R.string.car_is_offline));
+                            responseHandler.handleFailure(HTTP_STATUS_RESPONSE, activity);
                         }
                         Log.i(activity.getString(R.string.log_title_error),activity.getString(R.string.log_connection_fail) + e.getMessage());
                         client.dispatcher().cancelAll();
