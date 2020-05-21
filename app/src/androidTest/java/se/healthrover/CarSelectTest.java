@@ -11,11 +11,9 @@ import androidx.test.rule.ActivityTestRule;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.BeforeClass;
-import org.junit.FixMethodOrder;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.junit.runners.MethodSorters;
 
 import se.healthrover.entities.HealthRoverCar;
 import se.healthrover.test_services.MockWebService;
@@ -42,7 +40,6 @@ import static org.junit.Assert.assertNotNull;
  * @see <a href="http://d.android.com/tools/testing">Testing documentation</a>
  */
 @RunWith(AndroidJUnit4.class)
-@FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class CarSelectTest  {
 
     private CarSelect carSelect;
