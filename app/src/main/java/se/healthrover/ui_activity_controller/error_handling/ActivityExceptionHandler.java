@@ -9,8 +9,8 @@ import androidx.annotation.NonNull;
 import se.healthrover.R;
 import se.healthrover.car_service.CarManagement;
 import se.healthrover.conectivity.HealthRoverWebService;
+import se.healthrover.entities.Car;
 import se.healthrover.entities.CarCommands;
-import se.healthrover.entities.HealthRoverCar;
 import se.healthrover.entities.ObjectFactory;
 import se.healthrover.ui_activity_controller.CarSelect;
 
@@ -18,10 +18,10 @@ public class ActivityExceptionHandler implements Thread.UncaughtExceptionHandler
 
     private Activity activity;
     private CarManagement carManagement;
-    private HealthRoverCar healthRoverCar;
+    private Car healthRoverCar;
     private static final int RESTART_TIME_OUT = 2;
 
-    public ActivityExceptionHandler(Activity activity, HealthRoverCar healthRoverCar, HealthRoverWebService healthRoverWebService) {
+    public ActivityExceptionHandler(Activity activity, Car healthRoverCar, HealthRoverWebService healthRoverWebService) {
         this.activity = activity;
         carManagement = ObjectFactory.getInstance().getCarManagement(healthRoverWebService);
         this.healthRoverCar = healthRoverCar;

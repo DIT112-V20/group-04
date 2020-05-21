@@ -11,7 +11,9 @@ import android.widget.ListView;
 import se.healthrover.R;
 import se.healthrover.car_service.CarManagement;
 import se.healthrover.conectivity.HealthRoverWebService;
-import se.healthrover.entities.HealthRoverCar;
+import se.healthrover.conectivity.SqlHelper;
+import se.healthrover.entities.Car;
+import se.healthrover.entities.CarAdapter;
 import se.healthrover.entities.ObjectFactory;
 
 public class CarSelect extends Activity{
@@ -19,11 +21,12 @@ public class CarSelect extends Activity{
     private Button infoButton;
     private Button connectToCarSelected;
     private ListView carList;
-    private HealthRoverCar healthRoverCar;
+    private Car healthRoverCar;
     private boolean carOnlineConnection;
     private CarManagement carManagement;
     private UserInterfaceUtilities uiHelper;
     private HealthRoverWebService healthRoverWebService;
+    private ArrayAdapter adapter;
 
     public CarSelect() {
         carManagement = ObjectFactory.getInstance().getCarManagement(getHealthRoverWebService());
@@ -44,6 +47,8 @@ public class CarSelect extends Activity{
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Thread.setDefaultUncaughtExceptionHandler(ObjectFactory.getInstance().getExceptionHandler(this, healthRoverCar, healthRoverWebService));
+        SqlHelper sqlHelper = ObjectFactory.getInstance().getSqlHelper(this);
+        carManagement.loadCars(this);
         initialize();
 
     }
@@ -65,18 +70,20 @@ public class CarSelect extends Activity{
         connectToCarSelected = findViewById(R.id.connectToCarButton);
         infoButton = findViewById(R.id.infoButton);
 
-        ArrayAdapter adapter = new ArrayAdapter<>(this,
-                R.layout.car_select_list_item, HealthRoverCar.getListOfCarNames());
+        adapter = new CarAdapter(this,
+                R.layout.list_item,carManagement.getCars());
+
+
 
         carList = findViewById(R.id.smartCarList);
         carList.setAdapter(adapter);
+
 
         //Once a car is selected the name is retrieved and used to initialize the car object that is to be controlled
         carList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
                 String carName = carList.getItemAtPosition(position).toString();
-                healthRoverCar = HealthRoverCar.valueOf(HealthRoverCar.getCarObjectNameByCarName(carName));
-
+                healthRoverCar = carManagement.getCarByName(carName);
                 uiHelper.showCustomToast(getApplicationContext(), getString(R.string.selected_car_message) + carName);
             }
         });

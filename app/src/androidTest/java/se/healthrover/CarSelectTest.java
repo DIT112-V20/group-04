@@ -4,7 +4,6 @@ import android.content.Context;
 import android.view.View;
 
 import androidx.test.espresso.intent.Intents;
-import androidx.test.espresso.matcher.RootMatchers;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 import androidx.test.platform.app.InstrumentationRegistry;
 import androidx.test.rule.ActivityTestRule;
@@ -18,7 +17,6 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.MethodSorters;
 
-import se.healthrover.entities.HealthRoverCar;
 import se.healthrover.stub_web_service.MockWebService;
 import se.healthrover.ui_activity_controller.CarSelect;
 import se.healthrover.ui_activity_controller.ManualControl;

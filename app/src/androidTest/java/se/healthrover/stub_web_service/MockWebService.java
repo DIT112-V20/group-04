@@ -5,7 +5,6 @@ import android.content.Intent;
 
 import se.healthrover.R;
 import se.healthrover.conectivity.HealthRoverWebService;
-import se.healthrover.entities.HealthRoverCar;
 import se.healthrover.entities.ObjectFactory;
 import se.healthrover.ui_activity_controller.ManualControl;
 

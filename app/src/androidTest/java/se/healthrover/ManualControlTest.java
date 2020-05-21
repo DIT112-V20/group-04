@@ -19,7 +19,6 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.MethodSorters;
 
-import se.healthrover.entities.HealthRoverCar;
 import se.healthrover.entities.HealthRoverJoystick;
 import se.healthrover.ui_activity_controller.CarSelect;
 import se.healthrover.ui_activity_controller.ManualControl;

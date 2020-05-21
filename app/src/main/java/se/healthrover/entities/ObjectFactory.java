@@ -9,11 +9,15 @@ import com.google.cloud.dialogflow.v2.QueryInput;
 import com.google.cloud.dialogflow.v2.SessionName;
 import com.google.cloud.dialogflow.v2.SessionsClient;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import okhttp3.OkHttpClient;
 import se.healthrover.car_service.CarManagement;
 import se.healthrover.car_service.CarManagementImp;
 import se.healthrover.conectivity.HealthRoverWebService;
 import se.healthrover.conectivity.OkHttpWebService;
+import se.healthrover.conectivity.SqlHelper;
 import se.healthrover.ui_activity_controller.UserInterfaceUtilities;
 import se.healthrover.ui_activity_controller.error_handling.ActivityExceptionHandler;
 import se.healthrover.ui_activity_controller.voice_control.RequestTask;
@@ -49,7 +53,7 @@ public class ObjectFactory {
             return healthRoverWebService;
     }
 
-    public ActivityExceptionHandler getExceptionHandler(Activity activity, HealthRoverCar healthRoverCar, HealthRoverWebService healthRoverWebService){
+    public ActivityExceptionHandler getExceptionHandler(Activity activity, Car healthRoverCar, HealthRoverWebService healthRoverWebService){
         return new ActivityExceptionHandler(activity, healthRoverCar, healthRoverWebService);
     }
 
@@ -74,5 +78,17 @@ public class ObjectFactory {
 
     public PopupWindow getPopupWindow(View popupView, int width, int height, boolean focusable){
         return new PopupWindow(popupView, width, height, focusable);
+    }
+
+    public Car makeCar(String URL, String name){
+        return new Car(URL, name);
+    }
+
+    public List<Car> getCarList() {
+        return new ArrayList<>();
+    }
+
+    public SqlHelper getSqlHelper(Activity activity){
+        return new SqlHelper(activity);
     }
 }

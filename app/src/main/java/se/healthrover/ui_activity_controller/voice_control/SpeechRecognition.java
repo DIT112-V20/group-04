@@ -28,8 +28,8 @@ import java.util.ArrayList;
 import se.healthrover.R;
 import se.healthrover.car_service.CarManagement;
 import se.healthrover.conectivity.HealthRoverWebService;
+import se.healthrover.entities.Car;
 import se.healthrover.entities.CarCommands;
-import se.healthrover.entities.HealthRoverCar;
 import se.healthrover.entities.ObjectFactory;
 import se.healthrover.ui_activity_controller.CarSelect;
 import se.healthrover.ui_activity_controller.ManualControl;
@@ -40,7 +40,7 @@ public class SpeechRecognition extends AppCompatActivity {
     private Button manualControlButton;
     private HealthRoverWebService healthRoverWebService;
     private Button guideButton;
-    private HealthRoverCar healthRoverCar;
+    private Car healthRoverCar;
     private String carName;
     private TextView headerVoiceControl;
     private ImageView speechButton;
@@ -100,7 +100,8 @@ public class SpeechRecognition extends AppCompatActivity {
         headerVoiceControl = findViewById(R.id.headerVoiceControl);
         carName = getIntent().getStringExtra(getString(R.string.car_name));
         headerVoiceControl.setText(carName);
-        healthRoverCar = HealthRoverCar.valueOf(HealthRoverCar.getCarObjectNameByCarName(carName));
+
+        healthRoverCar = carManagement.getCarByName(carName);
         manualControlButton = findViewById(R.id.manualControl);
         guideButton = findViewById(R.id.guideButton);
         speechButton = findViewById(R.id.speechButton);
@@ -111,7 +112,7 @@ public class SpeechRecognition extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent intent = ObjectFactory.getInstance().getIntent(SpeechRecognition.this, ManualControl.class);
-                intent.putExtra(getString(R.string.car_name), healthRoverCar.getCarName());
+                intent.putExtra(getString(R.string.car_name), healthRoverCar.getName());
                 startActivity(intent);
             }
         });
@@ -136,7 +137,8 @@ public class SpeechRecognition extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         super.onBackPressed();
-        Intent intent = ObjectFactory.getInstance().getIntent(SpeechRecognition.this, CarSelect.class);
+        Intent intent = ObjectFactory.getInstance().getIntent(SpeechRecognition.this, ManualControl.class);
+        carManagement.getCars().clear();
         startActivity(intent);
     }
 

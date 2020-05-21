@@ -15,7 +15,7 @@ import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
 import se.healthrover.R;
-import se.healthrover.entities.HealthRoverCar;
+import se.healthrover.entities.Car;
 import se.healthrover.entities.ObjectFactory;
 import se.healthrover.ui_activity_controller.ManualControl;
 import se.healthrover.ui_activity_controller.UserInterfaceUtilities;
@@ -36,7 +36,7 @@ public class OkHttpWebService implements HealthRoverWebService {
 
 
     @Override
-    public void createHttpRequest(final String url, final Activity activity) {
+    public void createHttpRequest(final String url, final Activity activity, final Car car) {
         //Builds a GET request to a given url
         final Request request = new Request.Builder()
                 .url(url)
@@ -73,7 +73,8 @@ public class OkHttpWebService implements HealthRoverWebService {
                                 //If status request is successful the manual control page is loaded and the car name is passed as a parameter
                                 if (responseData.equals(HTTP_STATUS_RESPONSE)) {
                                     Intent intent = ObjectFactory.getInstance().getIntent(activity, ManualControl.class);
-                                    intent.putExtra(activity.getString(R.string.car_name), HealthRoverCar.getCarNameByUrl(url.substring(0, 20)));
+
+                                    intent.putExtra(activity.getString(R.string.car_name), car.getName());
                                     activity.startActivity(intent);
                                 }
                             } catch (IOException e) {

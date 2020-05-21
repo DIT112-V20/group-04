@@ -13,7 +13,7 @@ import io.github.controlwear.virtual.joystick.android.JoystickView;
 import se.healthrover.R;
 import se.healthrover.car_service.CarManagement;
 import se.healthrover.conectivity.HealthRoverWebService;
-import se.healthrover.entities.HealthRoverCar;
+import se.healthrover.entities.Car;
 import se.healthrover.entities.HealthRoverJoystick;
 import se.healthrover.entities.ObjectFactory;
 import se.healthrover.ui_activity_controller.voice_control.SpeechRecognition;
@@ -29,7 +29,7 @@ public class ManualControl extends AppCompatActivity {
     private int speed;
     private int turningAngle;
     private Button voiceControl;
-    private HealthRoverCar healthRoverCar;
+    private Car healthRoverCar;
     private HealthRoverJoystick healthRoverJoystick;
     private static final int JOYSTICK_CENTER = 50;
     private HealthRoverWebService healthRoverWebService;
@@ -74,7 +74,7 @@ public class ManualControl extends AppCompatActivity {
         header.setText(carName);
         angleText = findViewById(R.id.textView_angle);
         strengthText = findViewById(R.id.textView_strength);
-        healthRoverCar = HealthRoverCar.valueOf(HealthRoverCar.getCarObjectNameByCarName(carName));
+        healthRoverCar = carManagement.getCarByName(carName);
         // Can be used to reduce number of request (2 of 4 blocks of code)
         // lastSpeedAndAngleValues = new int[]{0, 0};
 
@@ -115,7 +115,7 @@ public class ManualControl extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent intent =ObjectFactory.getInstance().getIntent(ManualControl.this, SpeechRecognition.class);
-                intent.putExtra(getString(R.string.car_name), healthRoverCar.getCarName());
+                intent.putExtra(getString(R.string.car_name), healthRoverCar.getName());
                 startActivity(intent);
             }
         });
@@ -128,6 +128,7 @@ public class ManualControl extends AppCompatActivity {
     public void onBackPressed() {
         super.onBackPressed();
         Intent intent = ObjectFactory.getInstance().getIntent(ManualControl.this, CarSelect.class);
+        carManagement.getCars().clear();
         startActivity(intent);
     }
 
