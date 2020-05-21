@@ -51,6 +51,8 @@ public class ResponseHandler {
         });
     }
 
+    // Method to handle connection failure to the SmartCar
+    // Currently only handling status failure connection
     public void handleFailure(final Activity activity, final String url){
         activity.runOnUiThread(new Runnable() {
             @Override
@@ -62,27 +64,24 @@ public class ResponseHandler {
         });
     }
 
+    // Method to handle successful responses from the server that pass different parameters
     public void handleSuccess(final String responseData, final Activity activity, final String url){
-        //If status request is successful the manual control page is loaded and the car name is passed as a parameter
-        activity.runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                if (responseData.equals(HTTP_STATUS_RESPONSE)) {
-                    handleSuccessStatus(activity, url);
-                }
-                else if(responseData.equals(HTTP_OBSTACLE_RESPONSE)){
-                    handleObstacleDetection(activity);
-                }
-            }
-        });
+        if (responseData.equals(HTTP_STATUS_RESPONSE)) {
+            handleSuccessStatus(activity, url);
+        }
+        else if(responseData.equals(HTTP_OBSTACLE_RESPONSE)){
+            handleObstacleDetection(activity);
+        }
     }
 
+    // If status request is successful the end-user will be notified with toast, vibration and speech
     private void handleObstacleDetection(Activity activity){
         userInterfaceUtilities.showCustomToast(activity, activity.getString(R.string.obstacle_detection));
         makeVibrator(activity);
         makeSpeaker(activity, activity.getString(R.string.obstacle_detection));
     }
 
+    // If status request is successful the manual control page is loaded and the car name is passed as a parameter
     private void handleSuccessStatus(Activity activity, String url){
         Intent intent = ObjectFactory.getInstance().getIntent(activity, ManualControl.class);
         intent.putExtra(activity.getString(R.string.car_name), HealthRoverCar.getCarNameByUrl(url.substring(0, 20)));
