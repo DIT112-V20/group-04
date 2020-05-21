@@ -2,8 +2,6 @@ package se.healthrover.entities;
 
 import org.jetbrains.annotations.NotNull;
 
-import se.healthrover.conectivity.SqlHelper;
-
 public class Car {
 
 
@@ -39,7 +37,6 @@ public class Car {
     public void setURL(String URL) {
         this.URL = URL;
     }
-
 
     @NotNull
     @Override
