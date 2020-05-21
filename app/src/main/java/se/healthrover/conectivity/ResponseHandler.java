@@ -66,12 +66,17 @@ public class ResponseHandler {
 
     // Method to handle successful responses from the server that pass different parameters
     public void handleSuccess(final String responseData, final Activity activity, final String url){
-        if (responseData.equals(HTTP_STATUS_RESPONSE)) {
-            handleSuccessStatus(activity, url);
-        }
-        else if(responseData.equals(HTTP_OBSTACLE_RESPONSE)){
-            handleObstacleDetection(activity);
-        }
+        activity.runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                if (responseData.equals(HTTP_STATUS_RESPONSE)) {
+                    handleSuccessStatus(activity, url);
+                }
+                else if(responseData.equals(HTTP_OBSTACLE_RESPONSE)){
+                    handleObstacleDetection(activity);
+                }
+            }
+        });
     }
 
     // If status request is successful the end-user will be notified with toast, vibration and speech

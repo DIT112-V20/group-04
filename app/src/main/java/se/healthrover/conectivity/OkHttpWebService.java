@@ -64,22 +64,16 @@ public class OkHttpWebService implements HealthRoverWebService {
             }
             @Override
             public void onResponse(@NotNull final Call call, @NotNull final Response response) {
-                activity.runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        if(response.isSuccessful()) {
-                            try {
-                                responseData = Objects.requireNonNull(response.body()).string();
-                                Log.i(activity.getString(R.string.log_success), activity.getString(R.string.log_success) + response.code());
-                                responseHandler.handleSuccess(responseData, activity, url);
-                            } catch (IOException e) {
-                                Log.i(activity.getString(R.string.log_title_error), activity.getString(R.string.log_title_error) + e.getMessage());
-                                client.dispatcher().cancelAll();
-                            }
-                        }
-
+                if(response.isSuccessful()) {
+                    try {
+                        responseData = Objects.requireNonNull(response.body()).string();
+                        Log.i(activity.getString(R.string.log_success), activity.getString(R.string.log_success) + response.code());
+                        responseHandler.handleSuccess(responseData, activity, url);
+                    } catch (IOException e) {
+                        Log.i(activity.getString(R.string.log_title_error), activity.getString(R.string.log_title_error) + e.getMessage());
+                        client.dispatcher().cancelAll();
                     }
-                });
+                }
             }});
 
 
