@@ -10,6 +10,7 @@ import android.widget.ListView;
 
 import se.healthrover.R;
 import se.healthrover.car_service.CarManagement;
+import se.healthrover.conectivity.HealthRoverWebService;
 import se.healthrover.entities.HealthRoverCar;
 import se.healthrover.entities.ObjectFactory;
 
@@ -22,17 +23,27 @@ public class CarSelect extends Activity{
     private boolean carOnlineConnection;
     private CarManagement carManagement;
     private UserInterfaceUtilities uiHelper;
+    private HealthRoverWebService healthRoverWebService;
 
     public CarSelect() {
-        carManagement = ObjectFactory.getInstance().getCarManagement();
+        carManagement = ObjectFactory.getInstance().getCarManagement(getHealthRoverWebService());
         uiHelper = ObjectFactory.getInstance().getInterfaceUtilities();
+    }
+
+    private HealthRoverWebService getHealthRoverWebService() {
+        return healthRoverWebService;
+    }
+
+    public void setHealthRoverWebService(HealthRoverWebService healthRoverWebService){
+        this.healthRoverWebService = healthRoverWebService;
+        carManagement = ObjectFactory.getInstance().getCarManagement(healthRoverWebService);
     }
 
     //Create the activity
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Thread.setDefaultUncaughtExceptionHandler(ObjectFactory.getInstance().getExceptionHandler(this, healthRoverCar));
+        Thread.setDefaultUncaughtExceptionHandler(ObjectFactory.getInstance().getExceptionHandler(this, healthRoverCar, healthRoverWebService));
         initialize();
 
     }
@@ -40,7 +51,7 @@ public class CarSelect extends Activity{
     @Override
     protected void onRestart() {
         super.onRestart();
-        Thread.setDefaultUncaughtExceptionHandler(ObjectFactory.getInstance().getExceptionHandler(this, healthRoverCar));
+        Thread.setDefaultUncaughtExceptionHandler(ObjectFactory.getInstance().getExceptionHandler(this, healthRoverCar, healthRoverWebService));
         initialize();
     }
 

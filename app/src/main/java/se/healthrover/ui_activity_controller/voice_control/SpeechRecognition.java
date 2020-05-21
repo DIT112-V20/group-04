@@ -27,6 +27,7 @@ import java.util.ArrayList;
 
 import se.healthrover.R;
 import se.healthrover.car_service.CarManagement;
+import se.healthrover.conectivity.HealthRoverWebService;
 import se.healthrover.entities.CarCommands;
 import se.healthrover.entities.HealthRoverCar;
 import se.healthrover.entities.ObjectFactory;
@@ -37,6 +38,7 @@ import se.healthrover.ui_activity_controller.UserInterfaceUtilities;
 public class SpeechRecognition extends AppCompatActivity {
 
     private Button manualControlButton;
+    private HealthRoverWebService healthRoverWebService;
     private Button guideButton;
     private HealthRoverCar healthRoverCar;
     private String carName;
@@ -69,7 +71,7 @@ public class SpeechRecognition extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Thread.setDefaultUncaughtExceptionHandler(ObjectFactory.getInstance().getExceptionHandler(this, healthRoverCar));
+        Thread.setDefaultUncaughtExceptionHandler(ObjectFactory.getInstance().getExceptionHandler(this, healthRoverCar, healthRoverWebService));
         initialize();
 
     }
@@ -77,15 +79,22 @@ public class SpeechRecognition extends AppCompatActivity {
     @Override
     protected void onRestart() {
         super.onRestart();
-        Thread.setDefaultUncaughtExceptionHandler(ObjectFactory.getInstance().getExceptionHandler(this, healthRoverCar));
+        Thread.setDefaultUncaughtExceptionHandler(ObjectFactory.getInstance().getExceptionHandler(this, healthRoverCar, healthRoverWebService));
         initialize();
     }
 
     public SpeechRecognition(){
-        carManagement = ObjectFactory.getInstance().getCarManagement();
+        carManagement = ObjectFactory.getInstance().getCarManagement(getHealthRoverWebService());
         userInterfaceUtilities = ObjectFactory.getInstance().getInterfaceUtilities();
     }
+    private HealthRoverWebService getHealthRoverWebService() {
+        return healthRoverWebService;
+    }
 
+    public void setHealthRoverWebService(HealthRoverWebService healthRoverWebService){
+        this.healthRoverWebService = healthRoverWebService;
+        carManagement = ObjectFactory.getInstance().getCarManagement(healthRoverWebService);
+    }
     // Using the method to load and initialize the content of the page
     private void initialize() {
         setContentView(R.layout.speech_recognition);
@@ -165,7 +174,7 @@ public class SpeechRecognition extends AppCompatActivity {
     // Send requested query to the Dialogflow API
     private void sendVoiceCommand(String command) {
         QueryInput queryInput = QueryInput.newBuilder().setText(TextInput.newBuilder().setText(command).setLanguageCode("en-US")).build();
-        new RequestTask(SpeechRecognition.this, session, sessionsClient , queryInput).execute();
+        ObjectFactory.getInstance().getRequestTask(SpeechRecognition.this, session, sessionsClient , queryInput).execute();
     }
 
     // Process the response received from Dialogflow

@@ -11,8 +11,8 @@ public class CarManagementImp implements CarManagement {
 
     private HealthRoverWebService webService;
 
-    public CarManagementImp(){
-        webService = ObjectFactory.getInstance().getWebService();
+    public CarManagementImp(HealthRoverWebService healthRoverWebService){
+        webService = ObjectFactory.getInstance().getWebService(healthRoverWebService);
     }
 
     @Override

@@ -8,6 +8,7 @@ import androidx.annotation.NonNull;
 
 import se.healthrover.R;
 import se.healthrover.car_service.CarManagement;
+import se.healthrover.conectivity.HealthRoverWebService;
 import se.healthrover.entities.CarCommands;
 import se.healthrover.entities.HealthRoverCar;
 import se.healthrover.entities.ObjectFactory;
@@ -20,9 +21,9 @@ public class ActivityExceptionHandler implements Thread.UncaughtExceptionHandler
     private HealthRoverCar healthRoverCar;
     private static final int RESTART_TIME_OUT = 2;
 
-    public ActivityExceptionHandler(Activity activity, HealthRoverCar healthRoverCar) {
+    public ActivityExceptionHandler(Activity activity, HealthRoverCar healthRoverCar, HealthRoverWebService healthRoverWebService) {
         this.activity = activity;
-        carManagement = ObjectFactory.getInstance().getCarManagement();
+        carManagement = ObjectFactory.getInstance().getCarManagement(healthRoverWebService);
         this.healthRoverCar = healthRoverCar;
     }
     // The method handles runtime exceptions
