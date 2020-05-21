@@ -22,8 +22,8 @@ public class CarManagementImpTest {
 
     @Test
     public void checkIfRequestIsSendTest() {
-        carManagementSpy.moveCar(HealthRoverCar.HEALTH_ROVER_CAR1,0,0,null);
-        Mockito.verify(carManagementSpy, Mockito.times(1)).moveCar(HealthRoverCar.HEALTH_ROVER_CAR1,0,0,null);
+        carManagementSpy.moveCar(HealthRoverCar.HEALTH_ROVER_CAR1,0,0,"manual",null);
+        Mockito.verify(carManagementSpy, Mockito.times(1)).moveCar(HealthRoverCar.HEALTH_ROVER_CAR1,0,0, "manual",null);
     }
 
 

@@ -21,8 +21,8 @@ public class CarManagementImp implements CarManagement {
         webService.createHttpRequest(request, activity);
     }
 
-    public void moveCar(HealthRoverCar healthRoverCar, int speed, int angle, Activity activity) {
-        String request = healthRoverCar.getUrl() + CarCommands.REQUEST.getCarCommands() + CarCommands.SPEED.getCarCommands() + speed + CarCommands.ANGLE.getCarCommands() + angle;
+    public void moveCar(HealthRoverCar healthRoverCar, int speed, int angle, String controlType, Activity activity) {
+        String request = healthRoverCar.getUrl() + CarCommands.REQUEST.getCarCommands() + CarCommands.SPEED.getCarCommands() + speed + CarCommands.ANGLE.getCarCommands() + angle + CarCommands.CONTROL.getCarCommands() + controlType;
         webService.createHttpRequest(request, activity );
     }
 }
