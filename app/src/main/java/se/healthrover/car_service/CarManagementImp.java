@@ -11,13 +11,13 @@ public class CarManagementImp implements CarManagement {
 
     private HealthRoverWebService webService;
 
-    public CarManagementImp(){
-        webService = ObjectFactory.getInstance().getWebService();
+    public CarManagementImp(HealthRoverWebService healthRoverWebService){
+        webService = ObjectFactory.getInstance().getWebService(healthRoverWebService);
     }
 
     @Override
     public void checkStatus(HealthRoverCar healthRoverCar, Activity activity) {
-        String request = healthRoverCar.getUrl();// + CarCommands.STATUS.getCarCommands();
+        String request = healthRoverCar.getUrl() + CarCommands.STATUS.getCarCommands();
         webService.createHttpRequest(request, activity);
     }
 
