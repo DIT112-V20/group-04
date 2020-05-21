@@ -27,11 +27,13 @@ public class OkHttpWebService implements HealthRoverWebService {
     private String responseData;
     private static final String HTTP_STATUS_RESPONSE = "status";
     private UserInterfaceUtilities userInterfaceUtilities;
+    private ResponseHandler responseHandler;
 
 
     public OkHttpWebService(){
         client = ObjectFactory.getInstance().getOkHttpClient();
         userInterfaceUtilities = ObjectFactory.getInstance().getInterfaceUtilities();
+        responseHandler = ObjectFactory.getInstance().getResponseHandler();
     }
 
 
@@ -47,13 +49,12 @@ public class OkHttpWebService implements HealthRoverWebService {
 
             @Override
             public void onFailure(@NotNull final Call call, @NotNull final IOException e) {
-
                 activity.runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
                         //If the status request fails a message is displayed in the application
                         if (url.contains(HTTP_STATUS_RESPONSE)){
-                            userInterfaceUtilities.showCustomToast(activity, activity.getString(R.string.car_is_offline));
+                            responseHandler.handleFailure(activity, url);
                         }
                         Log.i(activity.getString(R.string.log_title_error),activity.getString(R.string.log_connection_fail) + e.getMessage());
                         client.dispatcher().cancelAll();
@@ -63,27 +64,16 @@ public class OkHttpWebService implements HealthRoverWebService {
             }
             @Override
             public void onResponse(@NotNull final Call call, @NotNull final Response response) {
-                activity.runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        if(response.isSuccessful()) {
-                            try {
-                                responseData = Objects.requireNonNull(response.body()).string();
-                                Log.i(activity.getString(R.string.log_success), activity.getString(R.string.log_success) + response.code());
-                                //If status request is successful the manual control page is loaded and the car name is passed as a parameter
-                                if (responseData.equals(HTTP_STATUS_RESPONSE)) {
-                                    Intent intent = ObjectFactory.getInstance().getIntent(activity, ManualControl.class);
-                                    intent.putExtra(activity.getString(R.string.car_name), HealthRoverCar.getCarNameByUrl(url.substring(0, 20)));
-                                    activity.startActivity(intent);
-                                }
-                            } catch (IOException e) {
-                                Log.i(activity.getString(R.string.log_title_error), activity.getString(R.string.log_title_error) + e.getMessage());
-                                client.dispatcher().cancelAll();
-                            }
-                        }
-
+                if(response.isSuccessful()) {
+                    try {
+                        responseData = Objects.requireNonNull(response.body()).string();
+                        Log.i(activity.getString(R.string.log_success), activity.getString(R.string.log_success) + response.code());
+                        responseHandler.handleSuccess(responseData, activity, url);
+                    } catch (IOException e) {
+                        Log.i(activity.getString(R.string.log_title_error), activity.getString(R.string.log_title_error) + e.getMessage());
+                        client.dispatcher().cancelAll();
                     }
-                });
+                }
             }});
 
 
