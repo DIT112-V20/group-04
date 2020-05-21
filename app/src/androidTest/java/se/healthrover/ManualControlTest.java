@@ -69,14 +69,14 @@ public class ManualControlTest {
 
     // Launch activity under test
     @Before
-    public void setUp() throws Exception {
+    public void setUp() {
         manualControl = manualControlActivityTestRule.getActivity();
         Intents.init();
     }
 
     // Verify the context of the app under test
     @Test
-    public void testCase_0_useAppContext() {
+    public void useAppContext() {
         Context appContext = getInstrumentation().getTargetContext();
         assertEquals("se.healthrover", appContext.getPackageName());
     }
@@ -85,7 +85,7 @@ public class ManualControlTest {
      *   verify that all the elements are loaded by using IDs
      *   assert that the correct car name is set into the header*/
     @Test
-    public void testCase_1_verifyIfElementsAreLoadedTest() {
+    public void verifyIfElementsAreLoadedTest() {
 
         View view = manualControl.findViewById(R.id.joystick);
         assertNotNull(view);
@@ -114,7 +114,7 @@ public class ManualControlTest {
     *   verify that the correct activity is loaded
     *   verify that the correct car name has been passed to the activity*/
     @Test
-    public void testCase_2_switchToVoiceControlTest() {
+    public void switchToVoiceControlTest() {
         onView(withId(R.id.voiceControl)).perform(click());
         intended(hasComponent(SpeechRecognition.class.getName()));
         onView(withId(R.id.headerVoiceControl)).check(matches(withText(testHealthRover.getCarName())));
@@ -125,7 +125,7 @@ public class ManualControlTest {
      *   click the emulator back button,
      *   verify that the correct activity is loaded*/
     @Test
-    public void testCase_3_backButtonBackToCarSelectTest() {
+    public void backButtonBackToCarSelectTest() {
         assertNotNull(manualControl);
         Espresso.pressBack();
         intended(hasComponent(CarSelect.class.getName()));
@@ -139,7 +139,7 @@ public class ManualControlTest {
      *   move the joystick right,
      *   verify that the joystick is reset to start position - start position x = 50 and y = 50*/
     @Test
-    public void testCase_4_checkJoystickMovement() {
+    public void checkJoystickMovement() {
         HealthRoverJoystick joystick = manualControl.findViewById(R.id.joystick);
         assertNotNull(joystick);
         onView(withId(R.id.joystick)).perform(swipeUp());
@@ -150,6 +150,24 @@ public class ManualControlTest {
         assertEquals(joystickStartPosition, joystick.getNormalizedX());
         assertEquals(joystickStartPosition, joystick.getNormalizedY());
     }
+
+    /* Test Case 5
+     *   Locate the voice control button by ID,
+     *   click on the voice control button,
+     *   verify that the correct activity is loaded
+     *   verify that the correct car name has been passed to the activity
+     *   click on back to manual control
+     *   verify that correct activity is loaded and the car name is correct*/
+    @Test
+    public void checkIfRestartMethodIsCalledWhenSwitchingFromVoiceControl() {
+        onView(withId(R.id.voiceControl)).perform(click());
+        intended(hasComponent(SpeechRecognition.class.getName()));
+        onView(withId(R.id.headerVoiceControl)).check(matches(withText(testHealthRover.getCarName())));
+        onView(withId(R.id.manualControl)).perform(click());
+        intended(hasComponent(ManualControl.class.getName()));
+        onView(withId(R.id.manualControlHeaderText)).check(matches(withText(testHealthRover.getCarName())));
+    }
+
 
     // Close activity under test
     @After

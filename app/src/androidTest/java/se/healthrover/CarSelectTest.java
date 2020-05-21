@@ -4,7 +4,6 @@ import android.content.Context;
 import android.view.View;
 
 import androidx.test.espresso.intent.Intents;
-import androidx.test.espresso.matcher.RootMatchers;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 import androidx.test.platform.app.InstrumentationRegistry;
 import androidx.test.rule.ActivityTestRule;
@@ -19,7 +18,7 @@ import org.junit.runner.RunWith;
 import org.junit.runners.MethodSorters;
 
 import se.healthrover.entities.HealthRoverCar;
-import se.healthrover.stub_web_service.MockWebService;
+import se.healthrover.test_services.MockWebService;
 import se.healthrover.ui_activity_controller.CarSelect;
 import se.healthrover.ui_activity_controller.ManualControl;
 
@@ -50,7 +49,7 @@ public class CarSelectTest  {
     private static HealthRoverCar testHealthRover;
 
     @Rule
-    public ActivityTestRule<CarSelect> carSelectActivityTestRule = new ActivityTestRule<CarSelect>(CarSelect.class);
+    public ActivityTestRule<CarSelect> carSelectActivityTestRule = new ActivityTestRule<>(CarSelect.class);
 
     @BeforeClass
     public static void setCarSelect(){
@@ -74,7 +73,7 @@ public class CarSelectTest  {
     /* Test Case 1
      *   verify that all the elements are loaded by using IDs*/
     @Test
-    public void testCase_1_verifyIfElementsAreLoadedTest(){
+    public void verifyIfElementsAreLoadedTest(){
         //Buttons
         View view = carSelect.findViewById(R.id.infoButton);
         assertNotNull(view);
@@ -95,7 +94,7 @@ public class CarSelectTest  {
      *   verify that the correct activity is loaded
      *   verify that the correct car name has been passed to the activity*/
     @Test
-    public void testCase_2_switchToManualControlTest() {
+    public void switchToManualControlTest() {
         onData(anything()).inAdapterView(withId(R.id.smartCarList)).atPosition(0).perform(click());
         onView(withId(R.id.connectToCarButton)).perform(click());
         intended(hasComponent(hasClassName(ManualControl.class.getName())));
@@ -109,7 +108,7 @@ public class CarSelectTest  {
      *   verify the text in the popup.
      */
     @Test
-    public void testCase_3_infoButtonDisplaysInfoPopup(){
+    public void infoButtonDisplaysInfoPopup(){
         assertNotNull(carSelect);
         onView(withId(R.id.infoButton)).perform(click());
         onView(withId(R.id.infoPopup)).check(matches(isDisplayed()));
