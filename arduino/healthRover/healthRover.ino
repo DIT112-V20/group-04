@@ -2,7 +2,6 @@
 #include <Wire.h>
 #include <WiFi.h>
 #include <WebServer.h>
-#include <ESPmDNS.h>
 
 const auto pulsesPerMeter = 600;
 const int START_SPEED = 40;
@@ -63,10 +62,11 @@ void loop() {
   // Stop when distance from the front sensor is less than MIN_OBSTACLE_DISTANCE and
   // the car is moving forward,
   // disregard 0 reading because its a null reading from the sensor
-  if (frontSensorReading <= MIN_OBSTACLE_DISTANCE && frontSensorReading > 0 && carSpeed > 0){
+  if (frontSensorReading <= MIN_OBSTACLE_DISTANCE && frontSensorReading > 5 && carSpeed > 0){
     car.setSpeed(STOP);
+    server.send(200, "text/plain", "obstacle");
   }else if (WiFi.status() != WL_CONNECTED){
-    car.setSpeed(STOP);
+    //car.setSpeed(STOP);
     connectToWiFi();
   }
 }
@@ -159,7 +159,7 @@ void turnCar(int turningAngle) {
         // currentHeading)
         int degreesTurnedSoFar  = initialHeading - currentHeading;
         hasReachedTargetDegrees = smartcarlib::utils::getAbsolute(degreesTurnedSoFar)
-                                  >= smartcarlib::utils::getAbsolute(degrees);
+                                  >= smartcarlib::utils::getAbsolute(turningAngle);
     }
     setCarAngle(0);
 }
@@ -177,8 +177,8 @@ void handleRequest() {
     server.send(200);
   }
   else if (appRequest.equals("move") && controlRequest.equals("voice")) {
-      turnCar(angleRequest);
       setCarSpeed(speedRequest);
+      turnCar(angleRequest);
       server.send(200);
   }
   else if (appRequest.equals("stop")) {
