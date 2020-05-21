@@ -48,4 +48,5 @@
     <string name="voice_control_min_velocity">Minimum velocity reached!</string>
     <string name="voice_pop_up_message">Listening…</string>
     <string name="edit">EDIT</string>
+    <string name="update">Update</string>
 </resources>
