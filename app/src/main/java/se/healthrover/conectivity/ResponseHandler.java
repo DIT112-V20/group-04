@@ -5,12 +5,11 @@ import se.healthrover.R;
 import se.healthrover.entities.Car;
 import se.healthrover.entities.ObjectFactory;
 import se.healthrover.ui_activity_controller.ManualControl;
-import se.healthrover.ui_activity_controller.UserInterfaceUtilities;
+import se.healthrover.ui_activity_controller.utilities.UserInterfaceUtilities;
 
 import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
-import android.os.Looper;
 import android.os.VibrationEffect;
 import android.os.Vibrator;
 import android.speech.tts.*;

@@ -1,4 +1,4 @@
-package se.healthrover.entities;
+package se.healthrover.ui_activity_controller.car_selection;
 
 import android.app.Activity;
 import android.app.Dialog;
@@ -19,6 +19,8 @@ import java.util.List;
 import se.healthrover.R;
 import se.healthrover.car_service.CarManagement;
 import se.healthrover.conectivity.HealthRoverWebService;
+import se.healthrover.entities.Car;
+import se.healthrover.entities.ObjectFactory;
 
 public class CarAdapter extends ArrayAdapter<Car> {
 

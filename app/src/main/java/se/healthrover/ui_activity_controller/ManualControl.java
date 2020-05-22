@@ -16,6 +16,7 @@ import se.healthrover.conectivity.HealthRoverWebService;
 import se.healthrover.entities.Car;
 import se.healthrover.entities.HealthRoverJoystick;
 import se.healthrover.entities.ObjectFactory;
+import se.healthrover.ui_activity_controller.car_selection.CarSelect;
 import se.healthrover.ui_activity_controller.voice_control.SpeechRecognition;
 
 

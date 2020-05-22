@@ -4,8 +4,6 @@ import android.app.Activity;
 import java.util.List;
 
 import se.healthrover.entities.Car;
-import se.healthrover.entities.ObjectFactory;
-import se.healthrover.ui_activity_controller.CarSelect;
 
 public interface CarManagement {
 

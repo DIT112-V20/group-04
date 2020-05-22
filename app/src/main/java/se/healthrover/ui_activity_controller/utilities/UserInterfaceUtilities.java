@@ -1,4 +1,4 @@
-package se.healthrover.ui_activity_controller;
+package se.healthrover.ui_activity_controller.utilities;
 
 import android.annotation.SuppressLint;
 import android.content.Context;

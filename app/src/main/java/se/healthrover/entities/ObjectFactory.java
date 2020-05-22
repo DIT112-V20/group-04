@@ -21,8 +21,8 @@ import se.healthrover.conectivity.LocalIpLoader;
 import se.healthrover.conectivity.OkHttpWebService;
 import se.healthrover.conectivity.ResponseHandler;
 import se.healthrover.conectivity.SqlHelper;
-import se.healthrover.ui_activity_controller.UserInterfaceUtilities;
-import se.healthrover.ui_activity_controller.error_handling.ActivityExceptionHandler;
+import se.healthrover.ui_activity_controller.utilities.UserInterfaceUtilities;
+import se.healthrover.ui_activity_controller.utilities.ActivityExceptionHandler;
 import se.healthrover.ui_activity_controller.voice_control.RequestTask;
 
 public class ObjectFactory {

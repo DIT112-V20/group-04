@@ -31,9 +31,8 @@ import se.healthrover.conectivity.HealthRoverWebService;
 import se.healthrover.entities.Car;
 import se.healthrover.entities.CarCommands;
 import se.healthrover.entities.ObjectFactory;
-import se.healthrover.ui_activity_controller.CarSelect;
 import se.healthrover.ui_activity_controller.ManualControl;
-import se.healthrover.ui_activity_controller.UserInterfaceUtilities;
+import se.healthrover.ui_activity_controller.utilities.UserInterfaceUtilities;
 
 public class SpeechRecognition extends AppCompatActivity {
 

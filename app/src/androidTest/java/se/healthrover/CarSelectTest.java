@@ -14,17 +14,11 @@ import org.junit.BeforeClass;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.junit.runners.MethodSorters;
-import org.mockito.Mockito;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import se.healthrover.car_service.CarManagementImp;
 import se.healthrover.entities.Car;
 import se.healthrover.test_services.MockWebService;
 import se.healthrover.test_services.TestCar;
-import se.healthrover.ui_activity_controller.CarSelect;
+import se.healthrover.ui_activity_controller.car_selection.CarSelect;
 import se.healthrover.ui_activity_controller.ManualControl;
 
 import static androidx.test.espresso.Espresso.onData;

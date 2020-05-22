@@ -1,4 +1,4 @@
-package se.healthrover.ui_activity_controller;
+package se.healthrover.ui_activity_controller.car_selection;
 
 import android.app.Activity;
 import android.os.Bundle;
@@ -13,7 +13,7 @@ import se.healthrover.car_service.CarManagement;
 import se.healthrover.conectivity.HealthRoverWebService;
 import se.healthrover.conectivity.SqlHelper;
 import se.healthrover.entities.Car;
-import se.healthrover.entities.CarAdapter;
+import se.healthrover.ui_activity_controller.utilities.UserInterfaceUtilities;
 import se.healthrover.entities.ObjectFactory;
 
 public class CarSelect extends Activity{

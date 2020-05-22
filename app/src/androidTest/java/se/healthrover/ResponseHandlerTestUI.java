@@ -15,7 +15,7 @@ import org.mockito.Mockito;
 import se.healthrover.conectivity.ResponseHandler;
 import se.healthrover.test_services.TestCar;
 import se.healthrover.test_services.ToastMatcher;
-import se.healthrover.ui_activity_controller.CarSelect;
+import se.healthrover.ui_activity_controller.car_selection.CarSelect;
 import se.healthrover.ui_activity_controller.ManualControl;
 
 import static androidx.test.espresso.Espresso.onView;

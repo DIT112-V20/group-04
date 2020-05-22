@@ -13,14 +13,13 @@ import androidx.test.rule.ActivityTestRule;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.BeforeClass;
-import org.junit.FixMethodOrder;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import se.healthrover.entities.HealthRoverJoystick;
 import se.healthrover.test_services.TestCar;
-import se.healthrover.ui_activity_controller.CarSelect;
+import se.healthrover.ui_activity_controller.car_selection.CarSelect;
 import se.healthrover.ui_activity_controller.ManualControl;
 import se.healthrover.ui_activity_controller.voice_control.SpeechRecognition;
 

@@ -55,7 +55,8 @@ public class SqlHelper extends SQLiteOpenHelper {
 
 
 
-
+    // Creates a list of instances of car objects for
+    // all available cars from the database
     public List<Car> getSavedCars(){
         database = this.getReadableDatabase();
         List<Car> cars = ObjectFactory.getInstance().getCarList();

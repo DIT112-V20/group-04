@@ -1,4 +1,4 @@
-package se.healthrover.ui_activity_controller.error_handling;
+package se.healthrover.ui_activity_controller.utilities;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -12,7 +12,7 @@ import se.healthrover.conectivity.HealthRoverWebService;
 import se.healthrover.entities.Car;
 import se.healthrover.entities.CarCommands;
 import se.healthrover.entities.ObjectFactory;
-import se.healthrover.ui_activity_controller.CarSelect;
+import se.healthrover.ui_activity_controller.car_selection.CarSelect;
 
 public class ActivityExceptionHandler implements Thread.UncaughtExceptionHandler {
 

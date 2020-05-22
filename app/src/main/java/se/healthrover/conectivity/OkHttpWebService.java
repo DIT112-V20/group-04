@@ -1,7 +1,6 @@
 package se.healthrover.conectivity;
 
 import android.app.Activity;
-import android.content.Intent;
 import android.util.Log;
 
 import org.jetbrains.annotations.NotNull;
@@ -17,8 +16,7 @@ import okhttp3.Response;
 import se.healthrover.R;
 import se.healthrover.entities.Car;
 import se.healthrover.entities.ObjectFactory;
-import se.healthrover.ui_activity_controller.ManualControl;
-import se.healthrover.ui_activity_controller.UserInterfaceUtilities;
+import se.healthrover.ui_activity_controller.utilities.UserInterfaceUtilities;
 
 public class OkHttpWebService implements HealthRoverWebService {
 
