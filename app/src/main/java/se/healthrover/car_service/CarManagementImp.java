@@ -50,6 +50,10 @@ public class CarManagementImp implements CarManagement {
         return carFound;
     }
 
+    public void moveCar(Car healthRoverCar, int speed, int angle, String controlType, Activity activity) {
+        String request = healthRoverCar.getURL() + CarCommands.REQUEST.getCarCommands() + CarCommands.SPEED.getCarCommands() + speed + CarCommands.ANGLE.getCarCommands() + angle + CarCommands.CONTROL.getCarCommands() + controlType;
+        webService.createHttpRequest(request, activity, healthRoverCar );
+
     public Car getCarByURL(String url){
         Car carFound = null;
 

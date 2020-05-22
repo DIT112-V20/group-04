@@ -9,6 +9,8 @@ import se.healthrover.ui_activity_controller.CarSelect;
 
 public interface CarManagement {
 
+    void checkStatus(Car healthRoverCar, Activity activity);
+    void moveCar(Car healthRoverCar, int speed, int angle, String controlType, Activity activity);
 
     void checkStatus(Car healthRoverCar, Activity activity);
 

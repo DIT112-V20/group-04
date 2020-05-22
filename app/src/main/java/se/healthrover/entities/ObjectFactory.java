@@ -17,6 +17,7 @@ import se.healthrover.car_service.CarManagement;
 import se.healthrover.car_service.CarManagementImp;
 import se.healthrover.conectivity.HealthRoverWebService;
 import se.healthrover.conectivity.OkHttpWebService;
+import se.healthrover.conectivity.ResponseHandler;
 import se.healthrover.conectivity.SqlHelper;
 import se.healthrover.ui_activity_controller.UserInterfaceUtilities;
 import se.healthrover.ui_activity_controller.error_handling.ActivityExceptionHandler;
@@ -78,6 +79,10 @@ public class ObjectFactory {
 
     public PopupWindow getPopupWindow(View popupView, int width, int height, boolean focusable){
         return new PopupWindow(popupView, width, height, focusable);
+    }
+
+    public ResponseHandler getResponseHandler() {
+        return new ResponseHandler();
     }
 
     public Car makeCar(String URL, String name){

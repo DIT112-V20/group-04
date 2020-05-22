@@ -33,6 +33,7 @@ public class ManualControl extends AppCompatActivity {
     private HealthRoverJoystick healthRoverJoystick;
     private static final int JOYSTICK_CENTER = 50;
     private HealthRoverWebService healthRoverWebService;
+    private static final String CONTROL_TYPE = "manual";
     // Can be used to reduce number of request send (1 of 4 blocks of code)
     // private int[] lastSpeedAndAngleValues;
 
@@ -102,7 +103,7 @@ public class ManualControl extends AppCompatActivity {
                     turningAngle = 0;
                 }
                 //If reduce request is used this statement needs to be moved inside the if statement above (4 of 4 blocks of code)
-                carManagement.moveCar(healthRoverCar, speed, turningAngle, ManualControl.this);
+                carManagement.moveCar(healthRoverCar, speed, turningAngle, CONTROL_TYPE, ManualControl.this);
 
                 //Update the UI speed and angle
                 angleText.setText(turningAngle + getString(R.string.degree_symbol));

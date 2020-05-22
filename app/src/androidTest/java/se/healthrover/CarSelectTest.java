@@ -11,7 +11,6 @@ import androidx.test.rule.ActivityTestRule;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.BeforeClass;
-import org.junit.FixMethodOrder;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -41,14 +40,13 @@ import static org.junit.Assert.assertNotNull;
  * @see <a href="http://d.android.com/tools/testing">Testing documentation</a>
  */
 @RunWith(AndroidJUnit4.class)
-@FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class CarSelectTest  {
 
     private CarSelect carSelect;
     private static HealthRoverCar testHealthRover;
 
     @Rule
-    public ActivityTestRule<CarSelect> carSelectActivityTestRule = new ActivityTestRule<CarSelect>(CarSelect.class);
+    public ActivityTestRule<CarSelect> carSelectActivityTestRule = new ActivityTestRule<>(CarSelect.class);
 
     @BeforeClass
     public static void setCarSelect(){
@@ -72,7 +70,7 @@ public class CarSelectTest  {
     /* Test Case 1
      *   verify that all the elements are loaded by using IDs*/
     @Test
-    public void testCase_1_verifyIfElementsAreLoadedTest(){
+    public void verifyIfElementsAreLoadedTest(){
         //Buttons
         View view = carSelect.findViewById(R.id.infoButton);
         assertNotNull(view);
@@ -93,7 +91,7 @@ public class CarSelectTest  {
      *   verify that the correct activity is loaded
      *   verify that the correct car name has been passed to the activity*/
     @Test
-    public void testCase_2_switchToManualControlTest() {
+    public void switchToManualControlTest() {
         onData(anything()).inAdapterView(withId(R.id.smartCarList)).atPosition(0).perform(click());
         onView(withId(R.id.connectToCarButton)).perform(click());
         intended(hasComponent(hasClassName(ManualControl.class.getName())));
@@ -107,7 +105,7 @@ public class CarSelectTest  {
      *   verify the text in the popup.
      */
     @Test
-    public void testCase_3_infoButtonDisplaysInfoPopup(){
+    public void infoButtonDisplaysInfoPopup(){
         assertNotNull(carSelect);
         onView(withId(R.id.infoButton)).perform(click());
         onView(withId(R.id.infoPopup)).check(matches(isDisplayed()));
