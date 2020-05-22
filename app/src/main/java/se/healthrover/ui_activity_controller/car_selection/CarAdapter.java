@@ -22,6 +22,7 @@ import se.healthrover.conectivity.HealthRoverWebService;
 import se.healthrover.entities.Car;
 import se.healthrover.entities.ObjectFactory;
 
+// Implement custom adapter in order to have multiple items in the listview
 public class CarAdapter extends ArrayAdapter<Car> {
 
     private int layout;
@@ -33,16 +34,17 @@ public class CarAdapter extends ArrayAdapter<Car> {
         this.names = objects;
     }
 
-    public void showEditNamePopup(final String oldName, final Activity activity){
+    // Launches the dialog for editing carName
+    private void showEditNamePopup(final String oldName, final Activity activity){
         HealthRoverWebService healthRoverWebService = null;
         final CarManagement carManagement = ObjectFactory.getInstance().getCarManagement(healthRoverWebService);
         final Dialog dialog = new Dialog(getContext());
         dialog.setContentView(R.layout.edit_popup);
-        TextView textView = (TextView) dialog.findViewById(R.id.editTitle);
+        TextView textView = dialog.findViewById(R.id.editTitle);
         textView.setText(activity.getString(R.string.update));
-        final EditText editText = (EditText) dialog.findViewById(R.id.editName);
+        final EditText editText = dialog.findViewById(R.id.editName);
         editText.setText(oldName);
-        Button button = (Button) dialog.findViewById(R.id.updateName);
+        Button button = dialog.findViewById(R.id.updateName);
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -57,17 +59,18 @@ public class CarAdapter extends ArrayAdapter<Car> {
         dialog.show();
     }
 
+    // Method to populate the listview
     @NonNull
     @Override
     public View getView(final int position, @Nullable View convertView, @NonNull ViewGroup parent) {
-        ViewHolder holder = null;
+        ViewHolder holder;
         View rowView = convertView;
         if (rowView == null){
             LayoutInflater inflater = LayoutInflater.from(getContext());
             rowView = inflater.inflate(layout, parent, false);
             ViewHolder viewHolder = new ViewHolder();
-            viewHolder.textView = (TextView) rowView.findViewById(R.id.list_text);
-            viewHolder.listButton = (Button) rowView.findViewById(R.id.list_button);
+            viewHolder.textView = rowView.findViewById(R.id.list_text);
+            viewHolder.listButton = rowView.findViewById(R.id.list_button);
             final View finalRowView = rowView;
             viewHolder.listButton.setOnClickListener(new View.OnClickListener() {
                 @Override

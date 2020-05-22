@@ -10,7 +10,6 @@ import android.os.Build;
 
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
-import java.util.ArrayList;
 import java.util.List;
 
 import se.healthrover.entities.Car;
@@ -36,7 +35,6 @@ public class SqlHelper extends SQLiteOpenHelper {
     public void onCreate(SQLiteDatabase db) {
         SQLiteStatement stmt = db.compileStatement("CREATE TABLE "+DATABASE_TABLE_NAME+" ("+DATABASE_COL_ID+" SERIAL PRIMARY KEY, "+DATABASE_COL_URL+" VARCHAR, "+ DATABASE_COL_NAME+" VARCHAR);");
         stmt.execute();
-            //db.execSQL("CREATE TABLE healthrover_name_table (ID SERIAL PRIMARY KEY, URL VARCHAR, name VARCHAR);");
     }
 
     @RequiresApi(api = Build.VERSION_CODES.O)
@@ -47,12 +45,11 @@ public class SqlHelper extends SQLiteOpenHelper {
             onCreate(db);
     }
 
-    public void deleteTable(){
-        database = this.getWritableDatabase();
-        SQLiteStatement statement = database.compileStatement("DROP TABLE IF EXISTS " + DATABASE_TABLE_NAME + ";");
-        statement.execute();
-    }
-
+//    public void deleteTable(){
+//        database = this.getWritableDatabase();
+//        SQLiteStatement statement = database.compileStatement("DROP TABLE IF EXISTS " + DATABASE_TABLE_NAME + ";");
+//        statement.execute();
+//    }
 
 
     // Creates a list of instances of car objects for
@@ -74,6 +71,9 @@ public class SqlHelper extends SQLiteOpenHelper {
             return cars;
         }
     }
+
+    // This method will return a car by given name, if and only
+    // if there's only one instance of that car name in the database
     public Car getCarByName(String name){
         database = this.getReadableDatabase();
         List<Car> cars = ObjectFactory.getInstance().getCarList();
@@ -96,6 +96,7 @@ public class SqlHelper extends SQLiteOpenHelper {
             }
         }
     }
+
     public void insertData(Car car){
         database = this.getWritableDatabase();
         database.beginTransaction();
@@ -122,7 +123,5 @@ public class SqlHelper extends SQLiteOpenHelper {
         statement.bindString(2, car.getURL());
         statement.executeUpdateDelete();
     }
-
-
 
 }
