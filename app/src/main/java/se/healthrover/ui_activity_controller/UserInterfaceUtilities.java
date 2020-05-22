@@ -14,7 +14,7 @@ import se.healthrover.entities.ObjectFactory;
 
 //Common utilities used in the application
 public class UserInterfaceUtilities {
-    private static int TOAST_OFFSET = 165;
+    private static final int TOAST_OFFSET = 165;
 
     //Shows a customized toast message with the given string
     public void showCustomToast(Context applicationContext, String text) {

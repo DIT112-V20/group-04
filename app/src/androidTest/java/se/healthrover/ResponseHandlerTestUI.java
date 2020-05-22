@@ -13,7 +13,7 @@ import org.junit.runner.RunWith;
 import org.mockito.Mockito;
 
 import se.healthrover.conectivity.ResponseHandler;
-import se.healthrover.entities.HealthRoverCar;
+import se.healthrover.test_services.TestCar;
 import se.healthrover.test_services.ToastMatcher;
 import se.healthrover.ui_activity_controller.CarSelect;
 import se.healthrover.ui_activity_controller.ManualControl;
@@ -30,7 +30,7 @@ import static org.mockito.Mockito.verify;
 @RunWith(AndroidJUnit4.class)
 public class ResponseHandlerTestUI {
 
-    private static HealthRoverCar testHealthRover;
+    private static TestCar testHealthRover;
     private ToastMatcher toastMatcher;
     @Rule
     public ActivityTestRule<CarSelect> carSelectActivityTestRule = new ActivityTestRule<>(CarSelect.class);
@@ -42,7 +42,7 @@ public class ResponseHandlerTestUI {
 
     @BeforeClass
     public static void setCarSelect(){
-        testHealthRover = HealthRoverCar.HEALTH_ROVER_CAR1;
+        testHealthRover = new TestCar(TestCar.TestCarData.NAME.getTestData(), TestCar.TestCarData.ADDRESS.getTestData());
     }
 
 
@@ -57,17 +57,17 @@ public class ResponseHandlerTestUI {
     //Verify handle failure is called and verify toast
     @Test
     public void handleFailureTest()  {
-        responseHandler.handleFailure(carSelect,testHealthRover.getUrl());
-        verify(responseHandler, times(1)).handleFailure(carSelect,testHealthRover.getUrl());
-        onView(withText(carSelect.getString(R.string.connection_failure) + testHealthRover.getCarName())).inRoot(toastMatcher).check(matches(isDisplayed()));
+        responseHandler.handleFailure(carSelect,testHealthRover);
+        verify(responseHandler, times(1)).handleFailure(carSelect,testHealthRover);
+        onView(withText(carSelect.getString(R.string.connection_failure) + testHealthRover.getName())).inRoot(toastMatcher).check(matches(isDisplayed()));
 
     }
 
     //Verify handle success is called, activity is loaded
     @Test
     public void handleSuccessStatusTest()  {
-        responseHandler.handleSuccess(HTTP_STATUS_RESPONSE, carSelect,testHealthRover.getUrl() + HTTP_STATUS_RESPONSE);
-        verify(responseHandler, times(1)).handleSuccess(HTTP_STATUS_RESPONSE,carSelect,testHealthRover.getUrl()+HTTP_STATUS_RESPONSE);
+        responseHandler.handleSuccess(HTTP_STATUS_RESPONSE, carSelect,testHealthRover);
+        verify(responseHandler, times(1)).handleSuccess(HTTP_STATUS_RESPONSE,carSelect,testHealthRover);
         intended(hasComponent(ManualControl.class.getName()));
     }
 
@@ -75,8 +75,8 @@ public class ResponseHandlerTestUI {
     //Verify handle success obstacle is called and check toast message
     @Test
     public void handleSuccessObstacleTest()  {
-        responseHandler.handleSuccess(HTTP_OBSTACLE_RESPONSE, carSelect,testHealthRover.getUrl() + HTTP_STATUS_RESPONSE);
-        verify(responseHandler, times(1)).handleSuccess(HTTP_OBSTACLE_RESPONSE,carSelect,testHealthRover.getUrl()+HTTP_STATUS_RESPONSE);
+        responseHandler.handleSuccess(HTTP_OBSTACLE_RESPONSE, carSelect,testHealthRover);
+        verify(responseHandler, times(1)).handleSuccess(HTTP_OBSTACLE_RESPONSE,carSelect,testHealthRover);
         onView(withText(carSelect.getString(R.string.obstacle_detection))).inRoot(toastMatcher).check(matches(isDisplayed()));
 
     }

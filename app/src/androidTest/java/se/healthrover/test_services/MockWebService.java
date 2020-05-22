@@ -4,6 +4,7 @@ import android.app.Activity;
 
 import se.healthrover.conectivity.HealthRoverWebService;
 import se.healthrover.conectivity.ResponseHandler;
+import se.healthrover.entities.Car;
 import se.healthrover.entities.ObjectFactory;
 
 public class MockWebService implements HealthRoverWebService {
@@ -12,14 +13,14 @@ public class MockWebService implements HealthRoverWebService {
 
 
     @Override
-    public void createHttpRequest(final String request, final Activity activity) {
+    public void createHttpRequest(final String request, final Activity activity, final Car car) {
         if (request.contains(HTTP_STATUS_RESPONSE)) {
 
             activity.runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
                     ResponseHandler responseHandler = ObjectFactory.getInstance().getResponseHandler();
-                    responseHandler.handleSuccess(HTTP_STATUS_RESPONSE,activity,request);
+                    responseHandler.handleSuccess(HTTP_STATUS_RESPONSE,activity, car);
                 }
             });
         }

@@ -15,8 +15,15 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.MethodSorters;
+import org.mockito.Mockito;
 
-import se.healthrover.stub_web_service.MockWebService;
+import java.util.ArrayList;
+import java.util.List;
+
+import se.healthrover.car_service.CarManagementImp;
+import se.healthrover.entities.Car;
+import se.healthrover.test_services.MockWebService;
+import se.healthrover.test_services.TestCar;
 import se.healthrover.ui_activity_controller.CarSelect;
 import se.healthrover.ui_activity_controller.ManualControl;
 
@@ -43,19 +50,19 @@ import static org.junit.Assert.assertNotNull;
 public class CarSelectTest  {
 
     private CarSelect carSelect;
-    private static HealthRoverCar testHealthRover;
+    private static Car testHealthRover;
+
 
     @Rule
     public ActivityTestRule<CarSelect> carSelectActivityTestRule = new ActivityTestRule<>(CarSelect.class);
 
     @BeforeClass
     public static void setCarSelect(){
-        testHealthRover = HealthRoverCar.HEALTH_ROVER_CAR1;
+        testHealthRover = new TestCar(TestCar.TestCarData.NAME.getTestData(), TestCar.TestCarData.ADDRESS.getTestData());
     }
 
     @Before
     public void setUp() {
-
         carSelect = carSelectActivityTestRule.getActivity();
         carSelect.setHealthRoverWebService(new MockWebService());
         Intents.init();
@@ -96,7 +103,7 @@ public class CarSelectTest  {
         onView(withId(R.id.connectToCarButton)).perform(click());
         intended(hasComponent(hasClassName(ManualControl.class.getName())));
         onView(withId(R.id.manualControlHeaderText)).check(matches(isDisplayed()));
-        onView(withId(R.id.manualControlHeaderText)).check(matches(withText(testHealthRover.getCarName())));
+        onView(withId(R.id.manualControlHeaderText)).check(matches(withText(testHealthRover.getName())));
     }
     /* Test Case 3
      *   check that the activity is loaded,

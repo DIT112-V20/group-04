@@ -13,9 +13,11 @@ public class CarManagementImpTest {
 
     private CarManagement carManagementSpy;
     private HealthRoverWebService healthRoverCar;
+    Car healthRover;
 
     @Before
     public void setUp(){
+        healthRover = new Car("")
         CarManagement carManagement = new CarManagementImp(healthRoverCar);
         carManagementSpy = Mockito.spy(carManagement);
     }

@@ -16,6 +16,8 @@ import okhttp3.OkHttpClient;
 import se.healthrover.car_service.CarManagement;
 import se.healthrover.car_service.CarManagementImp;
 import se.healthrover.conectivity.HealthRoverWebService;
+import se.healthrover.conectivity.IpLoader;
+import se.healthrover.conectivity.LocalIpLoader;
 import se.healthrover.conectivity.OkHttpWebService;
 import se.healthrover.conectivity.ResponseHandler;
 import se.healthrover.conectivity.SqlHelper;
@@ -95,5 +97,9 @@ public class ObjectFactory {
 
     public SqlHelper getSqlHelper(Activity activity){
         return new SqlHelper(activity);
+    }
+
+    public IpLoader getIpLoader(HealthRoverWebService healthRoverWebService) {
+        return new LocalIpLoader(healthRoverWebService);
     }
 }

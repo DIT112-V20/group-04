@@ -120,6 +120,7 @@ public class CarSelect extends Activity{
     @Override
     public void onBackPressed() {
         super.onBackPressed();
+        carManagement.getCars().clear();
         finishAffinity();
         finish();
     }

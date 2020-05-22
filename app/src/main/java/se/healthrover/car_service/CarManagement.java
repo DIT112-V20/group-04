@@ -11,15 +11,8 @@ public interface CarManagement {
 
     void checkStatus(Car healthRoverCar, Activity activity);
     void moveCar(Car healthRoverCar, int speed, int angle, String controlType, Activity activity);
-
-    void checkStatus(Car healthRoverCar, Activity activity);
-
-    void moveCar(Car healthRoverCar, int speed, int angle, Activity activity);
-
     void loadCars(Activity activity);
-
     Car getCarByName(String carName);
     List<Car> getCars();
-
     void updateCarName(Car car, String newName, Activity activity);
 }

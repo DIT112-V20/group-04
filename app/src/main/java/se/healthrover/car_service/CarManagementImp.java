@@ -5,6 +5,7 @@ import android.app.Activity;
 import java.util.List;
 
 import se.healthrover.conectivity.HealthRoverWebService;
+import se.healthrover.conectivity.IpLoader;
 import se.healthrover.conectivity.SqlHelper;
 import se.healthrover.entities.Car;
 import se.healthrover.entities.CarCommands;
@@ -13,15 +14,17 @@ import se.healthrover.entities.ObjectFactory;
 public class CarManagementImp implements CarManagement {
 
     private HealthRoverWebService webService;
+    private HealthRoverWebService healthRoverWebService;
     private static List<Car> cars = ObjectFactory.getInstance().getCarList();;
 
     public CarManagementImp(HealthRoverWebService healthRoverWebService){
+        this.healthRoverWebService = healthRoverWebService;
         webService = ObjectFactory.getInstance().getWebService(healthRoverWebService);
     }
 
     @Override
     public void checkStatus(Car healthRoverCar, Activity activity) {
-        String request = healthRoverCar.getURL();// + CarCommands.STATUS.getCarCommands();
+        String request = healthRoverCar.getURL();// TO DO  + CarCommands.STATUS.getCarCommands();
         webService.createHttpRequest(request, activity, healthRoverCar);
     }
 
@@ -52,7 +55,8 @@ public class CarManagementImp implements CarManagement {
 
     public void moveCar(Car healthRoverCar, int speed, int angle, String controlType, Activity activity) {
         String request = healthRoverCar.getURL() + CarCommands.REQUEST.getCarCommands() + CarCommands.SPEED.getCarCommands() + speed + CarCommands.ANGLE.getCarCommands() + angle + CarCommands.CONTROL.getCarCommands() + controlType;
-        webService.createHttpRequest(request, activity, healthRoverCar );
+        webService.createHttpRequest(request, activity, healthRoverCar);
+    }
 
     public Car getCarByURL(String url){
         Car carFound = null;
@@ -93,21 +97,25 @@ public class CarManagementImp implements CarManagement {
         SqlHelper sqlHelper = ObjectFactory.getInstance().getSqlHelper(activity);
         getCarsOnNetwork();
         List<Car> savedCars = sqlHelper.getSavedCars();
-        for (int i = 0; i < savedCars.size(); i++){
-            for (int j = 0; j < cars.size(); j++){
-                if (savedCars.get(i).getURL().equals(cars.get(j).getURL())){
-                    cars.get(j).setName(savedCars.get(i).getName());
+        if (savedCars != null && !cars.isEmpty()){
+            for (int i = 0; i < savedCars.size(); i++){
+                for (int j = 0; j < cars.size(); j++){
+                    if (savedCars.get(i).getURL().equals(cars.get(j).getURL())){
+                        cars.get(j).setName(savedCars.get(i).getName());
+                    }
                 }
             }
         }
+
     }
 
     private void getCarsOnNetwork() {
+        IpLoader ipLoader = ObjectFactory.getInstance().getIpLoader(healthRoverWebService);
+        List<Car> carsFromNetwork = ipLoader.loadCarsOnNetwork();
+        if (carsFromNetwork != null){
+            cars.addAll(carsFromNetwork);
+        }
 
-        cars.add(ObjectFactory.getInstance().makeCar("test1", "test"));
-        cars.add(ObjectFactory.getInstance().makeCar("test2", "test1"));
-        cars.add(ObjectFactory.getInstance().makeCar("test3", "test2"));
-        cars.add(ObjectFactory.getInstance().makeCar("http://www.mocky.io/v2/5ec5a39e3200005900d74860", "mocky"));
 
     }
 }
