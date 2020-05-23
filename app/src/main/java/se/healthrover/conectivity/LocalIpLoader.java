@@ -17,7 +17,7 @@ public class LocalIpLoader implements IpLoader {
     @Override
     public List<Car> loadCarsOnNetwork() {
 
-        cars.add(ObjectFactory.getInstance().makeCar("test1", "test"));
+        cars.add(ObjectFactory.getInstance().makeCar("http://192.168.137.200/", "Healthrover"));
         cars.add(ObjectFactory.getInstance().makeCar("test2", "test1"));
         cars.add(ObjectFactory.getInstance().makeCar("test3", "test2"));
         cars.add(ObjectFactory.getInstance().makeCar("http://www.mocky.io/v2/5ec5a39e3200005900d74860", "mocky"));
