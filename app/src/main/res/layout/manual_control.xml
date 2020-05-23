@@ -27,7 +27,7 @@
         android:layout_alignParentEnd="true"
         android:layout_alignParentBottom="true"
         android:background="@drawable/joystick_background_hr"
-        custom:JV_buttonColor="@color/colorDeepJungleGreen"
+        custom:JV_buttonImage="@drawable/joystick_inner_hr"
         custom:layout_constraintBottom_toBottomOf="parent"
         custom:layout_constraintEnd_toEndOf="parent"
         custom:layout_constraintHorizontal_bias="0.495"
