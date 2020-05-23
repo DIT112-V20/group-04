@@ -2,6 +2,7 @@
 #include <Wire.h>
 #include <WiFi.h>
 #include <WebServer.h>
+#include <ESPmDNS.h>
 
 const auto pulsesPerMeter = 600;
 const int START_SPEED = 40;
@@ -36,9 +37,9 @@ DirectionlessOdometer rightOdometer(
 SmartCar car(control, gyroscope, leftOdometer, rightOdometer);
 
  //Static Local IP configuration for identifying car. Gateway and subnet needs to be adjusted according to local network settings.
-//IPAddress local_IP(192, 168, 1, 200);
-//IPAddress gateway(192, 168, 1, 1);
-//IPAddress subnet(255, 255, 255, 0);
+IPAddress local_IP(192, 168, 137, 200);
+IPAddress gateway(10, 0, 0, 1);
+IPAddress subnet(255, 255, 0, 0);
 
 void setup(){
   Serial.begin(BAUD_RATE);
@@ -74,9 +75,9 @@ void loop() {
 void connectToWiFi(){
 
 //Used when static IP is available
-//  if (!WiFi.config(local_IP, gateway, subnet)) {
-//    Serial.println("STA Failed to configure");
-//  }
+  if (!WiFi.config(local_IP, gateway, subnet)) {
+    Serial.println("STA Failed to configure");
+  }
 
   WiFi.mode(WIFI_STA);
   WiFi.begin(ssid, password);
@@ -134,7 +135,7 @@ void turnCar(int turningAngle) {
     {
         setCarAngle(-90);
     }
-    const auto initialHeading    = car.getHeading();
+    const auto initialHeading = car.getHeading();
     bool hasReachedTargetDegrees = false;
     while (!hasReachedTargetDegrees)
     {
