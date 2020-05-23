@@ -24,7 +24,7 @@ public class CarManagementImp implements CarManagement {
 
     @Override
     public void checkStatus(Car healthRoverCar, Activity activity) {
-        String request = healthRoverCar.getURL();// TO DO  + CarCommands.STATUS.getCarCommands();
+        String request = healthRoverCar.getURL() + CarCommands.STATUS.getCarCommands();
         webService.createHttpRequest(request, activity, healthRoverCar);
     }
 
