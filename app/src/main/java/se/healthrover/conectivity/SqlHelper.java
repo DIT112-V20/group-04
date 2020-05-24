@@ -47,10 +47,9 @@ public class SqlHelper extends SQLiteOpenHelper {
             onCreate(db);
     }
 
-    public void deleteTable(){
+    public void deleteTableContent(){
         database = this.getWritableDatabase();
-        SQLiteStatement statement = database.compileStatement("DROP TABLE IF EXISTS " + DATABASE_TABLE_NAME + ";");
-        statement.execute();
+        database.delete(DATABASE_TABLE_NAME, null, null);
     }
 
     public void deleteCarByURL(String URL){

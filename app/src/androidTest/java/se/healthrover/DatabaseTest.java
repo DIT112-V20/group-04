@@ -47,11 +47,7 @@ public class DatabaseTest {
         carList = new ArrayList<>();
         sqlHelper = ObjectFactory.getInstance().getSqlHelper(activity);
         dataBase = sqlHelper.getSavedCars();
-        carList = sqlHelper.getSavedCars();
-        if (sqlHelper.getSavedCars() == null){
-            carList = new ArrayList<>();
-            dataBase = new ArrayList<>();
-        }
+        sqlHelper.deleteTableContent();
         for (int i = 0; i < 10; i++){
             Car car = new Car("http://" + new Faker().internet().url(), new Faker().name().username());
             carListTestCars.add(car);
@@ -67,7 +63,6 @@ public class DatabaseTest {
         List<Car> result = sqlHelper.getSavedCars();
         assertEquals(carList, result);
     }
-
     @Test
     public void insertIntoDatabaseTest(){
         Car car = new Car("http://" + new Faker().internet().url(), new Faker().name().username());
@@ -80,7 +75,7 @@ public class DatabaseTest {
 
     @Test
     public void removeCarByURLTest(){
-        Car car = carList.get(0);
+        Car car = carListTestCars.get(0);
         sqlHelper.deleteCarByURL(car.getURL());
         carList.remove(car);
         carListTestCars.remove(car);
@@ -90,7 +85,7 @@ public class DatabaseTest {
 
     @Test
     public void updateCarNameTest(){
-        Car car = carList.get(0);
+        Car car = carListTestCars.get(0);
         String name = "new Name";
         car.setName(name);
         sqlHelper.updateNameByURL(car);
@@ -104,13 +99,13 @@ public class DatabaseTest {
         sqlHelper.updateNameByURL(car);
         result = sqlHelper.getSavedCars();
         assertEquals(carList, result);
-        updatedCar = sqlHelper.getCarByName(name);
+        updatedCar = sqlHelper.getCarByName(car.getName());
         assertEquals(car,updatedCar);
     }
 
     @Test
     public void findSpecificCarByNameTest(){
-        Car car = carList.get(0);
+        Car car = carListTestCars.get(0);
         Car result = sqlHelper.getCarByName(car.getName());
         assertEquals(car, result);
     }
@@ -118,15 +113,13 @@ public class DatabaseTest {
 
     @After
     public void tearDown()  {
-        for (int i = 0; i < carListTestCars.size(); i++){
-            sqlHelper.deleteCarByURL(carListTestCars.get(i).getURL());
+        sqlHelper.deleteTableContent();
+        if (dataBase != null){
+            for (int i = 0; i < dataBase.size(); i++){
+                sqlHelper.insertData(dataBase.get(i));
+            }
+            assertEquals(dataBase, sqlHelper.getSavedCars());
         }
-        if (sqlHelper.getSavedCars() == null){
-            carList = new ArrayList<>();
-        }else {
-            carList = sqlHelper.getSavedCars();
-        }
-        assertEquals(dataBase, carList);
         carList = null;
         dataBase = null;
         carListTestCars = null;
