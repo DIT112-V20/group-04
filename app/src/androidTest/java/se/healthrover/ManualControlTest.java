@@ -62,7 +62,7 @@ public class ManualControlTest {
     @BeforeClass
     public static void setTestHealthRover(){
 
-        testHealthRover = new TestCar(TestCar.TestCarData.ADDRESS.getTestData(), TestCar.TestCarData.NAME.getTestData());
+        testHealthRover = new TestCar();
     }
 
     // Launch activity under test

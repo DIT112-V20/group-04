@@ -1,6 +1,7 @@
 package se.healthrover.entities;
 
 import android.app.Activity;
+import android.content.ContentValues;
 import android.content.Intent;
 import android.view.View;
 import android.widget.ArrayAdapter;
@@ -99,5 +100,9 @@ public class ObjectFactory {
 
     public ArrayAdapter getCarAdapter(Activity activity, int list_item, List<Car> cars) {
         return new CarAdapter(activity, R.layout.list_item,cars);
+    }
+
+    public ContentValues getContentValuesSQL() {
+        return new ContentValues();
     }
 }

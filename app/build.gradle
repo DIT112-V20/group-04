@@ -62,4 +62,6 @@ dependencies {
     // Optional -- Mockito framework
     testImplementation 'org.mockito:mockito-core:2.25.0'
     androidTestImplementation "com.google.dexmaker:dexmaker-mockito:1.2"
+    implementation 'com.github.javafaker:javafaker:1.0.2'
+
 }

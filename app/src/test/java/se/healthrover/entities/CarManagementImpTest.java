@@ -17,7 +17,7 @@ public class CarManagementImpTest {
 
     @Before
     public void setUp(){
-        healthRover = new Car("http://local.local/", "test");
+        healthRover = new TestCar();
         CarManagement carManagement = new CarManagementImp();
         carManagementSpy = Mockito.spy(carManagement);
     }

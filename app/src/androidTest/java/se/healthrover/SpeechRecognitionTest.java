@@ -1,20 +1,13 @@
 package se.healthrover;
 
-import android.app.Activity;
+import android.content.Context;
+import android.content.Intent;
+import android.view.View;
+import android.widget.TextView;
 
 import androidx.test.espresso.Espresso;
 import androidx.test.espresso.intent.Intents;
 import androidx.test.rule.ActivityTestRule;
-
-import android.app.Instrumentation;
-import android.content.Context;
-import android.content.Intent;
-import android.speech.RecognizerIntent;
-import android.speech.SpeechRecognizer;
-import android.view.View;
-import android.widget.TextView;
-
-import com.google.cloud.dialogflow.v2.DetectIntentResponse;
 
 import org.junit.After;
 import org.junit.Assert;
@@ -22,12 +15,8 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Rule;
 import org.junit.Test;
-import org.mockito.Mockito;
-import org.mockito.stubbing.Answer;
-
 
 import se.healthrover.test_services.TestCar;
-
 import se.healthrover.test_services.ToastMatcher;
 import se.healthrover.ui_activity_controller.ManualControl;
 import se.healthrover.ui_activity_controller.voice_control.SpeechRecognition;
@@ -36,16 +25,12 @@ import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.click;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.intent.Intents.intended;
-import static androidx.test.espresso.intent.Intents.intending;
-import static androidx.test.espresso.intent.matcher.IntentMatchers.hasAction;
 import static androidx.test.espresso.intent.matcher.IntentMatchers.hasComponent;
-import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
 import static androidx.test.platform.app.InstrumentationRegistry.getInstrumentation;
 import static junit.framework.TestCase.assertEquals;
 import static junit.framework.TestCase.assertNotNull;
-import static org.hamcrest.Matchers.equalTo;
 
 public class SpeechRecognitionTest {
 
@@ -69,7 +54,7 @@ public class SpeechRecognitionTest {
     // Launch the activity under test
     @BeforeClass
     public static void setTestHealthRover() {
-        testHealthRover = new TestCar(TestCar.TestCarData.ADDRESS.getTestData(), TestCar.TestCarData.NAME.getTestData());
+        testHealthRover = new TestCar();
     }
 
     @Before

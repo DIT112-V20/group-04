@@ -1,13 +1,13 @@
-package se.healthrover.test_services;
+package se.healthrover.entities;
 
 import com.github.javafaker.Faker;
 
-import se.healthrover.entities.Car;
+class TestCar extends Car {
 
-public class TestCar extends Car {
 
-    public TestCar() {
+    TestCar() {
         super("http://" + new Faker().internet().url(), new Faker().name().username());
+        super.setID(new Faker().idNumber().ssnValid());
     }
 
 }

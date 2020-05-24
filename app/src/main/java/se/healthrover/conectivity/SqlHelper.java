@@ -1,6 +1,7 @@
 package se.healthrover.conectivity;
 
 import android.annotation.SuppressLint;
+import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
@@ -10,6 +11,7 @@ import android.os.Build;
 
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
+
 import java.util.List;
 
 import se.healthrover.entities.Car;
@@ -45,12 +47,17 @@ public class SqlHelper extends SQLiteOpenHelper {
             onCreate(db);
     }
 
-//    public void deleteTable(){
-//        database = this.getWritableDatabase();
-//        SQLiteStatement statement = database.compileStatement("DROP TABLE IF EXISTS " + DATABASE_TABLE_NAME + ";");
-//        statement.execute();
-//    }
+    public void deleteTable(){
+        database = this.getWritableDatabase();
+        SQLiteStatement statement = database.compileStatement("DROP TABLE IF EXISTS " + DATABASE_TABLE_NAME + ";");
+        statement.execute();
+    }
 
+    public void deleteCarByURL(String URL){
+        database = this.getWritableDatabase();
+        database.delete(DATABASE_TABLE_NAME, DATABASE_COL_URL + "=?", new String[]{URL});
+
+    }
 
     // Creates a list of instances of car objects for
     // all available cars from the database
@@ -77,8 +84,7 @@ public class SqlHelper extends SQLiteOpenHelper {
     public Car getCarByName(String name){
         database = this.getReadableDatabase();
         List<Car> cars = ObjectFactory.getInstance().getCarList();
-        Car carToReturn;
-        @SuppressLint("Recycle") Cursor cursor = database.rawQuery("Select * from " + DATABASE_TABLE_NAME + " WHERE "+ DATABASE_COL_NAME+"="+name+";", null);
+        @SuppressLint("Recycle") Cursor cursor = database.rawQuery("Select * from " + DATABASE_TABLE_NAME + " WHERE "+ DATABASE_COL_NAME+"=?", new String[]{name});
         if (cursor.getCount() == 0){
             return null;
         }
@@ -92,7 +98,7 @@ public class SqlHelper extends SQLiteOpenHelper {
                 return null;
             }
             else {
-                return carToReturn = cars.get(0);
+                return cars.get(0);
             }
         }
     }
@@ -111,17 +117,16 @@ public class SqlHelper extends SQLiteOpenHelper {
 
     public void updateNameByURL(Car car){
         database = this.getWritableDatabase();
-        SQLiteStatement statement = database.compileStatement("UPDATE "+DATABASE_TABLE_NAME+" SET "+DATABASE_COL_NAME+"=? "+"WHERE " + DATABASE_COL_URL +"=" + car.getURL());
-        statement.bindString(2, car.getName());
-        statement.executeUpdateDelete();
-
+        ContentValues contentValues = ObjectFactory.getInstance().getContentValuesSQL();
+        contentValues.put(DATABASE_COL_NAME, car.getName());
+        database.update(DATABASE_TABLE_NAME, contentValues, DATABASE_COL_URL + "=?", new String[]{car.getURL()});
     }
 
     public void updateUrlByName(Car car){
         database = this.getWritableDatabase();
-        SQLiteStatement statement = database.compileStatement("UPDATE "+DATABASE_TABLE_NAME+" SET "+DATABASE_COL_URL+"=? "+"WHERE " + DATABASE_TABLE_NAME +"=" + car.getName());
-        statement.bindString(2, car.getURL());
-        statement.executeUpdateDelete();
+        ContentValues contentValues = ObjectFactory.getInstance().getContentValuesSQL();
+        contentValues.put(DATABASE_COL_NAME, car.getName());
+        database.update(DATABASE_TABLE_NAME, contentValues, DATABASE_COL_NAME + "=?", new String[]{car.getName()});
     }
 
 }
