@@ -1,20 +1,20 @@
 package se.healthrover.conectivity;
 
 import android.app.Activity;
-import se.healthrover.R;
-import se.healthrover.entities.Car;
-import se.healthrover.entities.ObjectFactory;
-import se.healthrover.ui_activity_controller.ManualControl;
-import se.healthrover.ui_activity_controller.utilities.UserInterfaceUtilities;
-
 import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
 import android.os.VibrationEffect;
 import android.os.Vibrator;
-import android.speech.tts.*;
+import android.speech.tts.TextToSpeech;
 
 import java.util.Locale;
+
+import se.healthrover.R;
+import se.healthrover.entities.Car;
+import se.healthrover.entities.ObjectFactory;
+import se.healthrover.ui_activity_controller.ManualControl;
+import se.healthrover.ui_activity_controller.utilities.UserInterfaceUtilities;
 
 public class ResponseHandler {
 
@@ -88,7 +88,7 @@ public class ResponseHandler {
     // If status request is successful the manual control page is loaded and the car name is passed as a parameter
     private void handleSuccessStatus(Activity activity, Car healthRoverCar){
         Intent intent = ObjectFactory.getInstance().getIntent(activity, ManualControl.class);
-        intent.putExtra(activity.getString(R.string.car_name), healthRoverCar.getName());
+        intent.putExtra(activity.getString(R.string.car_name), healthRoverCar);
         activity.startActivity(intent);
         makeSpeaker(activity, activity.getString(R.string.connection_success) + healthRoverCar.getName());
     }

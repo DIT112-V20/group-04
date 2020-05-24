@@ -10,11 +10,10 @@ import android.widget.ListView;
 
 import se.healthrover.R;
 import se.healthrover.car_service.CarManagement;
-import se.healthrover.conectivity.HealthRoverWebService;
 import se.healthrover.conectivity.SqlHelper;
 import se.healthrover.entities.Car;
-import se.healthrover.ui_activity_controller.utilities.UserInterfaceUtilities;
 import se.healthrover.entities.ObjectFactory;
+import se.healthrover.ui_activity_controller.utilities.UserInterfaceUtilities;
 
 public class CarSelect extends Activity{
 
@@ -25,30 +24,21 @@ public class CarSelect extends Activity{
     private boolean carOnlineConnection;
     private CarManagement carManagement;
     private UserInterfaceUtilities uiHelper;
-    private HealthRoverWebService healthRoverWebService;
     private ArrayAdapter adapter;
 
     public CarSelect() {
-        carManagement = ObjectFactory.getInstance().getCarManagement(getHealthRoverWebService());
+        carManagement = ObjectFactory.getInstance().getCarManagement();
         uiHelper = ObjectFactory.getInstance().getInterfaceUtilities();
-    }
-
-    private HealthRoverWebService getHealthRoverWebService() {
-        return healthRoverWebService;
-    }
-
-    public void setHealthRoverWebService(HealthRoverWebService healthRoverWebService){
-        this.healthRoverWebService = healthRoverWebService;
-        carManagement = ObjectFactory.getInstance().getCarManagement(healthRoverWebService);
     }
 
     //Create the activity
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Thread.setDefaultUncaughtExceptionHandler(ObjectFactory.getInstance().getExceptionHandler(this, healthRoverCar, healthRoverWebService));
+        Thread.setDefaultUncaughtExceptionHandler(ObjectFactory.getInstance().getExceptionHandler(this, healthRoverCar));
         SqlHelper sqlHelper = ObjectFactory.getInstance().getSqlHelper(this);
-        carManagement.loadCars(this);
+        carManagement.getCars().clear();
+        carManagement.loadCarsIntoList(this);
         initialize();
 
     }
@@ -56,7 +46,9 @@ public class CarSelect extends Activity{
     @Override
     protected void onRestart() {
         super.onRestart();
-        Thread.setDefaultUncaughtExceptionHandler(ObjectFactory.getInstance().getExceptionHandler(this, healthRoverCar, healthRoverWebService));
+        Thread.setDefaultUncaughtExceptionHandler(ObjectFactory.getInstance().getExceptionHandler(this, healthRoverCar));
+        carManagement.getCars().clear();
+        carManagement.loadCarsIntoList(this);
         initialize();
     }
 
@@ -70,7 +62,7 @@ public class CarSelect extends Activity{
         connectToCarSelected = findViewById(R.id.connectToCarButton);
         infoButton = findViewById(R.id.infoButton);
 
-        adapter = new CarAdapter(this,
+        adapter = ObjectFactory.getInstance().getCarAdapter(this,
                 R.layout.list_item,carManagement.getCars());
 
 

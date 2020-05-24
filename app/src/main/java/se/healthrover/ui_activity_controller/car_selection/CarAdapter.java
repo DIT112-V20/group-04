@@ -37,7 +37,7 @@ public class CarAdapter extends ArrayAdapter<Car> {
     // Launches the dialog for editing carName
     private void showEditNamePopup(final String oldName, final Activity activity){
         HealthRoverWebService healthRoverWebService = null;
-        final CarManagement carManagement = ObjectFactory.getInstance().getCarManagement(healthRoverWebService);
+        final CarManagement carManagement = ObjectFactory.getInstance().getCarManagement();
         final Dialog dialog = new Dialog(getContext());
         dialog.setContentView(R.layout.edit_popup);
         TextView textView = dialog.findViewById(R.id.editTitle);

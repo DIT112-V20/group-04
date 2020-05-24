@@ -1,7 +1,5 @@
 package se.healthrover.test_services;
 
-import java.util.List;
-
 import se.healthrover.entities.Car;
 
 public class TestCar extends Car {
@@ -15,7 +13,7 @@ public class TestCar extends Car {
    public enum TestCarData{
 
         NAME("new"),
-        ADDRESS("test1");
+        ADDRESS("http://localhost/");
 
         private final String testData;
 

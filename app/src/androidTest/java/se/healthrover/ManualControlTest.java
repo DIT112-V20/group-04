@@ -19,8 +19,8 @@ import org.junit.runner.RunWith;
 
 import se.healthrover.entities.HealthRoverJoystick;
 import se.healthrover.test_services.TestCar;
-import se.healthrover.ui_activity_controller.car_selection.CarSelect;
 import se.healthrover.ui_activity_controller.ManualControl;
+import se.healthrover.ui_activity_controller.car_selection.CarSelect;
 import se.healthrover.ui_activity_controller.voice_control.SpeechRecognition;
 
 import static androidx.test.espresso.Espresso.onView;
@@ -52,7 +52,7 @@ public class ManualControlTest {
         protected Intent getActivityIntent() {
             Context targetContext = getInstrumentation().getTargetContext();
             Intent result = new Intent(targetContext, ManualControl.class);
-            result.putExtra(targetContext.getString(R.string.car_name), testHealthRover.getName());
+            result.putExtra(targetContext.getString(R.string.car_name), testHealthRover);
             return result;
         }
     };
@@ -62,7 +62,7 @@ public class ManualControlTest {
     @BeforeClass
     public static void setTestHealthRover(){
 
-        testHealthRover = new TestCar(TestCar.TestCarData.NAME.getTestData(), TestCar.TestCarData.ADDRESS.getTestData());
+        testHealthRover = new TestCar(TestCar.TestCarData.ADDRESS.getTestData(), TestCar.TestCarData.NAME.getTestData());
     }
 
     // Launch activity under test

@@ -5,7 +5,6 @@ import android.app.Activity;
 import java.util.List;
 
 import se.healthrover.conectivity.HealthRoverWebService;
-import se.healthrover.conectivity.IpLoader;
 import se.healthrover.conectivity.SqlHelper;
 import se.healthrover.entities.Car;
 import se.healthrover.entities.CarCommands;
@@ -14,12 +13,11 @@ import se.healthrover.entities.ObjectFactory;
 public class CarManagementImp implements CarManagement {
 
     private HealthRoverWebService webService;
-    private HealthRoverWebService healthRoverWebService;
-    private static List<Car> cars = ObjectFactory.getInstance().getCarList();;
+    private static List<Car> cars = ObjectFactory.getInstance().getCarList();
 
-    public CarManagementImp(HealthRoverWebService healthRoverWebService){
-        this.healthRoverWebService = healthRoverWebService;
-        webService = ObjectFactory.getInstance().getWebService(healthRoverWebService);
+    public CarManagementImp(){
+
+        webService = ObjectFactory.getInstance().getWebService();
     }
 
     @Override
@@ -91,8 +89,9 @@ public class CarManagementImp implements CarManagement {
         sqlHelper.insertData(car);
     }
 
-
-    public void loadCars(Activity activity){
+    // The method loads the cars from the database and the network and checks if they are any previously
+    // saved cars if they are the list is updated to show the saved name
+    public void loadCarsIntoList(Activity activity){
 
         SqlHelper sqlHelper = ObjectFactory.getInstance().getSqlHelper(activity);
         getCarsOnNetwork();
@@ -110,12 +109,10 @@ public class CarManagementImp implements CarManagement {
     }
 
     private void getCarsOnNetwork() {
-        IpLoader ipLoader = ObjectFactory.getInstance().getIpLoader(healthRoverWebService);
-        List<Car> carsFromNetwork = ipLoader.loadCarsOnNetwork();
-        if (carsFromNetwork != null){
-            cars.addAll(carsFromNetwork);
-        }
-
+//        cars.add(ObjectFactory.getInstance().makeCar("http://192.168.137.200/", "Healthrover"));
+//        cars.add(ObjectFactory.getInstance().makeCar("test2", "test1"));
+//        cars.add(ObjectFactory.getInstance().makeCar("test3", "test2"));
+//        cars.add(ObjectFactory.getInstance().makeCar("http://www.mocky.io/v2/5ec5a39e3200005900d74860", "mocky"));
 
     }
 }

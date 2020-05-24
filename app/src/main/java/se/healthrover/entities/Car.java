@@ -2,7 +2,9 @@ package se.healthrover.entities;
 
 import org.jetbrains.annotations.NotNull;
 
-public class Car {
+import java.io.Serializable;
+
+public class Car implements Serializable{
 
 
     private String ID;

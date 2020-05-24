@@ -13,12 +13,12 @@ public class CarManagementImpTest {
 
     private CarManagement carManagementSpy;
     private HealthRoverWebService healthRoverCar;
-    Car healthRover;
+    private Car healthRover;
 
     @Before
     public void setUp(){
-        healthRover = new Car("")
-        CarManagement carManagement = new CarManagementImp(healthRoverCar);
+        healthRover = new Car("http://local.local/", "test");
+        CarManagement carManagement = new CarManagementImp();
         carManagementSpy = Mockito.spy(carManagement);
     }
 
@@ -26,8 +26,8 @@ public class CarManagementImpTest {
 
     @Test
     public void checkIfRequestIsSendTest() {
-        carManagementSpy.moveCar(HealthRoverCar.HEALTH_ROVER_CAR1,0,0,"manual",null);
-        Mockito.verify(carManagementSpy, Mockito.times(1)).moveCar(HealthRoverCar.HEALTH_ROVER_CAR1,0,0, "manual",null);
+        carManagementSpy.moveCar(healthRover,0,0,"manual",null);
+        Mockito.verify(carManagementSpy, Mockito.times(1)).moveCar(healthRover,0,0, "manual",null);
     }
 
 

@@ -42,7 +42,7 @@ public class ResponseHandlerTestUI {
 
     @BeforeClass
     public static void setCarSelect(){
-        testHealthRover = new TestCar(TestCar.TestCarData.NAME.getTestData(), TestCar.TestCarData.ADDRESS.getTestData());
+        testHealthRover = new TestCar(TestCar.TestCarData.ADDRESS.getTestData(), TestCar.TestCarData.NAME.getTestData());
     }
 
 
