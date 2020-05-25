@@ -3,6 +3,8 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/AndroidStudioProjects-HealthRover.iml" filepath="$PROJECT_DIR$/AndroidStudioProjects-HealthRover.iml" group="HealthRover" />
+      <module fileurl="file://$PROJECT_DIR$/AndroidStudioProjects-group-04-HealthRover.iml" filepath="$PROJECT_DIR$/AndroidStudioProjects-group-04-HealthRover.iml" group="HealthRover" />
+      <module fileurl="file://$PROJECT_DIR$/app/AndroidStudioProjects-group-04-app.iml" filepath="$PROJECT_DIR$/app/AndroidStudioProjects-group-04-app.iml" group="HealthRover/app" />
       <module fileurl="file://$PROJECT_DIR$/HealthRover.iml" filepath="$PROJECT_DIR$/HealthRover.iml" group="HealthRover" />
       <module fileurl="file://$PROJECT_DIR$/app/HealthRover-app.iml" filepath="$PROJECT_DIR$/app/HealthRover-app.iml" group="HealthRover/app" />
       <module fileurl="file://$PROJECT_DIR$/StudioProjects-group-04-HealthRover.iml" filepath="$PROJECT_DIR$/StudioProjects-group-04-HealthRover.iml" group="HealthRover" />

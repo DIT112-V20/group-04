@@ -1,10 +1,15 @@
 package se.healthrover.car_service;
 
 import android.app.Activity;
+import android.net.nsd.NsdManager;
+import android.util.Log;
 
+import java.net.InetAddress;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 import se.healthrover.conectivity.HealthRoverWebService;
+import se.healthrover.conectivity.LocalNetworkDeviceNameResolver;
 import se.healthrover.conectivity.SqlHelper;
 import se.healthrover.entities.Car;
 import se.healthrover.entities.CarCommands;
@@ -14,6 +19,9 @@ public class CarManagementImp implements CarManagement {
 
     private HealthRoverWebService webService;
     private static List<Car> cars = ObjectFactory.getInstance().getCarList();
+    private String TAG = "smartcar";
+    private NsdManager mNsdManager;
+    private LocalNetworkDeviceNameResolver mDeviceNameResolver;
 
     public CarManagementImp(){
 
@@ -93,7 +101,7 @@ public class CarManagementImp implements CarManagement {
     public void loadCarsIntoList(Activity activity){
 
         SqlHelper sqlHelper = ObjectFactory.getInstance().getSqlHelper(activity);
-        getCarsOnNetwork();
+        getCarsOnNetwork(activity);
         List<Car> savedCars = sqlHelper.getSavedCars();
         if (savedCars != null && !cars.isEmpty()){
             for (int i = 0; i < savedCars.size(); i++){
@@ -107,11 +115,28 @@ public class CarManagementImp implements CarManagement {
 
     }
 
-    private void getCarsOnNetwork() {
+    private void getCarsOnNetwork(Activity activity) {
 //        cars.add(ObjectFactory.getInstance().makeCar("http://192.168.137.200/", "Healthrover"));
 //        cars.add(ObjectFactory.getInstance().makeCar("test2", "test1"));
 //        cars.add(ObjectFactory.getInstance().makeCar("test3", "test2"));
 //        cars.add(ObjectFactory.getInstance().makeCar("http://www.mocky.io/v2/5ec5a39e3200005900d74860", "mocky"));
+
+        // Synchronous device name resolution
+        final LocalNetworkDeviceNameResolver nameResolver =
+                new LocalNetworkDeviceNameResolver(activity.getApplicationContext(),
+                        "smartcar", "_http._tcp.", 80);
+        Thread t = new Thread() {
+            public void run() {
+                try {
+                    InetAddress address = nameResolver.getAddress(10, TimeUnit.SECONDS);
+                    Log.i(TAG, "Synchronous IP resolution: " + address.getHostName());
+                    cars.add(ObjectFactory.getInstance().makeCar("http://" + address.getHostName() + "/", "Healthrover"));
+                } catch (Exception e) {
+                    Log.e(TAG, e.toString());
+                }
+            }
+        };
+        t.start();
 
     }
 }

@@ -10,12 +10,12 @@ const int MIN_OBSTACLE_DISTANCE = 30;
 const int BAUD_RATE = 115200;
 const int STOP = 0;
 const char* ssid = "SSID";
-const char* password = "password";
+const char* password = "PASSWORD";
 
-int frontSensorReading;
 int carSpeed;
 
 //Ultrasonic sensor setup
+int frontSensorReading;
 const int TRIGGER_PIN = 5; //D5
 const int ECHO_PIN = 18; //D18
 const unsigned int MAX_DISTANCE = 150;
@@ -36,15 +36,11 @@ DirectionlessOdometer rightOdometer(
 
 SmartCar car(control, gyroscope, leftOdometer, rightOdometer);
 
- //Static Local IP configuration for identifying car. Gateway and subnet needs to be adjusted according to local network settings.
-IPAddress local_IP(192, 168, 137, 200);
-IPAddress gateway(10, 0, 0, 1);
-IPAddress subnet(255, 255, 0, 0);
-
 void setup(){
   Serial.begin(BAUD_RATE);
   delay(10);
   Wire.begin();
+
   connectToWiFi();
   carSpeed = START_SPEED;
 
@@ -59,25 +55,23 @@ void loop() {
   server.handleClient();
 
   frontSensorReading = front.getDistance();
+
   // OBSTACLE AVOIDANCE
   // Stop when distance from the front sensor is less than MIN_OBSTACLE_DISTANCE and
   // the car is moving forward,
-  // disregard 0 reading because its a null reading from the sensor
+  // Disregard readings of 5 or lower in order to improve accuracy of the readings since the sr04 picks up many false readings in that interval
+  // Currently it is assumed that there are no obstacles closer than 5cm
   if (frontSensorReading <= MIN_OBSTACLE_DISTANCE && frontSensorReading > 5 && carSpeed > 0){
     car.setSpeed(STOP);
     server.send(200, "text/plain", "obstacle");
   }else if (WiFi.status() != WL_CONNECTED){
+  // Stopping car when disconnected should only be used on stable networks
     //car.setSpeed(STOP);
     connectToWiFi();
   }
 }
 
 void connectToWiFi(){
-
-//Used when static IP is available
-  if (!WiFi.config(local_IP, gateway, subnet)) {
-    Serial.println("STA Failed to configure");
-  }
 
   WiFi.mode(WIFI_STA);
   WiFi.begin(ssid, password);
@@ -88,6 +82,12 @@ void connectToWiFi(){
   }
   Serial.println("Connected to the WiFi network");
   Serial.println(WiFi.localIP());
+  WiFi.setHostname("smartcar");
+  if (MDNS.begin("smartcar"))
+  {
+    MDNS.addService("http", "tcp", 80);
+    Serial.println("MDNS responder started");
+  }
 }
 
 void setCarMovement(int newSpeed, int newAngle) {
