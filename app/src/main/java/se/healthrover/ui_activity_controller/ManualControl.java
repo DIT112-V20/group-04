@@ -12,10 +12,10 @@ import androidx.appcompat.app.AppCompatActivity;
 import io.github.controlwear.virtual.joystick.android.JoystickView;
 import se.healthrover.R;
 import se.healthrover.car_service.CarManagement;
-import se.healthrover.conectivity.HealthRoverWebService;
-import se.healthrover.entities.HealthRoverCar;
+import se.healthrover.entities.Car;
 import se.healthrover.entities.HealthRoverJoystick;
 import se.healthrover.entities.ObjectFactory;
+import se.healthrover.ui_activity_controller.car_selection.CarSelect;
 import se.healthrover.ui_activity_controller.voice_control.SpeechRecognition;
 
 
@@ -29,10 +29,9 @@ public class ManualControl extends AppCompatActivity {
     private int speed;
     private int turningAngle;
     private Button voiceControl;
-    private HealthRoverCar healthRoverCar;
+    private Car healthRoverCar;
     private HealthRoverJoystick healthRoverJoystick;
     private static final int JOYSTICK_CENTER = 50;
-    private HealthRoverWebService healthRoverWebService;
     private static final String CONTROL_TYPE = "manual";
     // Can be used to reduce number of request send (1 of 4 blocks of code)
     // private int[] lastSpeedAndAngleValues;
@@ -41,29 +40,21 @@ public class ManualControl extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Thread.setDefaultUncaughtExceptionHandler(ObjectFactory.getInstance().getExceptionHandler(this, healthRoverCar, healthRoverWebService));
+        Thread.setDefaultUncaughtExceptionHandler(ObjectFactory.getInstance().getExceptionHandler(this, healthRoverCar));
         initialize();
     }
     //On restart refresh the content
     @Override
     protected void onRestart() {
         super.onRestart();
-        Thread.setDefaultUncaughtExceptionHandler(ObjectFactory.getInstance().getExceptionHandler(this, healthRoverCar, healthRoverWebService));
+        Thread.setDefaultUncaughtExceptionHandler(ObjectFactory.getInstance().getExceptionHandler(this, healthRoverCar));
         initialize();
     }
 
     public ManualControl(){
-        carManagement =ObjectFactory.getInstance().getCarManagement(getHealthRoverWebService());
+        carManagement =ObjectFactory.getInstance().getCarManagement();
     }
 
-    private HealthRoverWebService getHealthRoverWebService() {
-        return healthRoverWebService;
-    }
-
-    public void setHealthRoverWebService(HealthRoverWebService healthRoverWebService){
-        this.healthRoverWebService = healthRoverWebService;
-        carManagement = ObjectFactory.getInstance().getCarManagement(healthRoverWebService);
-    }
 
     // Using the method to load and initialize the content
     private void initialize(){
@@ -71,11 +62,11 @@ public class ManualControl extends AppCompatActivity {
         healthRoverJoystick = ObjectFactory.getInstance().getHealthRoverJoystick(this);
         header = findViewById(R.id.manualControlHeaderText);
         voiceControl = findViewById(R.id.voiceControl);
-        carName = getIntent().getStringExtra(getString(R.string.car_name));
+        healthRoverCar = (Car) getIntent().getSerializableExtra(getString(R.string.car_name));
+        carName = healthRoverCar.getName();
         header.setText(carName);
         angleText = findViewById(R.id.textView_angle);
         strengthText = findViewById(R.id.textView_strength);
-        healthRoverCar = HealthRoverCar.valueOf(HealthRoverCar.getCarObjectNameByCarName(carName));
         // Can be used to reduce number of request (2 of 4 blocks of code)
         // lastSpeedAndAngleValues = new int[]{0, 0};
 
@@ -116,7 +107,7 @@ public class ManualControl extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent intent =ObjectFactory.getInstance().getIntent(ManualControl.this, SpeechRecognition.class);
-                intent.putExtra(getString(R.string.car_name), healthRoverCar.getCarName());
+                intent.putExtra(getString(R.string.car_name), healthRoverCar);
                 startActivity(intent);
             }
         });
@@ -129,6 +120,7 @@ public class ManualControl extends AppCompatActivity {
     public void onBackPressed() {
         super.onBackPressed();
         Intent intent = ObjectFactory.getInstance().getIntent(ManualControl.this, CarSelect.class);
+        carManagement.getCars().clear();
         startActivity(intent);
     }
 

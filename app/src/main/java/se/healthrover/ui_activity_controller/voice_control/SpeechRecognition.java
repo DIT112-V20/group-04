@@ -27,20 +27,17 @@ import java.util.ArrayList;
 
 import se.healthrover.R;
 import se.healthrover.car_service.CarManagement;
-import se.healthrover.conectivity.HealthRoverWebService;
+import se.healthrover.entities.Car;
 import se.healthrover.entities.CarCommands;
-import se.healthrover.entities.HealthRoverCar;
 import se.healthrover.entities.ObjectFactory;
-import se.healthrover.ui_activity_controller.CarSelect;
 import se.healthrover.ui_activity_controller.ManualControl;
-import se.healthrover.ui_activity_controller.UserInterfaceUtilities;
+import se.healthrover.ui_activity_controller.utilities.UserInterfaceUtilities;
 
 public class SpeechRecognition extends AppCompatActivity {
 
     private Button manualControlButton;
-    private HealthRoverWebService healthRoverWebService;
     private Button guideButton;
-    private HealthRoverCar healthRoverCar;
+    private Car healthRoverCar;
     private String carName;
     private TextView headerVoiceControl;
     private ImageView speechButton;
@@ -71,7 +68,7 @@ public class SpeechRecognition extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Thread.setDefaultUncaughtExceptionHandler(ObjectFactory.getInstance().getExceptionHandler(this, healthRoverCar, healthRoverWebService));
+        Thread.setDefaultUncaughtExceptionHandler(ObjectFactory.getInstance().getExceptionHandler(this, healthRoverCar));
         initialize();
 
     }
@@ -79,40 +76,32 @@ public class SpeechRecognition extends AppCompatActivity {
     @Override
     protected void onRestart() {
         super.onRestart();
-        Thread.setDefaultUncaughtExceptionHandler(ObjectFactory.getInstance().getExceptionHandler(this, healthRoverCar, healthRoverWebService));
+        Thread.setDefaultUncaughtExceptionHandler(ObjectFactory.getInstance().getExceptionHandler(this, healthRoverCar));
         initialize();
     }
 
     public SpeechRecognition(){
-        carManagement = ObjectFactory.getInstance().getCarManagement(getHealthRoverWebService());
+        carManagement = ObjectFactory.getInstance().getCarManagement();
         userInterfaceUtilities = ObjectFactory.getInstance().getInterfaceUtilities();
     }
-    private HealthRoverWebService getHealthRoverWebService() {
-        return healthRoverWebService;
-    }
 
-    public void setHealthRoverWebService(HealthRoverWebService healthRoverWebService){
-        this.healthRoverWebService = healthRoverWebService;
-        carManagement = ObjectFactory.getInstance().getCarManagement(healthRoverWebService);
-    }
     // Using the method to load and initialize the content of the page
     private void initialize() {
         setContentView(R.layout.speech_recognition);
         headerVoiceControl = findViewById(R.id.headerVoiceControl);
-        carName = getIntent().getStringExtra(getString(R.string.car_name));
+        healthRoverCar = (Car) getIntent().getSerializableExtra(getString(R.string.car_name));
+        carName = healthRoverCar.getName();
         headerVoiceControl.setText(carName);
-        healthRoverCar = HealthRoverCar.valueOf(HealthRoverCar.getCarObjectNameByCarName(carName));
         manualControlButton = findViewById(R.id.manualControl);
         guideButton = findViewById(R.id.guideButton);
         speechButton = findViewById(R.id.speechButton);
-
         connectDialogflow();
 
         manualControlButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = ObjectFactory.getInstance().getIntent(SpeechRecognition.this, ManualControl.class);
-                intent.putExtra(getString(R.string.car_name), healthRoverCar.getCarName());
+                intent.putExtra(getString(R.string.car_name), healthRoverCar);
                 startActivity(intent);
             }
         });
@@ -138,7 +127,9 @@ public class SpeechRecognition extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         super.onBackPressed();
-        Intent intent = ObjectFactory.getInstance().getIntent(SpeechRecognition.this, CarSelect.class);
+        Intent intent = ObjectFactory.getInstance().getIntent(SpeechRecognition.this, ManualControl.class);
+        intent.putExtra(getString(R.string.car_name), healthRoverCar);
+        carManagement.getCars().clear();
         startActivity(intent);
     }
 

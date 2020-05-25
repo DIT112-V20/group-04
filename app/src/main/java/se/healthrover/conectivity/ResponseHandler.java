@@ -1,21 +1,20 @@
 package se.healthrover.conectivity;
 
 import android.app.Activity;
-import se.healthrover.R;
-import se.healthrover.entities.HealthRoverCar;
-import se.healthrover.entities.ObjectFactory;
-import se.healthrover.ui_activity_controller.ManualControl;
-import se.healthrover.ui_activity_controller.UserInterfaceUtilities;
-
 import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
-import android.os.Looper;
 import android.os.VibrationEffect;
 import android.os.Vibrator;
-import android.speech.tts.*;
+import android.speech.tts.TextToSpeech;
 
 import java.util.Locale;
+
+import se.healthrover.R;
+import se.healthrover.entities.Car;
+import se.healthrover.entities.ObjectFactory;
+import se.healthrover.ui_activity_controller.ManualControl;
+import se.healthrover.ui_activity_controller.utilities.UserInterfaceUtilities;
 
 public class ResponseHandler {
 
@@ -53,24 +52,24 @@ public class ResponseHandler {
 
     // Method to handle connection failure to the SmartCar
     // Currently only handling status failure connection
-    public void handleFailure(final Activity activity, final String url){
+    public void handleFailure(final Activity activity, final Car healthRoverCar){
         activity.runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                userInterfaceUtilities.showCustomToast(activity, activity.getString(R.string.connection_failure) + HealthRoverCar.getCarNameByUrl(url.substring(0, 20)));
+                userInterfaceUtilities.showCustomToast(activity, activity.getString(R.string.connection_failure) + healthRoverCar.getName());
                 makeVibrator(activity);
-                makeSpeaker(activity, activity.getString(R.string.connection_failure) + HealthRoverCar.getCarNameByUrl(url.substring(0, 20)));
+                makeSpeaker(activity, activity.getString(R.string.connection_failure) + healthRoverCar.getName());
             }
         });
     }
 
     // Method to handle successful responses from the server that pass different parameters
-    public void handleSuccess(final String responseData, final Activity activity, final String url){
+    public void handleSuccess(final String responseData, final Activity activity, final Car healthRoverCar){
         activity.runOnUiThread(new Runnable() {
             @Override
             public void run() {
                 if (responseData.equals(HTTP_STATUS_RESPONSE)) {
-                    handleSuccessStatus(activity, url);
+                    handleSuccessStatus(activity, healthRoverCar);
                 }
                 else if(responseData.equals(HTTP_OBSTACLE_RESPONSE)){
                     handleObstacleDetection(activity);
@@ -87,10 +86,10 @@ public class ResponseHandler {
     }
 
     // If status request is successful the manual control page is loaded and the car name is passed as a parameter
-    private void handleSuccessStatus(Activity activity, String url){
+    private void handleSuccessStatus(Activity activity, Car healthRoverCar){
         Intent intent = ObjectFactory.getInstance().getIntent(activity, ManualControl.class);
-        intent.putExtra(activity.getString(R.string.car_name), HealthRoverCar.getCarNameByUrl(url.substring(0, 20)));
+        intent.putExtra(activity.getString(R.string.car_name), healthRoverCar);
         activity.startActivity(intent);
-        makeSpeaker(activity, activity.getString(R.string.connection_success) + HealthRoverCar.getCarNameByUrl(url.substring(0, 20)));
+        makeSpeaker(activity, activity.getString(R.string.connection_success) + healthRoverCar.getName());
     }
 }

@@ -14,7 +14,7 @@
         android:usesCleartextTraffic="true"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".ui_activity_controller.CarSelect">
+        <activity android:name=".ui_activity_controller.car_selection.CarSelect">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

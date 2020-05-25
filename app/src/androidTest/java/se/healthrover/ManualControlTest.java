@@ -13,16 +13,14 @@ import androidx.test.rule.ActivityTestRule;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.BeforeClass;
-import org.junit.FixMethodOrder;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.junit.runners.MethodSorters;
 
-import se.healthrover.entities.HealthRoverCar;
 import se.healthrover.entities.HealthRoverJoystick;
-import se.healthrover.ui_activity_controller.CarSelect;
+import se.healthrover.test_services.TestCar;
 import se.healthrover.ui_activity_controller.ManualControl;
+import se.healthrover.ui_activity_controller.car_selection.CarSelect;
 import se.healthrover.ui_activity_controller.voice_control.SpeechRecognition;
 
 import static androidx.test.espresso.Espresso.onView;
@@ -45,7 +43,7 @@ public class ManualControlTest {
 
     private ManualControl manualControl;
     private SpeechRecognition speechRecognition;
-    private static HealthRoverCar testHealthRover;
+    private static TestCar testHealthRover;
 
     // Activity with pre-defined intent with car name, since the activity is launched by CarSelect and it's given a car name with launching
     @Rule
@@ -54,7 +52,7 @@ public class ManualControlTest {
         protected Intent getActivityIntent() {
             Context targetContext = getInstrumentation().getTargetContext();
             Intent result = new Intent(targetContext, ManualControl.class);
-            result.putExtra(targetContext.getString(R.string.car_name), testHealthRover.getCarName());
+            result.putExtra(targetContext.getString(R.string.car_name), testHealthRover);
             return result;
         }
     };
@@ -63,7 +61,8 @@ public class ManualControlTest {
     // Initialize test object
     @BeforeClass
     public static void setTestHealthRover(){
-        testHealthRover = HealthRoverCar.HEALTH_ROVER_CAR1;
+
+        testHealthRover = new TestCar();
     }
 
     // Launch activity under test
@@ -90,7 +89,7 @@ public class ManualControlTest {
         assertNotNull(view);
         TextView textView = manualControl.findViewById(R.id.manualControlHeaderText);
         assertNotNull(textView);
-        assertEquals(testHealthRover.getCarName() , textView.getText());
+        assertEquals(testHealthRover.getName() , textView.getText());
         view = manualControl.findViewById(R.id.voiceControl);
         assertNotNull(view);
         view = manualControl.findViewById(R.id.textSpeedHeader);
@@ -116,7 +115,7 @@ public class ManualControlTest {
     public void switchToVoiceControlTest() {
         onView(withId(R.id.voiceControl)).perform(click());
         intended(hasComponent(SpeechRecognition.class.getName()));
-        onView(withId(R.id.headerVoiceControl)).check(matches(withText(testHealthRover.getCarName())));
+        onView(withId(R.id.headerVoiceControl)).check(matches(withText(testHealthRover.getName())));
     }
 
     /* Test Case 3
@@ -161,10 +160,10 @@ public class ManualControlTest {
     public void checkIfRestartMethodIsCalledWhenSwitchingFromVoiceControl() {
         onView(withId(R.id.voiceControl)).perform(click());
         intended(hasComponent(SpeechRecognition.class.getName()));
-        onView(withId(R.id.headerVoiceControl)).check(matches(withText(testHealthRover.getCarName())));
+        onView(withId(R.id.headerVoiceControl)).check(matches(withText(testHealthRover.getName())));
         onView(withId(R.id.manualControl)).perform(click());
         intended(hasComponent(ManualControl.class.getName()));
-        onView(withId(R.id.manualControlHeaderText)).check(matches(withText(testHealthRover.getCarName())));
+        onView(withId(R.id.manualControlHeaderText)).check(matches(withText(testHealthRover.getName())));
     }
 
 
