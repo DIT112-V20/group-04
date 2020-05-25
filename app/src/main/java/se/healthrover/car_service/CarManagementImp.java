@@ -26,11 +26,6 @@ public class CarManagementImp implements CarManagement {
         webService.createHttpRequest(request, activity, healthRoverCar);
     }
 
-    public void moveCar(Car healthRoverCar, int speed, int angle, Activity activity) {
-        String request = healthRoverCar.getURL() + CarCommands.REQUEST.getCarCommands() + CarCommands.SPEED.getCarCommands() + speed + CarCommands.ANGLE.getCarCommands() + angle;
-        webService.createHttpRequest(request, activity ,healthRoverCar);
-    }
-
 
     public void addCar(Car car){
         cars.add(car);
@@ -80,6 +75,10 @@ public class CarManagementImp implements CarManagement {
 
     public List<Car> getCars() {
         return cars;
+    }
+
+    public void setCars(List<Car> newCarList){
+        cars = newCarList;
     }
 
     @Override
