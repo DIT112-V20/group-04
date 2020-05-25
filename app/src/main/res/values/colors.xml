@@ -10,4 +10,5 @@
     <color name="colorWhite">#FFFFFF</color>
     <color name="colorBlack">#000000</color>
     <color name="colorLightSeaGreenTransparent">#E500A9A5</color>
+    <color name="colorJetStream">#b4d1cc</color>
 </resources>

@@ -27,20 +27,17 @@ import java.util.ArrayList;
 
 import se.healthrover.R;
 import se.healthrover.car_service.CarManagement;
-import se.healthrover.conectivity.HealthRoverWebService;
+import se.healthrover.entities.Car;
 import se.healthrover.entities.CarCommands;
-import se.healthrover.entities.HealthRoverCar;
 import se.healthrover.entities.ObjectFactory;
-import se.healthrover.ui_activity_controller.CarSelect;
 import se.healthrover.ui_activity_controller.ManualControl;
-import se.healthrover.ui_activity_controller.UserInterfaceUtilities;
+import se.healthrover.ui_activity_controller.utilities.UserInterfaceUtilities;
 
 public class SpeechRecognition extends AppCompatActivity {
 
     private Button manualControlButton;
-    private HealthRoverWebService healthRoverWebService;
     private Button guideButton;
-    private HealthRoverCar healthRoverCar;
+    private Car healthRoverCar;
     private String carName;
     private TextView headerVoiceControl;
     private ImageView speechButton;
@@ -64,13 +61,14 @@ public class SpeechRecognition extends AppCompatActivity {
     private static final String DIALOGFLOW_DIRECTION_VALUE_DECREASE = "decrease";
     private static final String DIALOGFLOW_DIRECTION_VALUE_LEFT = "left";
     private static final String DIALOGFLOW_DIRECTION_VALUE_RIGHT = "right";
+    private static final String CONTROL_TYPE = "voice";
 
 
     //Create the activity
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Thread.setDefaultUncaughtExceptionHandler(ObjectFactory.getInstance().getExceptionHandler(this, healthRoverCar, healthRoverWebService));
+        Thread.setDefaultUncaughtExceptionHandler(ObjectFactory.getInstance().getExceptionHandler(this, healthRoverCar));
         initialize();
 
     }
@@ -78,40 +76,32 @@ public class SpeechRecognition extends AppCompatActivity {
     @Override
     protected void onRestart() {
         super.onRestart();
-        Thread.setDefaultUncaughtExceptionHandler(ObjectFactory.getInstance().getExceptionHandler(this, healthRoverCar, healthRoverWebService));
+        Thread.setDefaultUncaughtExceptionHandler(ObjectFactory.getInstance().getExceptionHandler(this, healthRoverCar));
         initialize();
     }
 
     public SpeechRecognition(){
-        carManagement = ObjectFactory.getInstance().getCarManagement(getHealthRoverWebService());
+        carManagement = ObjectFactory.getInstance().getCarManagement();
         userInterfaceUtilities = ObjectFactory.getInstance().getInterfaceUtilities();
     }
-    private HealthRoverWebService getHealthRoverWebService() {
-        return healthRoverWebService;
-    }
 
-    public void setHealthRoverWebService(HealthRoverWebService healthRoverWebService){
-        this.healthRoverWebService = healthRoverWebService;
-        carManagement = ObjectFactory.getInstance().getCarManagement(healthRoverWebService);
-    }
     // Using the method to load and initialize the content of the page
     private void initialize() {
         setContentView(R.layout.speech_recognition);
         headerVoiceControl = findViewById(R.id.headerVoiceControl);
-        carName = getIntent().getStringExtra(getString(R.string.car_name));
+        healthRoverCar = (Car) getIntent().getSerializableExtra(getString(R.string.car_name));
+        carName = healthRoverCar.getName();
         headerVoiceControl.setText(carName);
-        healthRoverCar = HealthRoverCar.valueOf(HealthRoverCar.getCarObjectNameByCarName(carName));
         manualControlButton = findViewById(R.id.manualControl);
         guideButton = findViewById(R.id.guideButton);
         speechButton = findViewById(R.id.speechButton);
-
         connectDialogflow();
 
         manualControlButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = ObjectFactory.getInstance().getIntent(SpeechRecognition.this, ManualControl.class);
-                intent.putExtra(getString(R.string.car_name), healthRoverCar.getCarName());
+                intent.putExtra(getString(R.string.car_name), healthRoverCar);
                 startActivity(intent);
             }
         });
@@ -127,6 +117,7 @@ public class SpeechRecognition extends AppCompatActivity {
             public void onClick(View v) {
                 Intent speechIntent = ObjectFactory.getInstance().getIntent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
                 speechIntent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
+                speechIntent.putExtra(RecognizerIntent.EXTRA_LANGUAGE, "en-US");
                 speechIntent.putExtra(RecognizerIntent.EXTRA_PROMPT, getString(R.string.voice_pop_up_message));
                 startActivityForResult(speechIntent, SPEECH_RESULT);
             }
@@ -136,7 +127,9 @@ public class SpeechRecognition extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         super.onBackPressed();
-        Intent intent = ObjectFactory.getInstance().getIntent(SpeechRecognition.this, CarSelect.class);
+        Intent intent = ObjectFactory.getInstance().getIntent(SpeechRecognition.this, ManualControl.class);
+        intent.putExtra(getString(R.string.car_name), healthRoverCar);
+        carManagement.getCars().clear();
         startActivity(intent);
     }
 
@@ -185,8 +178,6 @@ public class SpeechRecognition extends AppCompatActivity {
                 String receivedAngle = response.getQueryResult().getParameters().getFieldsOrThrow(DIALOGFLOW_RESPONSE_KEY_ANGLE).getStringValue();
                 // Taking only the integer value from the receivedAngle String which includes not used characters
                 receivedAngle = CharMatcher.inRange('0', '9').retainFrom(receivedAngle);
-
-                System.out.println(response.getQueryResult().getParameters().toString());
 
                 // Here we check for empty values to be able to call driveCarCommand with
                 // default values, otherwise it will use user-specified ones
@@ -237,15 +228,15 @@ public class SpeechRecognition extends AppCompatActivity {
                 if (speed < SPEED_CHECK) {
                     speed = speed * NEGATION;
                 }
-                carManagement.moveCar(healthRoverCar, speed, Integer.parseInt(CarCommands.NO_ANGLE.getCarCommands()), this);
+                carManagement.moveCar(healthRoverCar, speed, Integer.parseInt(CarCommands.NO_ANGLE.getCarCommands()), CONTROL_TYPE, this);
                 break;
             case DIALOGFLOW_DIRECTION_VALUE_STOP:
-                carManagement.moveCar(healthRoverCar, Integer.parseInt(CarCommands.NO_MOVEMENT.getCarCommands()), Integer.parseInt(CarCommands.NO_ANGLE.getCarCommands()), this);
+                carManagement.moveCar(healthRoverCar, Integer.parseInt(CarCommands.NO_MOVEMENT.getCarCommands()), Integer.parseInt(CarCommands.NO_ANGLE.getCarCommands()), CONTROL_TYPE, this);
                 break;
             case DIALOGFLOW_DIRECTION_VALUE_INCREASE:
                 if (speed < Integer.parseInt(CarCommands.VC_MAX_VELOCITY.getCarCommands()) && speed > Integer.parseInt(CarCommands.VC_MIN_VELOCITY.getCarCommands())) {
                     speed += VELOCITY_MODIFIER;
-                    carManagement.moveCar(healthRoverCar, speed, Integer.parseInt(CarCommands.NO_ANGLE.getCarCommands()), this);
+                    carManagement.moveCar(healthRoverCar, speed, Integer.parseInt(CarCommands.NO_ANGLE.getCarCommands()), CONTROL_TYPE, this);
                 } else {
                     userInterfaceUtilities.showCustomToast(SpeechRecognition.this, getString(R.string.voice_control_max_velocity));
                 }
@@ -253,25 +244,25 @@ public class SpeechRecognition extends AppCompatActivity {
             case DIALOGFLOW_DIRECTION_VALUE_DECREASE:
                 if (speed > Integer.parseInt(CarCommands.VC_MIN_VELOCITY.getCarCommands())) {
                     speed -= VELOCITY_MODIFIER;
-                    carManagement.moveCar(healthRoverCar, speed, Integer.parseInt(CarCommands.NO_ANGLE.getCarCommands()), this);
+                    carManagement.moveCar(healthRoverCar, speed, Integer.parseInt(CarCommands.NO_ANGLE.getCarCommands()), CONTROL_TYPE, this);
                 } else {
                     userInterfaceUtilities.showCustomToast(SpeechRecognition.this, getString(R.string.voice_control_min_velocity));
                 }
                 break;
             case DIALOGFLOW_DIRECTION_VALUE_LEFT:
                 speed = receivedSpeed;
-                carManagement.moveCar(healthRoverCar, speed, (receivedAngle * NEGATION), this);
+                carManagement.moveCar(healthRoverCar, speed, (receivedAngle * NEGATION), CONTROL_TYPE, this);
                 break;
             case DIALOGFLOW_DIRECTION_VALUE_RIGHT:
                 speed = receivedSpeed;
-                carManagement.moveCar(healthRoverCar, speed, receivedAngle, this);
+                carManagement.moveCar(healthRoverCar, speed, receivedAngle, CONTROL_TYPE, this);
                 break;
             case DIALOGFLOW_DIRECTION_VALUE_REVERSE:
                 speed = receivedSpeed;
                 if(speed>SPEED_CHECK) {
                     speed = speed * NEGATION;
                 }
-                carManagement.moveCar(healthRoverCar, speed, Integer.parseInt(CarCommands.NO_ANGLE.getCarCommands()), this);
+                carManagement.moveCar(healthRoverCar, speed, Integer.parseInt(CarCommands.NO_ANGLE.getCarCommands()), CONTROL_TYPE, this);
                 break;
             default:
                 userInterfaceUtilities.showCustomToast(SpeechRecognition.this, getString(R.string.invalid_command));

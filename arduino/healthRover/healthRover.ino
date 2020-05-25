@@ -37,9 +37,9 @@ DirectionlessOdometer rightOdometer(
 SmartCar car(control, gyroscope, leftOdometer, rightOdometer);
 
  //Static Local IP configuration for identifying car. Gateway and subnet needs to be adjusted according to local network settings.
-//IPAddress local_IP(192, 168, 1, 200);
-//IPAddress gateway(192, 168, 1, 1);
-//IPAddress subnet(255, 255, 255, 0);
+IPAddress local_IP(192, 168, 137, 200);
+IPAddress gateway(10, 0, 0, 1);
+IPAddress subnet(255, 255, 0, 0);
 
 void setup(){
   Serial.begin(BAUD_RATE);
@@ -59,12 +59,15 @@ void loop() {
   server.handleClient();
 
   frontSensorReading = front.getDistance();
-  // Stop when distance is less than MIN_OBSTACLE_DISTANCE and
+  // OBSTACLE AVOIDANCE
+  // Stop when distance from the front sensor is less than MIN_OBSTACLE_DISTANCE and
+  // the car is moving forward,
   // disregard 0 reading because its a null reading from the sensor
-  if (frontSensorReading <= MIN_OBSTACLE_DISTANCE && frontSensorReading > 0){
+  if (frontSensorReading <= MIN_OBSTACLE_DISTANCE && frontSensorReading > 5 && carSpeed > 0){
     car.setSpeed(STOP);
+    server.send(200, "text/plain", "obstacle");
   }else if (WiFi.status() != WL_CONNECTED){
-    car.setSpeed(STOP);
+    //car.setSpeed(STOP);
     connectToWiFi();
   }
 }
@@ -72,9 +75,9 @@ void loop() {
 void connectToWiFi(){
 
 //Used when static IP is available
-//  if (!WiFi.config(local_IP, gateway, subnet)) {
-//    Serial.println("STA Failed to configure");
-//  }
+  if (!WiFi.config(local_IP, gateway, subnet)) {
+    Serial.println("STA Failed to configure");
+  }
 
   WiFi.mode(WIFI_STA);
   WiFi.begin(ssid, password);
@@ -115,17 +118,69 @@ void setCarSpeed(int newSpeed){
     car.setSpeed(carSpeed);
   }
 }
+// Turns the car, on the spot, the specified degrees and then resets the car's angle
+// Adapted version from SmartCar Shield Library's automated movements example, as seen
+// in the link: https://platisd.github.io/smartcar_shield/automated_movements_8ino-example.html
+void turnCar(int turningAngle) {
+    turningAngle %= 360; // Put degrees in a (-360,360) scale
+    if (turningAngle == 0)
+    {
+        return;
+    }
+    if (turningAngle > 0)
+    {
+        setCarAngle(90);
+    }
+    else
+    {
+        setCarAngle(-90);
+    }
+    const auto initialHeading = car.getHeading();
+    bool hasReachedTargetDegrees = false;
+    while (!hasReachedTargetDegrees)
+    {
+        car.update();
+        auto currentHeading = car.getHeading();
+        if (turningAngle < 0 && currentHeading > initialHeading)
+        {
+            // If we are turning left and the current heading is larger than the
+            // initial one (e.g. started at 10 degrees and now we are at 350), we need to subtract
+            // 360 so to eventually get a signed displacement from the initial heading (-20)
+            currentHeading -= 360;
+        }
+        else if (turningAngle > 0 && currentHeading < initialHeading)
+        {
+            // If we are turning right and the heading is smaller than the
+            // initial one (e.g. started at 350 degrees and now we are at 20), so to get a signed
+            // displacement (+30)
+            currentHeading += 360;
+        }
+        // Degrees turned so far is initial heading minus current (initial heading
+        // is at least 0 and at most 360. To handle the "edge" cases we subtracted or added 360 to
+        // currentHeading)
+        int degreesTurnedSoFar  = initialHeading - currentHeading;
+        hasReachedTargetDegrees = smartcarlib::utils::getAbsolute(degreesTurnedSoFar)
+                                  >= smartcarlib::utils::getAbsolute(turningAngle);
+    }
+    setCarAngle(0);
+}
 void handleRequest() {
-  if (!server.hasArg("type") && !server.hasArg("speed") && !server.hasArg("angle")) {
+  if (!server.hasArg("type") && !server.hasArg("speed") && !server.hasArg("angle") && !server.hasArg("control")) {
     server.send(404);
     return;
   }
   String appRequest = server.arg("type");
   int speedRequest = (server.arg("speed")).toInt();
   int angleRequest = (server.arg("angle")).toInt();
-  if (appRequest.equals("move")) {
+  String controlRequest = server.arg("control");
+  if (appRequest.equals("move") && controlRequest.equals("manual")) {
     setCarMovement(speedRequest, angleRequest);
     server.send(200);
+  }
+  else if (appRequest.equals("move") && controlRequest.equals("voice")) {
+      setCarSpeed(speedRequest);
+      turnCar(angleRequest);
+      server.send(200);
   }
   else if (appRequest.equals("stop")) {
     stopCar();

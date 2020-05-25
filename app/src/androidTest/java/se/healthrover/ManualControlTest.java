@@ -13,16 +13,14 @@ import androidx.test.rule.ActivityTestRule;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.BeforeClass;
-import org.junit.FixMethodOrder;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.junit.runners.MethodSorters;
 
-import se.healthrover.entities.HealthRoverCar;
 import se.healthrover.entities.HealthRoverJoystick;
-import se.healthrover.ui_activity_controller.CarSelect;
+import se.healthrover.test_services.TestCar;
 import se.healthrover.ui_activity_controller.ManualControl;
+import se.healthrover.ui_activity_controller.car_selection.CarSelect;
 import se.healthrover.ui_activity_controller.voice_control.SpeechRecognition;
 
 import static androidx.test.espresso.Espresso.onView;
@@ -41,12 +39,11 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
 @RunWith(AndroidJUnit4.class)
-@FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class ManualControlTest {
 
     private ManualControl manualControl;
     private SpeechRecognition speechRecognition;
-    private static HealthRoverCar testHealthRover;
+    private static TestCar testHealthRover;
 
     // Activity with pre-defined intent with car name, since the activity is launched by CarSelect and it's given a car name with launching
     @Rule
@@ -55,7 +52,7 @@ public class ManualControlTest {
         protected Intent getActivityIntent() {
             Context targetContext = getInstrumentation().getTargetContext();
             Intent result = new Intent(targetContext, ManualControl.class);
-            result.putExtra(targetContext.getString(R.string.car_name), testHealthRover.getCarName());
+            result.putExtra(targetContext.getString(R.string.car_name), testHealthRover);
             return result;
         }
     };
@@ -64,19 +61,20 @@ public class ManualControlTest {
     // Initialize test object
     @BeforeClass
     public static void setTestHealthRover(){
-        testHealthRover = HealthRoverCar.HEALTH_ROVER_CAR1;
+
+        testHealthRover = new TestCar();
     }
 
     // Launch activity under test
     @Before
-    public void setUp() throws Exception {
+    public void setUp() {
         manualControl = manualControlActivityTestRule.getActivity();
         Intents.init();
     }
 
     // Verify the context of the app under test
     @Test
-    public void testCase_0_useAppContext() {
+    public void useAppContext() {
         Context appContext = getInstrumentation().getTargetContext();
         assertEquals("se.healthrover", appContext.getPackageName());
     }
@@ -85,13 +83,13 @@ public class ManualControlTest {
      *   verify that all the elements are loaded by using IDs
      *   assert that the correct car name is set into the header*/
     @Test
-    public void testCase_1_verifyIfElementsAreLoadedTest() {
+    public void verifyIfElementsAreLoadedTest() {
 
         View view = manualControl.findViewById(R.id.joystick);
         assertNotNull(view);
         TextView textView = manualControl.findViewById(R.id.manualControlHeaderText);
         assertNotNull(textView);
-        assertEquals(testHealthRover.getCarName() , textView.getText());
+        assertEquals(testHealthRover.getName() , textView.getText());
         view = manualControl.findViewById(R.id.voiceControl);
         assertNotNull(view);
         view = manualControl.findViewById(R.id.textSpeedHeader);
@@ -114,10 +112,10 @@ public class ManualControlTest {
     *   verify that the correct activity is loaded
     *   verify that the correct car name has been passed to the activity*/
     @Test
-    public void testCase_2_switchToVoiceControlTest() {
+    public void switchToVoiceControlTest() {
         onView(withId(R.id.voiceControl)).perform(click());
         intended(hasComponent(SpeechRecognition.class.getName()));
-        onView(withId(R.id.headerVoiceControl)).check(matches(withText(testHealthRover.getCarName())));
+        onView(withId(R.id.headerVoiceControl)).check(matches(withText(testHealthRover.getName())));
     }
 
     /* Test Case 3
@@ -125,7 +123,7 @@ public class ManualControlTest {
      *   click the emulator back button,
      *   verify that the correct activity is loaded*/
     @Test
-    public void testCase_3_backButtonBackToCarSelectTest() {
+    public void backButtonBackToCarSelectTest() {
         assertNotNull(manualControl);
         Espresso.pressBack();
         intended(hasComponent(CarSelect.class.getName()));
@@ -139,7 +137,7 @@ public class ManualControlTest {
      *   move the joystick right,
      *   verify that the joystick is reset to start position - start position x = 50 and y = 50*/
     @Test
-    public void testCase_4_checkJoystickMovement() {
+    public void checkJoystickMovement() {
         HealthRoverJoystick joystick = manualControl.findViewById(R.id.joystick);
         assertNotNull(joystick);
         onView(withId(R.id.joystick)).perform(swipeUp());
@@ -150,6 +148,24 @@ public class ManualControlTest {
         assertEquals(joystickStartPosition, joystick.getNormalizedX());
         assertEquals(joystickStartPosition, joystick.getNormalizedY());
     }
+
+    /* Test Case 5
+     *   Locate the voice control button by ID,
+     *   click on the voice control button,
+     *   verify that the correct activity is loaded
+     *   verify that the correct car name has been passed to the activity
+     *   click on back to manual control
+     *   verify that correct activity is loaded and the car name is correct*/
+    @Test
+    public void checkIfRestartMethodIsCalledWhenSwitchingFromVoiceControl() {
+        onView(withId(R.id.voiceControl)).perform(click());
+        intended(hasComponent(SpeechRecognition.class.getName()));
+        onView(withId(R.id.headerVoiceControl)).check(matches(withText(testHealthRover.getName())));
+        onView(withId(R.id.manualControl)).perform(click());
+        intended(hasComponent(ManualControl.class.getName()));
+        onView(withId(R.id.manualControlHeaderText)).check(matches(withText(testHealthRover.getName())));
+    }
+
 
     // Close activity under test
     @After

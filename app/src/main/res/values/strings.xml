@@ -29,6 +29,9 @@
     </string>
     <string name="select_car_prompt">Select a car first…</string>
     <string name="selected_car_message">"You selected "</string>
+    <string name="connection_success">"Connected to "</string>
+    <string name="obstacle_detection">Obstacle detected</string>
+    <string name="connection_failure">"Can not connect to "</string>
     <string name="car_name">CarName</string>
     <string name="percentage_sign">%</string>
     <string name="degree_symbol">°</string>
@@ -47,4 +50,7 @@
     <string name="voice_control_max_velocity">Maximum velocity reached!</string>
     <string name="voice_control_min_velocity">Minimum velocity reached!</string>
     <string name="voice_pop_up_message">Listening…</string>
+    <string name="edit">EDIT</string>
+    <string name="update">Edit car name</string>
+    <string name="save_update_button">Save</string>
 </resources>
