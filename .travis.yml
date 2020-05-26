@@ -60,12 +60,12 @@ install:
 script:
   # Build the Android application
   - cd $TRAVIS_BUILD_DIR/
-  - travis_wait ./gradlew build --stacktrace
+  - ./gradlew build --stacktrace
   # Run the Android application's unit tests
   - ./gradlew test --info
   # Execution of Android application's instrumented tests
-  - travis_wait ./gradlew connectedCheck
-  - travis_wait ./gradlew connectedAndroidTest
+  - travis_wait 30 ./gradlew connectedCheck
+  - travis_wait 30 ./gradlew connectedAndroidTest
   # Build the .ino file(s) for ESP32
   - cd $TRAVIS_BUILD_DIR/arduino
   - build_platform esp32
