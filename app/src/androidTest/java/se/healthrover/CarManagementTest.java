@@ -22,7 +22,9 @@ import se.healthrover.entities.Car;
 import se.healthrover.entities.ObjectFactory;
 import se.healthrover.ui_activity_controller.car_selection.CarSelect;
 
+import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotEquals;
 
 @RunWith(AndroidJUnit4.class)
 public class CarManagementTest {
@@ -32,7 +34,6 @@ public class CarManagementTest {
     private List<Car> carListTestCars;
     private SqlHelper sqlHelper;
     private CarManagementImp management;
-
 
 
     @Rule
@@ -75,6 +76,68 @@ public class CarManagementTest {
         assertEquals(carListTestCars.get(0), management.getCars().get(0));
     }
 
+
+    @Test
+    public void getCarNamesTest(){
+        String[] result = management.getCarNames();
+        String[] carNames = new String[carListTestCars.size()];
+        for (int i = 0; i < carNames.length; i++){
+            carNames[i] = carListTestCars.get(i).getName();
+        }
+        assertArrayEquals(carNames, result);
+    }
+
+    @Test
+    public void getCarByUrlTest(){
+        Car car = carListTestCars.get(0);
+        Car result = management.getCarByURL(car.getURL());
+        assertEquals(car, result);
+
+    }
+
+    @Test
+    public void getCarByNameTest(){
+        Car car = carListTestCars.get(0);
+        String carName = car.getName();
+        Car result = management.getCarByName(carName);
+        assertEquals(carName, result.getName());
+        assertEquals(car, result);
+    }
+    @Test
+    public void getCarsTest(){
+        List<Car> cars = management.getCars();
+        assertEquals(carListTestCars, cars);
+    }
+
+    @Test
+    public void addCarTest(){
+        Car car = new Car("http://" + new Faker().internet().url(), new Faker().name().username());
+        carListTestCars.add(car);
+        int startSize = management.getCars().size();
+        management.addCar(car);
+        assertEquals(startSize + 1 , management.getCars().size());
+        assertEquals(carListTestCars, management.getCars());
+    }
+
+    @Test
+    public void removeCarTest(){
+        Car car = management.getCars().get(0);
+        carListTestCars.remove(car);
+        int startSize = management.getCars().size();
+        management.removeCar(car);
+        assertEquals(startSize - 1 , management.getCars().size());
+        assertEquals(carListTestCars, management.getCars());
+    }
+    @Test
+    public void setCarListTest(){
+        for (int i = 1; i < management.getCars().size(); i++){
+            management.getCars().remove(i);
+        }
+        assertNotEquals(carListTestCars, management.getCars());
+        management.setCars(carListTestCars);
+        assertEquals(carListTestCars, management.getCars());
+    }
+
     @After
     public void tearDown()  {
         sqlHelper.deleteTableContent();
@@ -87,5 +150,6 @@ public class CarManagementTest {
         dataBase = null;
         carListTestCars = null;
         activity = null;
+        management.setCars(new ArrayList<Car>());
     }
 }
