@@ -3,7 +3,7 @@
 ## What
 The HealthRover is aimed towards a hospital environment and will deliver medicine/medical equipment to a desired location using manual and voice control, without the need for human contact. The HealthRover uses natural language correlation in order to simplify the use of voice control for staff and is functional where there is Wi-Fi connectivity.
 
-The solution consists of an android application for interfacing with the user and a [SmartCar] (https://www.hackster.io/platisd/getting-started-with-the-smartcar-platform-1648ad) for accomplishing the physical task of delivering goods.
+The solution consists of an android application for interfacing with the user and a [SmartCar](https://www.hackster.io/platisd/getting-started-with-the-smartcar-platform-1648ad) for accomplishing the physical task of delivering goods.
 
 ## Why
 It will minimize the amount of human contact amidst a pandemic and reduce the risk of spreading contagious diseases. It will help medical professionals in and out of hospitals by improving the efficiency of the medical workflow, by assisting with safe distribution of medicine and equipment.
@@ -19,27 +19,34 @@ The android application is developed using an object oriented approach by applyi
 
 #### [Basic Obstacle Avoidance](https://github.com/DIT112-V20/group-04/wiki/Basic-Obstacle-Avoidance)
 The Basic Obstacle Avoidance is implemented with the purpose of helping the user avoid obstacles in the front, while driving the SmartCar. The SmartCar will stop when an obstacle is present at 30cm and the user is then able to steer away from the obstacle or find an alternative route.
+
 #### [Wifi Connectivity](https://github.com/DIT112-V20/group-04/wiki/Wifi-Connectivity)
 The purpose of the Wifi Connectivity feature is to let the user connect to a SmartCar over Wi-Fi. When a connection is established the application can send commands to the SmartCar and receive output.
+
 #### [Manual Maneuvering](https://github.com/DIT112-V20/group-04/wiki/Manual-Maneuvering)
 This feature assures that the SmartCar can be manually controlled by the user. The car is able to move in different directions with variations in angle and velocity.
+
 #### [Voice Control](https://github.com/DIT112-V20/group-04/wiki/Voice-Control) using [Speech Recognition](https://github.com/DIT112-V20/group-04/wiki/Speech-Recognition)
 The Voice Control feature is enhanced by a Natural Language Processing Engine in order to allow the user to specify any turning maneuver for touch-free interaction with the SmartCar. The intent is to make it possible to perform the same type of steering done in [Manual Maneuvering](https://github.com/DIT112-V20/group-04/wiki/Manual-Maneuvering), but using voice. 
+
 #### [Android Application and User Interface](https://github.com/DIT112-V20/group-04/wiki/Android-Application-and-User-Interface)
 The Android Application and Graphical user interface feature is implemented in order to provide a user-friendly way for the user to interact with the system. The application also allows for the user to customize some parts of the system in order to further adapt the system to each customer's use case.
+
 #### [Feedback](https://github.com/DIT112-V20/group-04/wiki/Feedback)
 This feature provides feedback from the application to the user when connecting to the SmartCar or when an obstacle is detected to warn the user. The intent is to make events clear to the end-user, without having to view the screen.
+
 #### [Continuous Integration & Quality Assurance](https://github.com/DIT112-V20/group-04/wiki/Continuous-Integration-and-Quality-Assurance)
 The project implements Continuous Integration by utilizing the Travis CI framework.This assures the high quality of the product.
+
 ## Technical Overview
 
 ### Hardware:
 
 The HealthRover SmartCar is designed by using the following components:
 
-- [Smartcar platform](https://www.hackster.io/platisd/getting-started-with-the-smartcar-platform-1648ad) based on the ESP32 microcontroller [update] (https://www.hackster.io/platisd/smartcar-gets-an-esp32-upgrade-bcbeb1)
+- [Smartcar platform](https://www.hackster.io/platisd/smartcar-gets-an-esp32-upgrade-bcbeb1) based on the ESP32 microcontroller
 - Wi-Fi connectivity (integrated in the ESP32 SoC microcontroller)
-- Ultrasonic Sensor - HC-SR04 (Generic)
+- 1 x Ultrasonic Sensor - HC-SR04 (Generic)
 - 3D-printed shell
 
 Assembling the car is done by attaching the ultrasonic sensor to the front of the car and adding the 3D shell on top. Adding the shell still allows the user to connect to the car with USB as well as turning the vehicle on and off. The car runs with a set of 8 AA batteries(found below the ESP-32). 
@@ -57,7 +64,7 @@ Assembling the car is done by attaching the ultrasonic sensor to the front of th
 - [JUnit 4.13](https://github.com/junit-team/junit4/blob/master/doc/ReleaseNotes4.13.md)
 - [Espresso 3.2.0](https://developer.android.com/training/testing/espresso)
 - [Dexmaker Mockito](https://mvnrepository.com/artifact/com.google.dexmaker/dexmaker-mockito/1.2)
-- [Jacoco Gradle plugin] (https://github.com/arturdm/jacoco-android-gradle-plugin)
+- [Jacoco Gradle plugin](https://github.com/arturdm/jacoco-android-gradle-plugin)
 - [SQLite](https://www.sqlite.org/index.html)
 
 
