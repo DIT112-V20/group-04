@@ -65,7 +65,8 @@ script:
   - ./gradlew test --info
   # Execution of Android application's instrumented tests
   - travis_wait ./gradlew connectedCheck
-  - travis_wait ./gradlew connectedAndroidTest
+  - ./gradlew createDebugCoverageReport
+  - ./gradlew jacocoTestReport
   # Build the .ino file(s) for ESP32
   - cd $TRAVIS_BUILD_DIR/arduino
   - build_platform esp32
