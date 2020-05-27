@@ -1,9 +1,16 @@
 package se.healthrover.entities;
 
+import android.content.ContentValues;
+
 import org.junit.Test;
 
+import java.util.List;
+
+import okhttp3.OkHttpClient;
 import se.healthrover.car_service.CarManagement;
 import se.healthrover.conectivity.HealthRoverWebService;
+import se.healthrover.conectivity.ResponseHandler;
+import se.healthrover.ui_activity_controller.utilities.UserInterfaceUtilities;
 
 import static junit.framework.TestCase.assertNotNull;
 
@@ -23,30 +30,23 @@ public class ObjectFactoryTest {
 
     @Test
     public void getInterfaceUtilities() {
+        UserInterfaceUtilities userInterfaceUtilities = ObjectFactory.getInstance().getInterfaceUtilities();
+        assertNotNull(userInterfaceUtilities);
     }
 
-    @Test
-    public void getRequestTask() {
-    }
 
     @Test
     public void getOkHttpClient() {
+        OkHttpClient okHttpClient = ObjectFactory.getInstance().getOkHttpClient();
+        assertNotNull(okHttpClient);
     }
 
-    @Test
-    public void getIntent() {
-    }
 
-    @Test
-    public void testGetIntent() {
-    }
-
-    @Test
-    public void getPopupWindow() {
-    }
 
     @Test
     public void getResponseHandler() {
+        ResponseHandler responseHandler = ObjectFactory.getInstance().getResponseHandler();
+        assertNotNull(responseHandler);
     }
 
     @Test
@@ -57,17 +57,14 @@ public class ObjectFactoryTest {
 
     @Test
     public void getCarList() {
+        List<Car> cars = ObjectFactory.getInstance().createList();
+        assertNotNull(cars);
     }
 
-    @Test
-    public void getSqlHelper() {
-    }
-
-    @Test
-    public void getCarAdapter() {
-    }
 
     @Test
     public void getContentValuesSQL() {
+       ContentValues contentValues = ObjectFactory.getInstance().getContentValuesSQL();
+       assertNotNull(contentValues);
     }
 }

@@ -15,6 +15,7 @@ import se.healthrover.car_service.CarManagement;
 import se.healthrover.car_service.CarManagementImp;
 import se.healthrover.conectivity.HealthRoverWebService;
 
+import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotEquals;
 
@@ -41,6 +42,24 @@ public class CarManagementImpTest {
             carListTestCars.add(car);
             management.addCar(car);
         }
+    }
+
+    @Test
+    public void getCarNamesTest(){
+        String[] result = management.getCarNames();
+        String[] carNames = new String[carListTestCars.size()];
+        for (int i = 0; i < carNames.length; i++){
+            carNames[i] = carListTestCars.get(i).getName();
+        }
+        assertArrayEquals(carNames, result);
+    }
+
+    @Test
+    public void getCarByUrlTest(){
+        Car car = carListTestCars.get(0);
+        Car result = management.getCarByURL(car.getURL());
+        assertEquals(car, result);
+
     }
 
 

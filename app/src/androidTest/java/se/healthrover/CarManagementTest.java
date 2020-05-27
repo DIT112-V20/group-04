@@ -22,7 +22,6 @@ import se.healthrover.entities.Car;
 import se.healthrover.entities.ObjectFactory;
 import se.healthrover.ui_activity_controller.car_selection.CarSelect;
 
-import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
 
 @RunWith(AndroidJUnit4.class)
@@ -59,23 +58,7 @@ public class CarManagementTest {
         }
 
     }
-    @Test
-    public void getCarNamesTest(){
-        String[] result = management.getCarNames();
-        String[] carNames = new String[carListTestCars.size()];
-        for (int i = 0; i < carNames.length; i++){
-            carNames[i] = carListTestCars.get(i).getName();
-        }
-        assertArrayEquals(carNames, result);
-    }
 
-    @Test
-    public void getCarByUrlTest(){
-        Car car = carListTestCars.get(0);
-        Car result = management.getCarByURL(car.getURL());
-        assertEquals(car, result);
-
-    }
     @Test
     public void updateCarNameTest(){
         Car car = carListTestCars.get(0);

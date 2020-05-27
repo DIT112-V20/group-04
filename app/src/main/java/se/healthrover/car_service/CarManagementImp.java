@@ -18,7 +18,7 @@ import se.healthrover.entities.ObjectFactory;
 public class CarManagementImp implements CarManagement {
 
     private HealthRoverWebService webService;
-    private static List<Car> cars = ObjectFactory.getInstance().getCarList();
+    private static List<Car> cars = ObjectFactory.getInstance().createList();
     private String TAG = "smartcar";
     private NsdManager mNsdManager;
     private LocalNetworkDeviceNameResolver mDeviceNameResolver;

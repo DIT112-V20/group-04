@@ -62,7 +62,7 @@ public class SqlHelper extends SQLiteOpenHelper {
     // all available cars from the database
     public List<Car> getSavedCars(){
         database = this.getReadableDatabase();
-        List<Car> cars = ObjectFactory.getInstance().getCarList();
+        List<Car> cars = ObjectFactory.getInstance().createList();
         @SuppressLint("Recycle") Cursor cursor = database.rawQuery("Select * from " + DATABASE_TABLE_NAME + ";", null);
         if (cursor.getCount() == 0){
             return null;
@@ -82,7 +82,7 @@ public class SqlHelper extends SQLiteOpenHelper {
     // if there's only one instance of that car name in the database
     public Car getCarByName(String name){
         database = this.getReadableDatabase();
-        List<Car> cars = ObjectFactory.getInstance().getCarList();
+        List<Car> cars = ObjectFactory.getInstance().createList();
         @SuppressLint("Recycle") Cursor cursor = database.rawQuery("Select * from " + DATABASE_TABLE_NAME + " WHERE "+ DATABASE_COL_NAME+"=?", new String[]{name});
         if (cursor.getCount() == 0){
             return null;
