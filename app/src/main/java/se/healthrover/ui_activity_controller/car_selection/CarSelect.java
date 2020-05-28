@@ -113,6 +113,7 @@ public class CarSelect extends Activity{
     public void onBackPressed() {
         super.onBackPressed();
         carManagement.getCars().clear();
+        carManagement.loadCarsIntoList(this);
         finishAffinity();
         finish();
     }

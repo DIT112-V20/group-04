@@ -8,6 +8,7 @@ import java.net.InetAddress;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
+import se.healthrover.R;
 import se.healthrover.conectivity.HealthRoverWebService;
 import se.healthrover.conectivity.LocalNetworkDeviceNameResolver;
 import se.healthrover.conectivity.SqlHelper;
@@ -17,6 +18,9 @@ import se.healthrover.entities.ObjectFactory;
 
 public class CarManagementImp implements CarManagement {
 
+    private static final String SERVICE_TYPE = "_http._tcp.";
+    private static final int WEB_SERVICE_PORT = 80;
+    private static final int RESOLVER_TIME_OUT = 10;
     private HealthRoverWebService webService;
     private static List<Car> cars = ObjectFactory.getInstance().createList();
     private String TAG = "smartcar";
@@ -93,7 +97,7 @@ public class CarManagementImp implements CarManagement {
     public void updateCarName(Car car, String newName, Activity activity) {
         SqlHelper sqlHelper = ObjectFactory.getInstance().getSqlHelper(activity);
         car.setName(newName);
-        sqlHelper.insertData(car);
+        sqlHelper.updateName(car);
     }
 
     // The method loads the cars from the database and the network and checks if they are any previously
@@ -101,36 +105,43 @@ public class CarManagementImp implements CarManagement {
     public void loadCarsIntoList(Activity activity){
 
         SqlHelper sqlHelper = ObjectFactory.getInstance().getSqlHelper(activity);
-        getCarsOnNetwork(activity);
         List<Car> savedCars = sqlHelper.getSavedCars();
-        if (savedCars != null && !cars.isEmpty()){
+        if (savedCars != null){
             for (int i = 0; i < savedCars.size(); i++){
-                for (int j = 0; j < cars.size(); j++){
-                    if (savedCars.get(i).getURL().equals(cars.get(j).getURL())){
-                        cars.get(j).setName(savedCars.get(i).getName());
-                    }
-                }
+                getCarsOnNetwork(activity, savedCars.get(i));
             }
         }
-
+        else {
+            sqlHelper.deleteTableContent();
+            insertIntoDataBase(sqlHelper);
+            savedCars = sqlHelper.getSavedCars();
+            for (int i = 0; i < savedCars.size(); i++){
+                getCarsOnNetwork(activity, savedCars.get(i));
+            }
+        }
     }
 
-    private void getCarsOnNetwork(Activity activity) {
-//        cars.add(ObjectFactory.getInstance().makeCar("http://192.168.137.200/", "Healthrover"));
-//        cars.add(ObjectFactory.getInstance().makeCar("test2", "test1"));
-//        cars.add(ObjectFactory.getInstance().makeCar("test3", "test2"));
-//        cars.add(ObjectFactory.getInstance().makeCar("http://www.mocky.io/v2/5ec5a39e3200005900d74860", "mocky"));
+    private void insertIntoDataBase(SqlHelper sqlHelper) {
+        Car newCar = ObjectFactory.getInstance().makeCar("", "SMART-E");
+        newCar.setLocalDomainName("smartcar");
+        sqlHelper.insertData(newCar);
+    }
+
+    private void getCarsOnNetwork(final Activity activity, final Car car) {
 
         // Synchronous device name resolution
         final LocalNetworkDeviceNameResolver nameResolver =
                 new LocalNetworkDeviceNameResolver(activity.getApplicationContext(),
-                        "smartcar", "_http._tcp.", 80);
+                        car.getLocalDomainName(), SERVICE_TYPE, WEB_SERVICE_PORT);
         Thread t = new Thread() {
             public void run() {
                 try {
-                    InetAddress address = nameResolver.getAddress(10, TimeUnit.SECONDS);
-                    Log.i(TAG, "Synchronous IP resolution: " + address.getHostName());
-                    cars.add(ObjectFactory.getInstance().makeCar("http://" + address.getHostName() + "/", "Healthrover"));
+                    InetAddress address = nameResolver.getAddress(RESOLVER_TIME_OUT, TimeUnit.SECONDS);
+                    Log.i(TAG, activity.getString(R.string.resolver_message) + address.getHostName());
+                    car.setURL( address.getHostName());
+                    cars.add(car);
+
+
                 } catch (Exception e) {
                     Log.e(TAG, e.toString());
                 }

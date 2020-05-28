@@ -53,4 +53,7 @@
     <string name="edit">EDIT</string>
     <string name="update">Edit car name</string>
     <string name="save_update_button">Save</string>
+    <string name="resolver_message"> Synchronous IP resolution: </string>
+
+
 </resources>

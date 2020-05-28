@@ -21,7 +21,7 @@ public class SqlHelper extends SQLiteOpenHelper {
 
     private static final String DATABASE_NAME = "healthrover.db";
     private static final String DATABASE_TABLE_NAME = "healthrover_name_table";
-    private static final String DATABASE_COL_ID = "ID";
+    private static final String DATABASE_COL_LOCAL_DOMAIN_NAME = "local_domain_name";
     private static final String DATABASE_COL_URL = "URL";
     private static final String DATABASE_COL_NAME = "name";
     private SQLiteDatabase database;
@@ -35,7 +35,7 @@ public class SqlHelper extends SQLiteOpenHelper {
     @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
     public void onCreate(SQLiteDatabase db) {
-        SQLiteStatement stmt = db.compileStatement("CREATE TABLE "+DATABASE_TABLE_NAME+" ("+DATABASE_COL_ID+" SERIAL PRIMARY KEY, "+DATABASE_COL_URL+" VARCHAR, "+ DATABASE_COL_NAME+" VARCHAR);");
+        SQLiteStatement stmt = db.compileStatement("CREATE TABLE "+DATABASE_TABLE_NAME+" ("+ DATABASE_COL_LOCAL_DOMAIN_NAME +" VARCHAR PRIMARY KEY, "+DATABASE_COL_URL+" VARCHAR, "+ DATABASE_COL_NAME+" VARCHAR);");
         stmt.execute();
     }
 
@@ -43,8 +43,8 @@ public class SqlHelper extends SQLiteOpenHelper {
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         SQLiteStatement stmt = db.compileStatement("DROP TABLE IF EXISTS " + DATABASE_TABLE_NAME + ";");
-            stmt.execute();
-            onCreate(db);
+        stmt.execute();
+        onCreate(db);
     }
 
     public void deleteTableContent(){
@@ -52,9 +52,9 @@ public class SqlHelper extends SQLiteOpenHelper {
         database.delete(DATABASE_TABLE_NAME, null, null);
     }
 
-    public void deleteCarByURL(String URL){
+    public void deleteCar(Car car){
         database = this.getWritableDatabase();
-        database.delete(DATABASE_TABLE_NAME, DATABASE_COL_URL + "=?", new String[]{URL});
+        database.delete(DATABASE_TABLE_NAME, DATABASE_COL_LOCAL_DOMAIN_NAME + "=?", new String[]{car.getLocalDomainName()});
 
     }
 
@@ -70,12 +70,31 @@ public class SqlHelper extends SQLiteOpenHelper {
         else {
             while (cursor.moveToNext()){
                 Car car = ObjectFactory.getInstance().makeCar( cursor.getString(1),cursor.getString(2));
-                car.setID(cursor.getString(0));
+                car.setLocalDomainName(cursor.getString(0));
                 cars.add(car);
-
             }
             return cars;
         }
+    }
+
+    public void insertData(Car car){
+        database = this.getWritableDatabase();
+        database.beginTransaction();
+        SQLiteStatement statement = database.compileStatement("INSERT INTO "+DATABASE_TABLE_NAME+" ("+ DATABASE_COL_LOCAL_DOMAIN_NAME +", "+DATABASE_COL_URL+", "+DATABASE_COL_NAME+") VALUES (?, ?, ?)");
+        statement.clearBindings();
+        statement.bindString(1,car.getLocalDomainName());
+        statement.bindString(2,car.getURL());
+        statement.bindString(3, car.getName());
+        statement.executeInsert();
+        database.setTransactionSuccessful();
+        database.endTransaction();
+    }
+
+    public void updateName(Car car){
+        database = this.getWritableDatabase();
+        ContentValues contentValues = ObjectFactory.getInstance().getContentValuesSQL();
+        contentValues.put(DATABASE_COL_NAME, car.getName());
+        database.update(DATABASE_TABLE_NAME, contentValues, DATABASE_COL_LOCAL_DOMAIN_NAME + "=?", new String[]{car.getLocalDomainName()});
     }
 
     // This method will return a car by given name, if and only
@@ -90,7 +109,7 @@ public class SqlHelper extends SQLiteOpenHelper {
         else {
             while (cursor.moveToNext()){
                 Car car = ObjectFactory.getInstance().makeCar( cursor.getString(1),cursor.getString(2));
-                car.setID(cursor.getString(0));
+                car.setLocalDomainName(cursor.getString(0));
                 cars.add(car);
             }
             if (cars.size()!=1){
@@ -100,32 +119,6 @@ public class SqlHelper extends SQLiteOpenHelper {
                 return cars.get(0);
             }
         }
-    }
-
-    public void insertData(Car car){
-        database = this.getWritableDatabase();
-        database.beginTransaction();
-        SQLiteStatement statement = database.compileStatement("INSERT INTO "+DATABASE_TABLE_NAME+" ("+DATABASE_COL_URL+", "+DATABASE_COL_NAME+") VALUES (?, ?)");
-        statement.clearBindings();
-        statement.bindString(1,car.getURL());
-        statement.bindString(2, car.getName());
-        statement.executeInsert();
-        database.setTransactionSuccessful();
-        database.endTransaction();
-    }
-
-    public void updateNameByURL(Car car){
-        database = this.getWritableDatabase();
-        ContentValues contentValues = ObjectFactory.getInstance().getContentValuesSQL();
-        contentValues.put(DATABASE_COL_NAME, car.getName());
-        database.update(DATABASE_TABLE_NAME, contentValues, DATABASE_COL_URL + "=?", new String[]{car.getURL()});
-    }
-
-    public void updateUrlByName(Car car){
-        database = this.getWritableDatabase();
-        ContentValues contentValues = ObjectFactory.getInstance().getContentValuesSQL();
-        contentValues.put(DATABASE_COL_NAME, car.getName());
-        database.update(DATABASE_TABLE_NAME, contentValues, DATABASE_COL_NAME + "=?", new String[]{car.getName()});
     }
 
 }

@@ -49,7 +49,7 @@ public class CarAdapter extends ArrayAdapter<Car> {
             @Override
             public void onClick(View v) {
                 Car car = carManagement.getCarByName(oldName);
-                if (editText.getText().toString().matches("[A-Za-z ]+") ){
+                if (editText.getText().toString().matches("[A-Za-z0-9 ]+") ){
                     carManagement.updateCarName(car, editText.getText().toString(), activity);
                     notifyDataSetChanged();
                 }
