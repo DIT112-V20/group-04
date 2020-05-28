@@ -39,6 +39,7 @@ public class CarManagementImpTest {
         carListTestCars = new ArrayList<>();
         for (int i = 0; i < 10; i++){
             Car car = new Car("http://" + new Faker().internet().url(), new Faker().name().username());
+            car.setLocalDomainName(new Faker().name().name());
             carListTestCars.add(car);
             management.addCar(car);
         }
@@ -93,6 +94,7 @@ public class CarManagementImpTest {
     @Test
     public void addCarTest(){
         Car car = new Car("http://" + new Faker().internet().url(), new Faker().name().username());
+        car.setLocalDomainName(new Faker().name().name());
         carListTestCars.add(car);
         int startSize = management.getCars().size();
         management.addCar(car);

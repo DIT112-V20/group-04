@@ -2,6 +2,8 @@ package se.healthrover.entities;
 
 import android.content.ContentValues;
 
+import com.github.javafaker.Faker;
+
 import org.junit.Test;
 
 import java.util.List;
@@ -52,6 +54,7 @@ public class ObjectFactoryTest {
     @Test
     public void makeCar() {
         Car car = ObjectFactory.getInstance().makeCar("local", "test");
+        car.setLocalDomainName(new Faker().name().name());
         assertNotNull(car);
     }
 

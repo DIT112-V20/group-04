@@ -50,6 +50,7 @@ public class CarManagementTest {
         sqlHelper.deleteTableContent();
         for (int i = 0; i < 10; i++){
             Car car = new Car("http://" + new Faker().internet().url(), new Faker().name().username());
+            car.setLocalDomainName(new Faker().name().name());
             carListTestCars.add(car);
             management.addCar(car);
         }
