@@ -1,5 +1,6 @@
 package se.healthrover.entities;
 
+
 import com.github.javafaker.Faker;
 
 import org.junit.After;
@@ -38,22 +39,10 @@ public class CarManagementImpTest {
         carListTestCars = new ArrayList<>();
         for (int i = 0; i < 10; i++){
             Car car = new Car("http://" + new Faker().internet().url(), new Faker().name().username());
+            car.setLocalDomainName(new Faker().name().name());
             carListTestCars.add(car);
             management.addCar(car);
         }
-    }
-
-
-
-    @Test
-    public void checkIfRequestIsCalledTest() {
-        carManagementSpy.moveCar(healthRover,0,0,"manual",null);
-        Mockito.verify(carManagementSpy, Mockito.times(1)).moveCar(healthRover,0,0, "manual",null);
-    }
-    @Test
-    public void checkIfStatusIsCalled() {
-        carManagementSpy.checkStatus(healthRover,null);
-        Mockito.verify(carManagementSpy, Mockito.times(1)).checkStatus(healthRover,null);
     }
 
     @Test
@@ -74,6 +63,20 @@ public class CarManagementImpTest {
 
     }
 
+
+
+    @Test
+    public void checkIfRequestIsCalledTest() {
+        carManagementSpy.moveCar(healthRover,0,0,"manual",null);
+        Mockito.verify(carManagementSpy, Mockito.times(1)).moveCar(healthRover,0,0, "manual",null);
+    }
+    @Test
+    public void checkIfStatusIsCalled() {
+        carManagementSpy.checkStatus(healthRover,null);
+        Mockito.verify(carManagementSpy, Mockito.times(1)).checkStatus(healthRover,null);
+    }
+
+
     @Test
     public void getCarByNameTest(){
         Car car = carListTestCars.get(0);
@@ -91,6 +94,7 @@ public class CarManagementImpTest {
     @Test
     public void addCarTest(){
         Car car = new Car("http://" + new Faker().internet().url(), new Faker().name().username());
+        car.setLocalDomainName(new Faker().name().name());
         carListTestCars.add(car);
         int startSize = management.getCars().size();
         management.addCar(car);

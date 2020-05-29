@@ -8,6 +8,8 @@ env:
     # Set the minimum Android API to support
     # Note: Not all of them work well with Travis
     - ANDROID_TARGET=android-21
+    - TEST_SUITE="travis_wait ./gradlew connectedCheck"
+    - TEST_SUITE="travis_wait ./gradlew createDebugCoverageReport"
 
 before_cache:
   - rm -f $HOME/.gradle/caches/modules-2/modules-2.lock
@@ -29,6 +31,7 @@ android:
     - sys-img-armeabi-v7a-$ANDROID_TARGET
     - extra-android-m2repository
     - extra-google-m2repository
+
 
 before_script:
   # Launch Android emulator to run the instrumented tests
@@ -60,12 +63,12 @@ install:
 script:
   # Build the Android application
   - cd $TRAVIS_BUILD_DIR/
-  - travis_wait ./gradlew build --stacktrace
+  - ./gradlew build --stacktrace
   # Run the Android application's unit tests
   - ./gradlew test --info
   # Execution of Android application's instrumented tests
-  - travis_wait ./gradlew connectedCheck
-  - travis_wait ./gradlew connectedAndroidTest
+  - $TEST_SUITE
+  - ./gradlew jacocoTestReport
   # Build the .ino file(s) for ESP32
   - cd $TRAVIS_BUILD_DIR/arduino
   - build_platform esp32

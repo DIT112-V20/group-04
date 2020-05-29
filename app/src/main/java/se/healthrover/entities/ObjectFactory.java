@@ -89,7 +89,7 @@ public class ObjectFactory {
         return new Car(URL, name);
     }
 
-    public List<Car> getCarList() {
+    public List<Car> createList() {
         return new ArrayList<>();
     }
 

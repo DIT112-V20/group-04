@@ -13,4 +13,5 @@ public interface CarManagement {
     Car getCarByName(String carName);
     List<Car> getCars();
     void updateCarName(Car car, String newName, Activity activity);
+    void stopCar(Car car, String controlType, Activity activity);
 }

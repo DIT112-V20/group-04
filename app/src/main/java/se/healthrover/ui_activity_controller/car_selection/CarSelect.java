@@ -36,7 +36,6 @@ public class CarSelect extends Activity{
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Thread.setDefaultUncaughtExceptionHandler(ObjectFactory.getInstance().getExceptionHandler(this, healthRoverCar));
-        SqlHelper sqlHelper = ObjectFactory.getInstance().getSqlHelper(this);
         carManagement.getCars().clear();
         carManagement.loadCarsIntoList(this);
         initialize();
@@ -113,7 +112,16 @@ public class CarSelect extends Activity{
     public void onBackPressed() {
         super.onBackPressed();
         carManagement.getCars().clear();
+        carManagement.loadCarsIntoList(this);
         finishAffinity();
         finish();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        carManagement.getCars().clear();
+        carManagement.loadCarsIntoList(this);
+        initialize();
     }
 }

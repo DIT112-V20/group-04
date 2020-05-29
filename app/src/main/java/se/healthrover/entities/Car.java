@@ -7,7 +7,7 @@ import java.io.Serializable;
 public class Car implements Serializable{
 
 
-    private String ID;
+    private String localDoaminName;
     private String URL;
     private String name;
 
@@ -24,12 +24,12 @@ public class Car implements Serializable{
         this.name = name;
     }
 
-    public String getID() {
-        return ID;
+    public String getLocalDomainName() {
+        return localDoaminName;
     }
 
-    public void setID(String ID) {
-        this.ID = ID;
+    public void setLocalDomainName(String domainName) {
+        this.localDoaminName = domainName;
     }
 
     public String getURL() {
@@ -37,6 +37,7 @@ public class Car implements Serializable{
     }
 
     public void setURL(String URL) {
+        URL = "http://" + URL + "/";
         this.URL = URL;
     }
     @Override
@@ -48,10 +49,10 @@ public class Car implements Serializable{
         if (getClass() != object.getClass())
             return false;
         final Car other = (Car) object;
-        if (URL == null) {
-            if (other.URL != null)
+        if (localDoaminName == null) {
+            if (other.localDoaminName != null)
                 return false;
-        } else if (!URL.equals(other.URL))
+        } else if (!localDoaminName.equals(other.localDoaminName))
             return false;
         return true;
     }
@@ -60,7 +61,7 @@ public class Car implements Serializable{
     public int hashCode() {
         final int prime = 31;
         int result = 1;
-        result = prime * result + ((URL == null) ? 0 : URL.hashCode());
+        result = prime * result + ((localDoaminName == null) ? 0 : localDoaminName.hashCode());
         return result;
     }
 

@@ -50,6 +50,7 @@ public class DatabaseTest {
         sqlHelper.deleteTableContent();
         for (int i = 0; i < 10; i++){
             Car car = new Car("http://" + new Faker().internet().url(), new Faker().name().username());
+            car.setLocalDomainName(new Faker().name().name());
             carListTestCars.add(car);
         }
         for (int i = 0; i < carListTestCars.size(); i++){
@@ -66,6 +67,7 @@ public class DatabaseTest {
     @Test
     public void insertIntoDatabaseTest(){
         Car car = new Car("http://" + new Faker().internet().url(), new Faker().name().username());
+        car.setLocalDomainName(new Faker().name().name());
         sqlHelper.insertData(car);
         List<Car> result = sqlHelper.getSavedCars();
         carList.add(car);
@@ -74,9 +76,9 @@ public class DatabaseTest {
     }
 
     @Test
-    public void removeCarByURLTest(){
+    public void removeCar(){
         Car car = carListTestCars.get(0);
-        sqlHelper.deleteCarByURL(car.getURL());
+        sqlHelper.deleteCar(car);
         carList.remove(car);
         carListTestCars.remove(car);
         List<Car> result = sqlHelper.getSavedCars();
@@ -88,18 +90,10 @@ public class DatabaseTest {
         Car car = carListTestCars.get(0);
         String name = "new Name";
         car.setName(name);
-        sqlHelper.updateNameByURL(car);
+        sqlHelper.updateName(car);
         List<Car> result = sqlHelper.getSavedCars();
         assertEquals(carList, result);
         Car updatedCar = sqlHelper.getCarByName(name);
-        assertEquals(car,updatedCar);
-        //Test the second method
-        name = name + " 2";
-        car.setName(name);
-        sqlHelper.updateNameByURL(car);
-        result = sqlHelper.getSavedCars();
-        assertEquals(carList, result);
-        updatedCar = sqlHelper.getCarByName(car.getName());
         assertEquals(car,updatedCar);
     }
 
