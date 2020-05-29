@@ -21,6 +21,7 @@ public class CarManagementImp implements CarManagement {
     private static final String SERVICE_TYPE = "_http._tcp.";
     private static final int WEB_SERVICE_PORT = 80;
     private static final int RESOLVER_TIME_OUT = 10;
+    private static final int STOP = 0;
     private HealthRoverWebService webService;
     private static List<Car> cars = ObjectFactory.getInstance().createList();
     private String TAG = "smartcar";
@@ -98,6 +99,15 @@ public class CarManagementImp implements CarManagement {
         SqlHelper sqlHelper = ObjectFactory.getInstance().getSqlHelper(activity);
         car.setName(newName);
         sqlHelper.updateName(car);
+    }
+
+    @Override
+    public void stopCar(Car car, String controlType, Activity activity) {
+        String request = car.getURL() + CarCommands.REQUEST.getCarCommands()
+                + CarCommands.SPEED.getCarCommands() + STOP
+                + CarCommands.ANGLE.getCarCommands() + STOP
+                + CarCommands.CONTROL.getCarCommands() + controlType;
+        webService.createHttpRequest(request, activity, car);
     }
 
     // The method loads the cars from the database and the network and checks if they are any previously

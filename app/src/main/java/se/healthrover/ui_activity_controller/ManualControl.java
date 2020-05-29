@@ -106,7 +106,8 @@ public class ManualControl extends AppCompatActivity {
         voiceControl.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent =ObjectFactory.getInstance().getIntent(ManualControl.this, SpeechRecognition.class);
+                carManagement.stopCar(healthRoverCar, CONTROL_TYPE, ManualControl.this);
+                Intent intent = ObjectFactory.getInstance().getIntent(ManualControl.this, SpeechRecognition.class);
                 intent.putExtra(getString(R.string.car_name), healthRoverCar);
                 startActivity(intent);
             }
@@ -119,9 +120,9 @@ public class ManualControl extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         super.onBackPressed();
+        carManagement.stopCar(healthRoverCar, CONTROL_TYPE, ManualControl.this);
         Intent intent = ObjectFactory.getInstance().getIntent(ManualControl.this, CarSelect.class);
         carManagement.getCars().clear();
         startActivity(intent);
     }
-
 }
