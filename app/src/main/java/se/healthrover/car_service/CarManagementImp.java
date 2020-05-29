@@ -113,18 +113,12 @@ public class CarManagementImp implements CarManagement {
         }
         else {
             sqlHelper.deleteTableContent();
-            insertIntoDataBase(sqlHelper);
+            sqlHelper.insertIntoDataBase();
             savedCars = sqlHelper.getSavedCars();
             for (int i = 0; i < savedCars.size(); i++){
                 getCarsOnNetwork(activity, savedCars.get(i));
             }
         }
-    }
-
-    private void insertIntoDataBase(SqlHelper sqlHelper) {
-        Car newCar = ObjectFactory.getInstance().makeCar("", "SMART-E");
-        newCar.setLocalDomainName("smartcar");
-        sqlHelper.insertData(newCar);
     }
 
     private void getCarsOnNetwork(final Activity activity, final Car car) {

@@ -24,6 +24,11 @@ public class SqlHelper extends SQLiteOpenHelper {
     private static final String DATABASE_COL_LOCAL_DOMAIN_NAME = "local_domain_name";
     private static final String DATABASE_COL_URL = "URL";
     private static final String DATABASE_COL_NAME = "name";
+
+    // The following two constants are used in the hardcoded implementation of one car in the database
+    private static final String LOCAL_DOMAIN_NAME = "smartcar";
+    private static final String CAR_NAME = "SMART-E";
+
     private SQLiteDatabase database;
 
 
@@ -121,4 +126,10 @@ public class SqlHelper extends SQLiteOpenHelper {
         }
     }
 
+    // This method currently hardcodes the database to work with only one SmartCar with local domain name
+    public void insertIntoDataBase() {
+        Car newCar = ObjectFactory.getInstance().makeCar("", CAR_NAME);
+        newCar.setLocalDomainName(LOCAL_DOMAIN_NAME);
+        insertData(newCar);
+    }
 }
