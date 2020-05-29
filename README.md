@@ -47,11 +47,13 @@ The HealthRover SmartCar is designed by using the following components:
 - [Smartcar platform](https://www.hackster.io/platisd/smartcar-gets-an-esp32-upgrade-bcbeb1) based on the ESP32 microcontroller
 - Wi-Fi connectivity (integrated in the ESP32 SoC microcontroller)
 - 1 x Ultrasonic Sensor - HC-SR04 (Generic)
-- 3D-printed shell
+- 3D-printed shell (find models in group-4/model/, g-code sliced for Prusa i3 MK3S)
 
 Assembling the car is done by attaching the ultrasonic sensor to the front of the car and adding the 3D shell on top. Adding the shell still allows the user to connect to the car with USB as well as turning the vehicle on and off. The car runs with a set of 8 AA batteries(found below the ESP-32). 
 
 ### Software:
+
+The following software libraries, API and external service was used during for the development of the HealthRover android application, the SmartCar sketch and surrounding features:
 
 - Java
 - Gradle
@@ -66,6 +68,9 @@ Assembling the car is done by attaching the ultrasonic sensor to the front of th
 - [Dexmaker Mockito](https://mvnrepository.com/artifact/com.google.dexmaker/dexmaker-mockito/1.2)
 - [Jacoco Gradle plugin](https://github.com/arturdm/jacoco-android-gradle-plugin)
 - [SQLite](https://www.sqlite.org/index.html)
+- [Autodesk Fusion 360 (Education License)](https://www.autodesk.com/products/fusion-360/overview) 
+- [PrusSlicer 2.2.0](https://www.prusa3d.com/prusaslicer/)
+
 
 
 #### Architecture and design
@@ -127,9 +132,10 @@ The manual control button takes the user to the manual control screen.
 <br />
 
 ## Team Overview
-- Ella Alklid - guslarcaan@student.gu.se
-- Sandra Smoler Eisenberg - gussmosa@student.gu.se
-- Samuel Gunnarsson - gusgunsah@student.gu.se
-- Chrysostomos Tsagkidis - gustsach@student.gu.se 
-- Eemil Jeskanen - gusjesee@student.gu.se 
-- Krasen Parvanov - gusparkr@student.gu.se
+- [Ella Alklid](https://github.com/Enilo) - guslarcaan@student.gu.se
+- [Sandra Smoler Eisenberg](https://github.com/SandraSmolerEisenberg) - gussmosa@student.gu.se
+- [Samuel Gunnarsson](https://github.com/samgun-6) - gusgunsah@student.gu.se
+- [Chrysostomos Tsagkidis](https://github.com/chrytsa) - gustsach@student.gu.se 
+- [Eemil Jeskanen](https://github.com/eemilj) - gusjesee@student.gu.se
+- [Krasen Parvanov](https://github.com/krasen86) - gusparkr@student.gu.se 
+
