@@ -143,8 +143,9 @@ public class CarManagementImp implements CarManagement {
                     InetAddress address = nameResolver.getAddress(RESOLVER_TIME_OUT, TimeUnit.SECONDS);
                     Log.i(TAG, activity.getString(R.string.resolver_message) + address.getHostName());
                     car.setURL( address.getHostName());
-                    cars.add(car);
-
+                    if (!cars.contains(car)){
+                        cars.add(car);
+                    }
 
                 } catch (Exception e) {
                     Log.e(TAG, e.toString());
