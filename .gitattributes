@@ -1,4 +1,4 @@
 
 /*Letting github ignore the G-code filename in order to not have G-code as the main language in
 the repository.*/
-*.gcode linguist-detectable = false
+*.gcode linguist-detectable=false
