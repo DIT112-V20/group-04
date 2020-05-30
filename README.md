@@ -80,6 +80,9 @@ The android application was designed by using object oriented principles and des
 ### Testing Summary 
 
 In order to assure the high quality of the system, it was tested continuously both manually and with the help of automated tests. The automated tests were then integrated into an Continuous Integration framework based on Travis-CI and with automated reports from Codecov. Based on those reports we can verify the functionality of the system features described above. 
+- Total automated test Summary:
+-- Java Unit Tests: 20
+-- Android Instrumented Unit Tests: 23
 
 ### Known issues:
 - Ultrasonic sensor produce invalid readings sometimes that affect the performance of the car.
