@@ -108,7 +108,7 @@ Turn on the car
 ### User Manual
 
 
-<img align="left" src="https://github.com/DIT112-V20/group-04/blob/development_sprint_7/misc/healthrover_showcase.gif" width="360" height="720"/>
+<img align="left" src="https://github.com/DIT112-V20/group-04/blob/master/misc/healthrover_showcase.gif" width="360" height="720"/>
 
 After completing the set-up steps from above the user can use the application features
 
