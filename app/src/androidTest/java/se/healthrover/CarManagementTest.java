@@ -68,14 +68,6 @@ public class CarManagementTest {
         assertEquals(car, sqlHelper.getCarByName("test new name"));
     }
 
-//    @Test
-//    public void loadCarsIntoListTest(){
-//        management.addCar(carListTestCars.get(0));
-//        management.loadCarsIntoList(activity);
-//
-//        assertEquals(carListTestCars.get(0), management.getCars().get(0));
-//    }
-
     @After
     public void tearDown()  {
         sqlHelper.deleteTableContent();
