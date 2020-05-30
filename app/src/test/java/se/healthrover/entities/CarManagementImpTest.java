@@ -23,7 +23,6 @@ public class CarManagementImpTest {
 
 
     private CarManagement carManagementSpy;
-    private HealthRoverWebService healthRoverCar;
     private CarManagementImp management;
     private Car healthRover;
     private List<Car> carListTestCars;
@@ -38,7 +37,7 @@ public class CarManagementImpTest {
         carManagementSpy = Mockito.spy(carManagement);
         carListTestCars = new ArrayList<>();
         for (int i = 0; i < 10; i++){
-            Car car = new Car("http://" + new Faker().internet().url(), new Faker().name().username());
+            Car car = new Car(  "http://" + new Faker().internet().url() + "/", new Faker().name().username());
             car.setLocalDomainName(new Faker().name().name());
             carListTestCars.add(car);
             management.addCar(car);
@@ -70,6 +69,7 @@ public class CarManagementImpTest {
         carManagementSpy.moveCar(healthRover,0,0,"manual",null);
         Mockito.verify(carManagementSpy, Mockito.times(1)).moveCar(healthRover,0,0, "manual",null);
     }
+
     @Test
     public void checkIfStatusIsCalled() {
         carManagementSpy.checkStatus(healthRover,null);

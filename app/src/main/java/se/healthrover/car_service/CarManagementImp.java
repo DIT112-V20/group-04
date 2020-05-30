@@ -3,10 +3,11 @@ package se.healthrover.car_service;
 import android.app.Activity;
 import android.net.nsd.NsdManager;
 import android.util.Log;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
 
 import java.net.InetAddress;
 import java.util.List;
-import java.util.concurrent.TimeUnit;
 
 import se.healthrover.R;
 import se.healthrover.conectivity.HealthRoverWebService;
@@ -20,12 +21,10 @@ public class CarManagementImp implements CarManagement {
 
     private static final String SERVICE_TYPE = "_http._tcp.";
     private static final int WEB_SERVICE_PORT = 80;
-    private static final int RESOLVER_TIME_OUT = 10;
     private static final int STOP = 0;
     private HealthRoverWebService webService;
     private static List<Car> cars = ObjectFactory.getInstance().createList();
     private String TAG = "smartcar";
-    private NsdManager mNsdManager;
     private LocalNetworkDeviceNameResolver mDeviceNameResolver;
 
     public CarManagementImp(){
@@ -112,8 +111,7 @@ public class CarManagementImp implements CarManagement {
 
     // The method loads the cars from the database and the network and checks if they are any previously
     // saved cars if they are the list is updated to show the saved name
-    public void loadCarsIntoList(Activity activity){
-
+    public void loadCarsIntoList(final Activity activity){
         SqlHelper sqlHelper = ObjectFactory.getInstance().getSqlHelper(activity);
         List<Car> savedCars = sqlHelper.getSavedCars();
         if (savedCars != null){
@@ -125,34 +123,40 @@ public class CarManagementImp implements CarManagement {
             sqlHelper.deleteTableContent();
             sqlHelper.insertIntoDataBase();
             savedCars = sqlHelper.getSavedCars();
-            for (int i = 0; i < savedCars.size(); i++){
-                getCarsOnNetwork(activity, savedCars.get(i));
-            }
+                        for (int i = 0; i < savedCars.size(); i++){
+                            getCarsOnNetwork(activity, savedCars.get(i));
+                        }
+
+
         }
     }
 
     private void getCarsOnNetwork(final Activity activity, final Car car) {
-
-        // Synchronous device name resolution
-        final LocalNetworkDeviceNameResolver nameResolver =
+        mDeviceNameResolver =
                 new LocalNetworkDeviceNameResolver(activity.getApplicationContext(),
-                        car.getLocalDomainName(), SERVICE_TYPE, WEB_SERVICE_PORT);
-        Thread t = new Thread() {
-            public void run() {
-                try {
-                    InetAddress address = nameResolver.getAddress(RESOLVER_TIME_OUT, TimeUnit.SECONDS);
-                    Log.i(TAG, activity.getString(R.string.resolver_message) + address.getHostName());
-                    car.setURL( address.getHostName());
+                        car.getLocalDomainName(), SERVICE_TYPE, WEB_SERVICE_PORT,
+                        new LocalNetworkDeviceNameResolver.AddressResolutionListener() {
+                            @Override
+                            public void onAddressResolved(InetAddress address) {
+                                Log.i(TAG, activity.getString(R.string.resolver_message) + address.getHostName
+                                        ());
+                                car.setURL( address.getHostName());
                     if (!cars.contains(car)){
                         cars.add(car);
                     }
+                    activity.runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            ArrayAdapter adapter;
+                            ListView carList;
+                            adapter = ObjectFactory.getInstance().getCarAdapter(activity,
+                                    R.layout.list_item,cars);
+                            carList = activity.findViewById(R.id.smartCarList);
+                            carList.setAdapter(adapter);
+                        }
+                    });
+                            }
+                        });
 
-                } catch (Exception e) {
-                    Log.e(TAG, e.toString());
-                }
-            }
-        };
-        t.start();
-
-    }
+        }
 }

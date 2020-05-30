@@ -1,5 +1,7 @@
 # Group-04 HealthRover  [![Build Status](https://travis-ci.com/DIT112-V20/group-04.svg?branch=master)](https://travis-ci.com/DIT112-V20/group-04)      [![codecov](https://codecov.io/gh/DIT112-V20/group-04/branch/master/graph/badge.svg)](https://codecov.io/gh/DIT112-V20/group-04) <img align="left" src="https://github.com/DIT112-V20/group-04/blob/master/app/src/main/ic_launcher-playstore.png" width="50" height="50"/>
 
+[![IMAGE ALT TEXT](https://raw.githubusercontent.com/DIT112-V20/group-04/readme_and_final_video/misc/healthrover_yt_img.png)](https://www.youtube.com/watch?v=CxYm5EA1l_8 "HealthRover - Contactless delivery project")
+
 ## What
 The HealthRover is aimed towards a hospital environment and will deliver medicine/medical equipment to a desired location using manual and voice control, without the need for human contact. The HealthRover uses natural language correlation in order to simplify the use of voice control for staff and is functional where there is Wi-Fi connectivity.
 
@@ -80,11 +82,15 @@ The android application was designed by using object oriented principles and des
 ### Testing Summary 
 
 In order to assure the high quality of the system, it was tested continuously both manually and with the help of automated tests. The automated tests were then integrated into an Continuous Integration framework based on Travis-CI and with automated reports from Codecov. Based on those reports we can verify the functionality of the system features described above. 
+- Total automated test Summary:
+-- Java Unit Tests: 20
+-- Android Instrumented Unit Tests: 23
 
 ### Known issues:
 - Ultrasonic sensor produce invalid readings sometimes that affect the performance of the car.
 - Wi-Fi connectivity quality highly depends on the stability of the network that it is connected to, which affects the overall functionality of the application
-
+- Sometimes some unpredicted results occur while using Speech Recognition, after building an apk and using the application on a smartphone. Possible reasons that affect this behaviour might be the smartphone’s speech recognition settings, smartphone’s microphone performance and surround audio capturing, as well as the dependency on the training of DialogFlow's agent being used.
+- If the car goes offline and the user navigates back to the car selection page the list doesn't get updated and still contains the disconnected car name
 
 ## Set-up and User Manual 
 
@@ -108,7 +114,7 @@ Turn on the car
 ### User Manual
 
 
-<img align="left" src="https://github.com/DIT112-V20/group-04/blob/development_sprint_7/misc/healthrover_showcase.gif" width="360" height="720"/>
+<img align="left" src="https://github.com/DIT112-V20/group-04/blob/master/misc/healthrover_showcase.gif" width="360" height="720"/>
 
 After completing the set-up steps from above the user can use the application features
 

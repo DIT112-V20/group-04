@@ -3,6 +3,7 @@ package se.healthrover.ui_activity_controller.car_selection;
 import android.app.Activity;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Adapter;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -19,17 +20,17 @@ public class CarSelect extends Activity{
 
     private Button infoButton;
     private Button connectToCarSelected;
-    private ListView carList;
     private Car healthRoverCar;
     private boolean carOnlineConnection;
     private CarManagement carManagement;
     private UserInterfaceUtilities uiHelper;
-    private ArrayAdapter adapter;
+    private ListView carList;
 
     public CarSelect() {
         carManagement = ObjectFactory.getInstance().getCarManagement();
         uiHelper = ObjectFactory.getInstance().getInterfaceUtilities();
     }
+
 
     //Create the activity
     @Override
@@ -37,7 +38,6 @@ public class CarSelect extends Activity{
         super.onCreate(savedInstanceState);
         Thread.setDefaultUncaughtExceptionHandler(ObjectFactory.getInstance().getExceptionHandler(this, healthRoverCar));
         carManagement.getCars().clear();
-        carManagement.loadCarsIntoList(this);
         initialize();
 
     }
@@ -47,7 +47,6 @@ public class CarSelect extends Activity{
         super.onRestart();
         Thread.setDefaultUncaughtExceptionHandler(ObjectFactory.getInstance().getExceptionHandler(this, healthRoverCar));
         carManagement.getCars().clear();
-        carManagement.loadCarsIntoList(this);
         initialize();
     }
 
@@ -60,15 +59,8 @@ public class CarSelect extends Activity{
         setContentView(R.layout.car_select);
         connectToCarSelected = findViewById(R.id.connectToCarButton);
         infoButton = findViewById(R.id.infoButton);
-
-        adapter = ObjectFactory.getInstance().getCarAdapter(this,
-                R.layout.list_item,carManagement.getCars());
-
-
-
         carList = findViewById(R.id.smartCarList);
-        carList.setAdapter(adapter);
-
+        carManagement.loadCarsIntoList(this);
 
         //Once a car is selected the name is retrieved and used to initialize the car object that is to be controlled
         carList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -107,12 +99,13 @@ public class CarSelect extends Activity{
         }
     }
 
+
+
     //Using back button to exit application
     @Override
     public void onBackPressed() {
         super.onBackPressed();
         carManagement.getCars().clear();
-        carManagement.loadCarsIntoList(this);
         finishAffinity();
         finish();
     }
@@ -121,7 +114,6 @@ public class CarSelect extends Activity{
     public void onResume() {
         super.onResume();
         carManagement.getCars().clear();
-        carManagement.loadCarsIntoList(this);
         initialize();
     }
 }
