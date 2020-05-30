@@ -84,6 +84,7 @@ In order to assure the high quality of the system, it was tested continuously bo
 ### Known issues:
 - Ultrasonic sensor produce invalid readings sometimes that affect the performance of the car.
 - Wi-Fi connectivity quality highly depends on the stability of the network that it is connected to, which affects the overall functionality of the application
+- Sometimes some unpredicted results occur while using Speech Recognition, after building an apk and using the application on a smartphone. Possible reasons that affect this behaviour might be the smartphone’s speech recognition settings, smartphone’s microphone performance and surround audio capturing, as well as the dependency on the training of DialogFlow's agent being used.
 
 
 ## Set-up and User Manual 
