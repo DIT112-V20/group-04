@@ -43,9 +43,10 @@ public class SpeechRecognition extends AppCompatActivity {
     private ImageView speechButton;
     private SessionName session;
     private SessionsClient sessionsClient;
-    private int speed = 30;
+    private int speed = DEFAULT_SPEED;
     private CarManagement carManagement;
     private UserInterfaceUtilities userInterfaceUtilities;
+    private static final int DEFAULT_SPEED = 30;
     private static final int VELOCITY_MODIFIER = 10;
     private static final int NEGATION = -1;
     private static final int SPEED_CHECK = 0;
@@ -234,6 +235,8 @@ public class SpeechRecognition extends AppCompatActivity {
                 break;
             case DIALOGFLOW_DIRECTION_VALUE_STOP:
                 carManagement.moveCar(healthRoverCar, Integer.parseInt(CarCommands.NO_MOVEMENT.getCarCommands()), Integer.parseInt(CarCommands.NO_ANGLE.getCarCommands()), CONTROL_TYPE, this);
+                // re-setting the speed to the default one after stopping the SmartCar
+                speed = DEFAULT_SPEED;
                 break;
             case DIALOGFLOW_DIRECTION_VALUE_INCREASE:
                 if (speed < Integer.parseInt(CarCommands.VC_MAX_VELOCITY.getCarCommands()) && speed > Integer.parseInt(CarCommands.VC_MIN_VELOCITY.getCarCommands())) {
