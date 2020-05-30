@@ -1,5 +1,7 @@
 # Group-04 HealthRover  [![Build Status](https://travis-ci.com/DIT112-V20/group-04.svg?branch=master)](https://travis-ci.com/DIT112-V20/group-04)      [![codecov](https://codecov.io/gh/DIT112-V20/group-04/branch/master/graph/badge.svg)](https://codecov.io/gh/DIT112-V20/group-04) <img align="left" src="https://github.com/DIT112-V20/group-04/blob/master/app/src/main/ic_launcher-playstore.png" width="50" height="50"/>
 
+[![IMAGE ALT TEXT](https://raw.githubusercontent.com/DIT112-V20/group-04/readme_and_final_video/misc/healthrover_yt_img.png)](https://www.youtube.com/watch?v=CxYm5EA1l_8 "HealthRover - Contactless delivery project")
+
 ## What
 The HealthRover is aimed towards a hospital environment and will deliver medicine/medical equipment to a desired location using manual and voice control, without the need for human contact. The HealthRover uses natural language correlation in order to simplify the use of voice control for staff and is functional where there is Wi-Fi connectivity.
 
