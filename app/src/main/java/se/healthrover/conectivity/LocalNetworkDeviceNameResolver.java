@@ -1,6 +1,6 @@
 package se.healthrover.conectivity;
 
-/**
+/*
  * This class implementation was originally written by @platisd https://github.com/platisd
  * The original code can be Viewed at https://github.com/DIT112-V20/kotlin-app-arduino-sketch-ci
  */
@@ -52,8 +52,8 @@ public class LocalNetworkDeviceNameResolver {
      * @param port                      The port
      * @param addressResolutionListener The callback to be invoked when the name is resolved
      */
-    LocalNetworkDeviceNameResolver(Context context, String serviceName, String serviceType,
-                                   int port, AddressResolutionListener addressResolutionListener) {
+    public LocalNetworkDeviceNameResolver(Context context, String serviceName, String serviceType,
+                                          int port, AddressResolutionListener addressResolutionListener) {
         mServiceName = serviceName;
         mServiceType = serviceType;
         mPort = port;
@@ -68,6 +68,7 @@ public class LocalNetworkDeviceNameResolver {
 
         mLatch = new CountDownLatch(1);
 
+        assert mNsdManager != null;
         mNsdManager.resolveService(serviceInfo, new NsdManager.ResolveListener() {
             @Override
             public void onResolveFailed(NsdServiceInfo serviceInfo, int errorCode) {
